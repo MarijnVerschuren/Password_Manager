@@ -7,10 +7,44 @@ user_folder = os.path.join(root_folder, "user")
 data_folder = os.path.join(root_folder, "data")
 
 
+"""
+import base64
+import hashlib
+from Crypto import Random
+from Crypto.Cipher import AES
+
+class AESCipher(object):
+
+    def __init__(self, key): 
+        self.bs = AES.block_size
+        self.key = hashlib.sha256(key.encode()).digest()
+
+    def encrypt(self, raw):
+        raw = self._pad(raw)
+        iv = Random.new().read(AES.block_size)
+        cipher = AES.new(self.key, AES.MODE_CBC, iv)
+        return base64.b64encode(iv + cipher.encrypt(raw.encode()))
+
+    def decrypt(self, enc):
+        enc = base64.b64decode(enc)
+        iv = enc[:AES.block_size]
+        cipher = AES.new(self.key, AES.MODE_CBC, iv)
+        return self._unpad(cipher.decrypt(enc[AES.block_size:])).decode('utf-8')
+
+    def _pad(self, s):
+        return s + (self.bs - len(s) % self.bs) * chr(self.bs - len(s) % self.bs)
+
+    @staticmethod
+    def _unpad(s):
+    	# check if it is realy padding and not message (by checking if every padding byte is the same)
+        return s[:-ord(s[len(s)-1:])]
+"""
+
 
 class Lockbox:
 	def __init__(self) -> None:
 		self.name = None
+		self.path = None
 		self.key = None
 
 	def new(self) -> None:
@@ -30,29 +64,21 @@ class Lockbox:
 	def unlock(self) -> None:  # TODO
 		self.name =	input("lockbox name: ")
 		self.key =	getpass("lockbox key: ")
+		self.path =	os.path.join(user_folder, lockbox_name)
 		# check if the hash in the user file is the same
 		# then load passwords
-
-	def token_unlock(self, token: str) -> None:  # TODO
-		pass
-		# decode token
-		# check if the hash in the user file is the same
-		# then load passwords
-
-	@property
-	def token(self) -> str:
-		return ""
-		# generate token
+		with open(path, "rb") as file:
+			
 
 
 
-def console_mode(token: str, new_user: bool) -> None:
+
+def console_mode(new_user: bool) -> None:
 	lockbox = Lockbox()
-	if token:		lockbox.token_unlock(token)		# unlock using key
-	elif new_user:	lockbox.new()					# create account
+	if new_user:	lockbox.new()					# create account
 	else:			lockbox.unlock()				# unlock using name and key
 
-def gui_mode(token: str, new_user: bool) -> None:
+def gui_mode(new_user: bool) -> None:
 	pass
 
 
@@ -60,7 +86,6 @@ def gui_mode(token: str, new_user: bool) -> None:
 if __name__ == "__main__":
 	if "-help" in sys.argv: print(
 			"[-new]\t\tmake new user",
-			"[-token],\tuser token to login",
 			"[-nogui]\trun password manager in console mode",
 			"",
 			"(*)\t\t= required",
@@ -68,11 +93,14 @@ if __name__ == "__main__":
 			sep="\n", end="\n\n"
 		); exit(0)
 
-	args = {"token": None, "new_user": False}
+	args = {"new_user": False}
 
 	if "-new" in sys.argv:		args["new_user"] = True
-	elif "-token" in sys.argv:	args["token"] = sys.argv[sys.argv.index("-token") + 1]
 	if "-nogui" in sys.argv:	console_mode(**args)
 	else:						gui_mode(**args)
 # https://github.com/hoffstadt/DearPyGui
 # https://en.wikipedia.org/wiki/SOLID
+
+
+# TODO:
+# add SHA3-512, SHA256, CRC64, CRC(n) check
