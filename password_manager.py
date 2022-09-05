@@ -104,3 +104,7 @@ if __name__ == "__main__":
 
 # TODO:
 # add SHA3-512, SHA256, CRC64, CRC(n) check
+# sha256:	https://www.google.com/search?q=c%2B%2B+sha256+library&oq=c%2B%2B+sha256&aqs=chrome.1.69i57j0i22i30l9.8513j0j7&sourceid=chrome&ie=UTF-8
+# eas:		https://www.google.com/search?q=c%2B%2B+aes+library&oq=c%2B%2B+aes+lib&aqs=chrome.1.69i57j0i512j0i22i30l2.5424j0j7&sourceid=chrome&ie=UTF-8
+# sha3-512:	https://www.google.com/search?q=c%2B%2B+sha3-512+library&oq=c%2B%2B+sha3-512+library&aqs=chrome..69i57j33i160.9059j0j7&sourceid=chrome&ie=UTF-8
+# crc (own implementation)
