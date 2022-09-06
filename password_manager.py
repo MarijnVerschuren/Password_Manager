@@ -64,10 +64,14 @@ class Lockbox:
 	def unlock(self) -> None:  # TODO
 		self.name =	input("lockbox name: ")
 		self.key =	getpass("lockbox key: ")
-		self.path =	os.path.join(user_folder, lockbox_name)
+		self.path =	os.path.join(user_folder, self.name)
 		# check if the hash in the user file is the same
 		# then load passwords
-		with open(path, "rb") as file:
+		if not os.path.exists(self.path):
+			clear_print("incorrect lockbox name\n")
+			return self.unlock()  # call function recursively
+		with open(self.path, "rb") as file:
+			pass
 			
 
 
@@ -84,6 +88,7 @@ def gui_mode(new_user: bool) -> None:
 
 
 if __name__ == "__main__":
+	print(sha256_test())
 	if "-help" in sys.argv: print(
 			"[-new]\t\tmake new user",
 			"[-nogui]\trun password manager in console mode",
@@ -93,8 +98,8 @@ if __name__ == "__main__":
 			sep="\n", end="\n\n"
 		); exit(0)
 
+	clear_console()
 	args = {"new_user": False}
-
 	if "-new" in sys.argv:		args["new_user"] = True
 	if "-nogui" in sys.argv:	console_mode(**args)
 	else:						gui_mode(**args)
@@ -104,7 +109,7 @@ if __name__ == "__main__":
 
 # TODO:
 # add SHA3-512, SHA256, CRC64, CRC(n) check
-# sha256:	https://www.google.com/search?q=c%2B%2B+sha256+library&oq=c%2B%2B+sha256&aqs=chrome.1.69i57j0i22i30l9.8513j0j7&sourceid=chrome&ie=UTF-8
+# sha256:  DONE: 	https://www.google.com/search?q=c%2B%2B+sha256+library&oq=c%2B%2B+sha256&aqs=chrome.1.69i57j0i22i30l9.8513j0j7&sourceid=chrome&ie=UTF-8
 # eas:		https://www.google.com/search?q=c%2B%2B+aes+library&oq=c%2B%2B+aes+lib&aqs=chrome.1.69i57j0i512j0i22i30l2.5424j0j7&sourceid=chrome&ie=UTF-8
 # sha3-512:	https://www.google.com/search?q=c%2B%2B+sha3-512+library&oq=c%2B%2B+sha3-512+library&aqs=chrome..69i57j33i160.9059j0j7&sourceid=chrome&ie=UTF-8
 # crc (own implementation)
