@@ -11,8 +11,14 @@ setup (
 		   Extension(
 				"_py_lib",
 				sources=[
+					"src\\hash.cpp",
+					"int\\hash.cpp",
+					"src\\encryption.cpp",
+					"int\\encryption.cpp",
+					"src\\io.cpp",
+					"int\\io.cpp",
+					# final cpp / hpp files
 					"int\\py_lib.cpp",
-					"src\\py_lib.cpp"
 				]
 		   )
 	   ],

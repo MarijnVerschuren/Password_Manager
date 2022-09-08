@@ -9,12 +9,12 @@ if _swig_python_version_info >= (2, 7, 0):
     def swig_import_helper():
         import importlib
         pkg = __name__.rpartition('.')[0]
-        mname = '.'.join((pkg, '_py_lib')).lstrip('.')
+        mname = '.'.join((pkg, '_hash')).lstrip('.')
         try:
             return importlib.import_module(mname)
         except ImportError:
-            return importlib.import_module('_py_lib')
-    _py_lib = swig_import_helper()
+            return importlib.import_module('_hash')
+    _hash = swig_import_helper()
     del swig_import_helper
 elif _swig_python_version_info >= (2, 6, 0):
     def swig_import_helper():
@@ -22,20 +22,20 @@ elif _swig_python_version_info >= (2, 6, 0):
         import imp
         fp = None
         try:
-            fp, pathname, description = imp.find_module('_py_lib', [dirname(__file__)])
+            fp, pathname, description = imp.find_module('_hash', [dirname(__file__)])
         except ImportError:
-            import _py_lib
-            return _py_lib
+            import _hash
+            return _hash
         try:
-            _mod = imp.load_module('_py_lib', fp, pathname, description)
+            _mod = imp.load_module('_hash', fp, pathname, description)
         finally:
             if fp is not None:
                 fp.close()
         return _mod
-    _py_lib = swig_import_helper()
+    _hash = swig_import_helper()
     del swig_import_helper
 else:
-    import _py_lib
+    import _hash
 del _swig_python_version_info
 
 try:
@@ -95,51 +95,6 @@ except __builtin__.Exception:
         pass
     _newclass = 0
 
-AESKeyLength_AES_128 = _py_lib.AESKeyLength_AES_128
-AESKeyLength_AES_192 = _py_lib.AESKeyLength_AES_192
-AESKeyLength_AES_256 = _py_lib.AESKeyLength_AES_256
-class AES(_object):
-    __swig_setmethods__ = {}
-    __setattr__ = lambda self, name, value: _swig_setattr(self, AES, name, value)
-    __swig_getmethods__ = {}
-    __getattr__ = lambda self, name: _swig_getattr(self, AES, name)
-    __repr__ = _swig_repr
-
-    def __init__(self, *args):
-        this = _py_lib.new_AES(*args)
-        try:
-            self.this.append(this)
-        except __builtin__.Exception:
-            self.this = this
-
-    def EncryptECB(self, *args):
-        return _py_lib.AES_EncryptECB(self, *args)
-
-    def DecryptECB(self, *args):
-        return _py_lib.AES_DecryptECB(self, *args)
-
-    def EncryptCBC(self, *args):
-        return _py_lib.AES_EncryptCBC(self, *args)
-
-    def DecryptCBC(self, *args):
-        return _py_lib.AES_DecryptCBC(self, *args)
-
-    def EncryptCFB(self, *args):
-        return _py_lib.AES_EncryptCFB(self, *args)
-
-    def DecryptCFB(self, *args):
-        return _py_lib.AES_DecryptCFB(self, *args)
-
-    def printHexArray(self, a, n):
-        return _py_lib.AES_printHexArray(self, a, n)
-
-    def printHexVector(self, a):
-        return _py_lib.AES_printHexVector(self, a)
-    __swig_destroy__ = _py_lib.delete_AES
-    __del__ = lambda self: None
-AES_swigregister = _py_lib.AES_swigregister
-AES_swigregister(AES)
-
 class Hash(_object):
     __swig_setmethods__ = {}
     __setattr__ = lambda self, name, value: _swig_setattr(self, Hash, name, value)
@@ -151,26 +106,20 @@ class Hash(_object):
     __repr__ = _swig_repr
 
     def __call__(self, *args):
-        return _py_lib.Hash___call__(self, *args)
+        return _hash.Hash___call__(self, *args)
 
     def add(self, *args):
-        return _py_lib.Hash_add(self, *args)
+        return _hash.Hash_add(self, *args)
 
     def get_hash(self):
-        return _py_lib.Hash_get_hash(self)
+        return _hash.Hash_get_hash(self)
 
     def reset(self):
-        return _py_lib.Hash_reset(self)
-    __swig_destroy__ = _py_lib.delete_Hash
+        return _hash.Hash_reset(self)
+    __swig_destroy__ = _hash.delete_Hash
     __del__ = lambda self: None
-Hash_swigregister = _py_lib.Hash_swigregister
+Hash_swigregister = _hash.Hash_swigregister
 Hash_swigregister(Hash)
-cvar = _py_lib.cvar
-sbox = cvar.sbox
-inv_sbox = cvar.inv_sbox
-GF_MUL_TABLE = cvar.GF_MUL_TABLE
-CMDS = cvar.CMDS
-INV_CMDS = cvar.INV_CMDS
 
 class SHA256(Hash):
     __swig_setmethods__ = {}
@@ -182,38 +131,32 @@ class SHA256(Hash):
         __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
     __getattr__ = lambda self, name: _swig_getattr(self, SHA256, name)
     __repr__ = _swig_repr
-    BlockSize = _py_lib.SHA256_BlockSize
-    HashBytes = _py_lib.SHA256_HashBytes
+    BlockSize = _hash.SHA256_BlockSize
+    HashBytes = _hash.SHA256_HashBytes
 
     def __init__(self):
-        this = _py_lib.new_SHA256()
+        this = _hash.new_SHA256()
         try:
             self.this.append(this)
         except __builtin__.Exception:
             self.this = this
 
     def __call__(self, *args):
-        return _py_lib.SHA256___call__(self, *args)
+        return _hash.SHA256___call__(self, *args)
 
     def add(self, *args):
-        return _py_lib.SHA256_add(self, *args)
+        return _hash.SHA256_add(self, *args)
 
     def get_hash(self, *args):
-        return _py_lib.SHA256_get_hash(self, *args)
+        return _hash.SHA256_get_hash(self, *args)
 
     def reset(self):
-        return _py_lib.SHA256_reset(self)
-    __swig_destroy__ = _py_lib.delete_SHA256
+        return _hash.SHA256_reset(self)
+    __swig_destroy__ = _hash.delete_SHA256
     __del__ = lambda self: None
-SHA256_swigregister = _py_lib.SHA256_swigregister
+SHA256_swigregister = _hash.SHA256_swigregister
 SHA256_swigregister(SHA256)
 
-CON_BACKSPACE = _py_lib.CON_BACKSPACE
-CON_RETURN = _py_lib.CON_RETURN
-
-def getpass(*args):
-    return _py_lib.getpass(*args)
-getpass = _py_lib.getpass
 # This file is compatible with both classic and new-style classes.
 
 

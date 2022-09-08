@@ -63,7 +63,7 @@ class Lockbox:
 
 	def unlock(self) -> None:  # TODO
 		self.name =	input("lockbox name: ")
-		self.key =	getpass("lockbox key: ")
+		self.key =	getpass("lockbox key: ", "#")
 		self.path =	os.path.join(user_folder, self.name)
 		# check if the hash in the user file is the same
 		# then load passwords
@@ -88,6 +88,11 @@ def gui_mode(new_user: bool) -> None:
 
 
 if __name__ == "__main__":
+	#a = AES()
+	#a.EncryptCBC(plain, plainLen, key);
+	s = SHA256()
+	print(s("abcdef"))
+	input()
 	if "-help" in sys.argv: print(
 			"[-new]\t\tmake new user",
 			"[-nogui]\trun password manager in console mode",

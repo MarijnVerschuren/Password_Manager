@@ -4,7 +4,7 @@ __all__ = [
 	# python functions (helpers / lambda)
 	"clear_console", "clear_print", 
 	# c++ classes
-	"SHA256",
+	"SHA256", "AES",
 	# c++ functions
 	"getpass"
 ]

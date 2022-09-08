@@ -1,19 +1,24 @@
 #pragma once
 
-
-#include <iostream>
 #include <string>
-#include <windows.h>
-#include <stdint.h>
-
-#define CON_BACKSPACE 8
-#define CON_RETURN 13  // Carriage Return
+#ifndef _MSC_VER  // big endian architectures need #define __BYTE_ORDER __BIG_ENDIAN
+#include <endian.h>
+#endif
 
 
+/// compute SHA256 hash
+/** Usage:
+    SHA256 sha256;
+    std::string myHash  = sha256("Hello World");     // std::string
+    std::string myHash2 = sha256("How are you", 11); // arbitrary data, 11 bytes
 
-////////////////////////////////////////////////|
-///		HASH									/
-/// abstract base class ////////////////////////
+    // or in a streaming fashion:
+
+    SHA256 sha256;
+    while (more data available)
+      sha256.add(pointer to fresh data, number of new bytes);
+    std::string myHash3 = sha256.getHash();
+  */
 class Hash {
 public:
 	/// compute hash of a memory block
@@ -74,10 +79,3 @@ private:
 	/// hash, stored as integers
 	uint32_t m_hash[HashValues];
 };
-
-
-
-////////////////////////////////////////////////|
-///		FUNCTIONS								/
-////////////////////////////////////////////////
-std::string getpass(const char* prompt, bool show_asterisk = true);

@@ -11,7 +11,10 @@ if __name__ == "__main__":
 	run(rf"echo y|rmdir {compile_folder}\int\Release /S")
 	run(rf"echo y|del {compile_folder}\bin\*.*")
 
-	run(rf"swig -c++ -python -outdir {compile_folder}/int -o {compile_folder}/int/py_lib.cpp {compile_folder}/src/py_lib.i")
+	run(rf"swig -c++ -python -outdir {compile_folder}/int -o {compile_folder}/int/hash.cpp {compile_folder}/src/hash.i")
+	run(rf"swig -c++ -python -outdir {compile_folder}/int -o {compile_folder}/int/encryption.cpp {compile_folder}/src/encryption.i")
+	run(rf"swig -c++ -python -outdir {compile_folder}/int -o {compile_folder}/int/io.cpp {compile_folder}/src/io.i")
+	run(rf"swig -c++ -python -outdir {compile_folder}/int -o {compile_folder}/int/py_lib.cpp {compile_folder}/src/py_lib.i")  # i file that includes all swig units listed above
 	run(rf"python {compile_folder}/setup.py build_ext --include-dirs {compile_folder}/src --build-lib {compile_folder}/bin --build-temp {compile_folder}/int --swig-cpp")
 
 	run(rf"echo F|xcopy {compile_folder}\bin\*.pyd {root_folder}\_py_lib.pyd /y")
