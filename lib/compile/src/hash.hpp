@@ -57,7 +57,7 @@ public:
 	/// return latest hash as 64 hex characters
 	std::string		get_hash() override;
 	/// return latest hash as bytes
-	void			get_raw_hash(unsigned char** buffer);
+	void					get_raw_hash(unsigned char** buffer);
 
 	/// restart
 	void reset() override;
