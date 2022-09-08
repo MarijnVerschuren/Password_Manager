@@ -6,5 +6,5 @@
 
 
 %{
-
+// #define SWIG_PYTHON_STRICT_BYTE_CHAR
 %}

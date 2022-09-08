@@ -3119,8 +3119,7 @@ namespace swig {
 #include <string>
 
 
-// #define SWIG_PYTHON_STRICT_BYTE_CHAR
-#include "encryption.hpp"
+	#include "encryption.hpp"
 
 
 SWIGINTERNINLINE PyObject*
@@ -3420,9 +3419,9 @@ fail:
 SWIGINTERN PyObject *_wrap_AES_EncryptECB__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   AES *arg1 = (AES *) 0 ;
-  unsigned char *arg2 ;
+  unsigned char *arg2 = (unsigned char *) 0 ;
   unsigned int arg3 ;
-  unsigned char *arg4 ;
+  unsigned char *arg4 = (unsigned char *) 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   void *argp2 = 0 ;
@@ -3445,8 +3444,8 @@ SWIGINTERN PyObject *_wrap_AES_EncryptECB__SWIG_0(PyObject *SWIGUNUSEDPARM(self)
   arg1 = reinterpret_cast< AES * >(argp1);
   res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p_unsigned_char, 0 |  0 );
   if (!SWIG_IsOK(res2)) {
-    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "AES_EncryptECB" "', argument " "2"" of type '" "unsigned char const []""'"); 
-  } 
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "AES_EncryptECB" "', argument " "2"" of type '" "unsigned char const *""'"); 
+  }
   arg2 = reinterpret_cast< unsigned char * >(argp2);
   ecode3 = SWIG_AsVal_unsigned_SS_int(obj2, &val3);
   if (!SWIG_IsOK(ecode3)) {
@@ -3455,10 +3454,10 @@ SWIGINTERN PyObject *_wrap_AES_EncryptECB__SWIG_0(PyObject *SWIGUNUSEDPARM(self)
   arg3 = static_cast< unsigned int >(val3);
   res4 = SWIG_ConvertPtr(obj3, &argp4,SWIGTYPE_p_unsigned_char, 0 |  0 );
   if (!SWIG_IsOK(res4)) {
-    SWIG_exception_fail(SWIG_ArgError(res4), "in method '" "AES_EncryptECB" "', argument " "4"" of type '" "unsigned char const []""'"); 
-  } 
+    SWIG_exception_fail(SWIG_ArgError(res4), "in method '" "AES_EncryptECB" "', argument " "4"" of type '" "unsigned char const *""'"); 
+  }
   arg4 = reinterpret_cast< unsigned char * >(argp4);
-  result = (unsigned char *)(arg1)->EncryptECB((unsigned char const (*))arg2,arg3,(unsigned char const (*))arg4);
+  result = (unsigned char *)(arg1)->EncryptECB((unsigned char const *)arg2,arg3,(unsigned char const *)arg4);
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_unsigned_char, 0 |  0 );
   return resultobj;
 fail:
@@ -3469,9 +3468,9 @@ fail:
 SWIGINTERN PyObject *_wrap_AES_DecryptECB__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   AES *arg1 = (AES *) 0 ;
-  unsigned char *arg2 ;
+  unsigned char *arg2 = (unsigned char *) 0 ;
   unsigned int arg3 ;
-  unsigned char *arg4 ;
+  unsigned char *arg4 = (unsigned char *) 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   void *argp2 = 0 ;
@@ -3494,8 +3493,8 @@ SWIGINTERN PyObject *_wrap_AES_DecryptECB__SWIG_0(PyObject *SWIGUNUSEDPARM(self)
   arg1 = reinterpret_cast< AES * >(argp1);
   res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p_unsigned_char, 0 |  0 );
   if (!SWIG_IsOK(res2)) {
-    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "AES_DecryptECB" "', argument " "2"" of type '" "unsigned char const []""'"); 
-  } 
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "AES_DecryptECB" "', argument " "2"" of type '" "unsigned char const *""'"); 
+  }
   arg2 = reinterpret_cast< unsigned char * >(argp2);
   ecode3 = SWIG_AsVal_unsigned_SS_int(obj2, &val3);
   if (!SWIG_IsOK(ecode3)) {
@@ -3504,10 +3503,10 @@ SWIGINTERN PyObject *_wrap_AES_DecryptECB__SWIG_0(PyObject *SWIGUNUSEDPARM(self)
   arg3 = static_cast< unsigned int >(val3);
   res4 = SWIG_ConvertPtr(obj3, &argp4,SWIGTYPE_p_unsigned_char, 0 |  0 );
   if (!SWIG_IsOK(res4)) {
-    SWIG_exception_fail(SWIG_ArgError(res4), "in method '" "AES_DecryptECB" "', argument " "4"" of type '" "unsigned char const []""'"); 
-  } 
+    SWIG_exception_fail(SWIG_ArgError(res4), "in method '" "AES_DecryptECB" "', argument " "4"" of type '" "unsigned char const *""'"); 
+  }
   arg4 = reinterpret_cast< unsigned char * >(argp4);
-  result = (unsigned char *)(arg1)->DecryptECB((unsigned char const (*))arg2,arg3,(unsigned char const (*))arg4);
+  result = (unsigned char *)(arg1)->DecryptECB((unsigned char const *)arg2,arg3,(unsigned char const *)arg4);
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_unsigned_char, 0 |  0 );
   return resultobj;
 fail:
@@ -3518,9 +3517,9 @@ fail:
 SWIGINTERN PyObject *_wrap_AES_EncryptCBC__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   AES *arg1 = (AES *) 0 ;
-  unsigned char *arg2 ;
+  unsigned char *arg2 = (unsigned char *) 0 ;
   unsigned int arg3 ;
-  unsigned char *arg4 ;
+  unsigned char *arg4 = (unsigned char *) 0 ;
   unsigned char *arg5 = (unsigned char *) 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
@@ -3547,8 +3546,8 @@ SWIGINTERN PyObject *_wrap_AES_EncryptCBC__SWIG_0(PyObject *SWIGUNUSEDPARM(self)
   arg1 = reinterpret_cast< AES * >(argp1);
   res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p_unsigned_char, 0 |  0 );
   if (!SWIG_IsOK(res2)) {
-    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "AES_EncryptCBC" "', argument " "2"" of type '" "unsigned char const []""'"); 
-  } 
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "AES_EncryptCBC" "', argument " "2"" of type '" "unsigned char const *""'"); 
+  }
   arg2 = reinterpret_cast< unsigned char * >(argp2);
   ecode3 = SWIG_AsVal_unsigned_SS_int(obj2, &val3);
   if (!SWIG_IsOK(ecode3)) {
@@ -3557,15 +3556,15 @@ SWIGINTERN PyObject *_wrap_AES_EncryptCBC__SWIG_0(PyObject *SWIGUNUSEDPARM(self)
   arg3 = static_cast< unsigned int >(val3);
   res4 = SWIG_ConvertPtr(obj3, &argp4,SWIGTYPE_p_unsigned_char, 0 |  0 );
   if (!SWIG_IsOK(res4)) {
-    SWIG_exception_fail(SWIG_ArgError(res4), "in method '" "AES_EncryptCBC" "', argument " "4"" of type '" "unsigned char const []""'"); 
-  } 
+    SWIG_exception_fail(SWIG_ArgError(res4), "in method '" "AES_EncryptCBC" "', argument " "4"" of type '" "unsigned char const *""'"); 
+  }
   arg4 = reinterpret_cast< unsigned char * >(argp4);
   res5 = SWIG_ConvertPtr(obj4, &argp5,SWIGTYPE_p_unsigned_char, 0 |  0 );
   if (!SWIG_IsOK(res5)) {
     SWIG_exception_fail(SWIG_ArgError(res5), "in method '" "AES_EncryptCBC" "', argument " "5"" of type '" "unsigned char const *""'"); 
   }
   arg5 = reinterpret_cast< unsigned char * >(argp5);
-  result = (unsigned char *)(arg1)->EncryptCBC((unsigned char const (*))arg2,arg3,(unsigned char const (*))arg4,(unsigned char const *)arg5);
+  result = (unsigned char *)(arg1)->EncryptCBC((unsigned char const *)arg2,arg3,(unsigned char const *)arg4,(unsigned char const *)arg5);
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_unsigned_char, 0 |  0 );
   return resultobj;
 fail:
@@ -3576,9 +3575,9 @@ fail:
 SWIGINTERN PyObject *_wrap_AES_DecryptCBC__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   AES *arg1 = (AES *) 0 ;
-  unsigned char *arg2 ;
+  unsigned char *arg2 = (unsigned char *) 0 ;
   unsigned int arg3 ;
-  unsigned char *arg4 ;
+  unsigned char *arg4 = (unsigned char *) 0 ;
   unsigned char *arg5 = (unsigned char *) 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
@@ -3605,8 +3604,8 @@ SWIGINTERN PyObject *_wrap_AES_DecryptCBC__SWIG_0(PyObject *SWIGUNUSEDPARM(self)
   arg1 = reinterpret_cast< AES * >(argp1);
   res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p_unsigned_char, 0 |  0 );
   if (!SWIG_IsOK(res2)) {
-    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "AES_DecryptCBC" "', argument " "2"" of type '" "unsigned char const []""'"); 
-  } 
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "AES_DecryptCBC" "', argument " "2"" of type '" "unsigned char const *""'"); 
+  }
   arg2 = reinterpret_cast< unsigned char * >(argp2);
   ecode3 = SWIG_AsVal_unsigned_SS_int(obj2, &val3);
   if (!SWIG_IsOK(ecode3)) {
@@ -3615,15 +3614,15 @@ SWIGINTERN PyObject *_wrap_AES_DecryptCBC__SWIG_0(PyObject *SWIGUNUSEDPARM(self)
   arg3 = static_cast< unsigned int >(val3);
   res4 = SWIG_ConvertPtr(obj3, &argp4,SWIGTYPE_p_unsigned_char, 0 |  0 );
   if (!SWIG_IsOK(res4)) {
-    SWIG_exception_fail(SWIG_ArgError(res4), "in method '" "AES_DecryptCBC" "', argument " "4"" of type '" "unsigned char const []""'"); 
-  } 
+    SWIG_exception_fail(SWIG_ArgError(res4), "in method '" "AES_DecryptCBC" "', argument " "4"" of type '" "unsigned char const *""'"); 
+  }
   arg4 = reinterpret_cast< unsigned char * >(argp4);
   res5 = SWIG_ConvertPtr(obj4, &argp5,SWIGTYPE_p_unsigned_char, 0 |  0 );
   if (!SWIG_IsOK(res5)) {
     SWIG_exception_fail(SWIG_ArgError(res5), "in method '" "AES_DecryptCBC" "', argument " "5"" of type '" "unsigned char const *""'"); 
   }
   arg5 = reinterpret_cast< unsigned char * >(argp5);
-  result = (unsigned char *)(arg1)->DecryptCBC((unsigned char const (*))arg2,arg3,(unsigned char const (*))arg4,(unsigned char const *)arg5);
+  result = (unsigned char *)(arg1)->DecryptCBC((unsigned char const *)arg2,arg3,(unsigned char const *)arg4,(unsigned char const *)arg5);
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_unsigned_char, 0 |  0 );
   return resultobj;
 fail:
@@ -3634,9 +3633,9 @@ fail:
 SWIGINTERN PyObject *_wrap_AES_EncryptCFB__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   AES *arg1 = (AES *) 0 ;
-  unsigned char *arg2 ;
+  unsigned char *arg2 = (unsigned char *) 0 ;
   unsigned int arg3 ;
-  unsigned char *arg4 ;
+  unsigned char *arg4 = (unsigned char *) 0 ;
   unsigned char *arg5 = (unsigned char *) 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
@@ -3663,8 +3662,8 @@ SWIGINTERN PyObject *_wrap_AES_EncryptCFB__SWIG_0(PyObject *SWIGUNUSEDPARM(self)
   arg1 = reinterpret_cast< AES * >(argp1);
   res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p_unsigned_char, 0 |  0 );
   if (!SWIG_IsOK(res2)) {
-    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "AES_EncryptCFB" "', argument " "2"" of type '" "unsigned char const []""'"); 
-  } 
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "AES_EncryptCFB" "', argument " "2"" of type '" "unsigned char const *""'"); 
+  }
   arg2 = reinterpret_cast< unsigned char * >(argp2);
   ecode3 = SWIG_AsVal_unsigned_SS_int(obj2, &val3);
   if (!SWIG_IsOK(ecode3)) {
@@ -3673,15 +3672,15 @@ SWIGINTERN PyObject *_wrap_AES_EncryptCFB__SWIG_0(PyObject *SWIGUNUSEDPARM(self)
   arg3 = static_cast< unsigned int >(val3);
   res4 = SWIG_ConvertPtr(obj3, &argp4,SWIGTYPE_p_unsigned_char, 0 |  0 );
   if (!SWIG_IsOK(res4)) {
-    SWIG_exception_fail(SWIG_ArgError(res4), "in method '" "AES_EncryptCFB" "', argument " "4"" of type '" "unsigned char const []""'"); 
-  } 
+    SWIG_exception_fail(SWIG_ArgError(res4), "in method '" "AES_EncryptCFB" "', argument " "4"" of type '" "unsigned char const *""'"); 
+  }
   arg4 = reinterpret_cast< unsigned char * >(argp4);
   res5 = SWIG_ConvertPtr(obj4, &argp5,SWIGTYPE_p_unsigned_char, 0 |  0 );
   if (!SWIG_IsOK(res5)) {
     SWIG_exception_fail(SWIG_ArgError(res5), "in method '" "AES_EncryptCFB" "', argument " "5"" of type '" "unsigned char const *""'"); 
   }
   arg5 = reinterpret_cast< unsigned char * >(argp5);
-  result = (unsigned char *)(arg1)->EncryptCFB((unsigned char const (*))arg2,arg3,(unsigned char const (*))arg4,(unsigned char const *)arg5);
+  result = (unsigned char *)(arg1)->EncryptCFB((unsigned char const *)arg2,arg3,(unsigned char const *)arg4,(unsigned char const *)arg5);
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_unsigned_char, 0 |  0 );
   return resultobj;
 fail:
@@ -3692,9 +3691,9 @@ fail:
 SWIGINTERN PyObject *_wrap_AES_DecryptCFB__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   AES *arg1 = (AES *) 0 ;
-  unsigned char *arg2 ;
+  unsigned char *arg2 = (unsigned char *) 0 ;
   unsigned int arg3 ;
-  unsigned char *arg4 ;
+  unsigned char *arg4 = (unsigned char *) 0 ;
   unsigned char *arg5 = (unsigned char *) 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
@@ -3721,8 +3720,8 @@ SWIGINTERN PyObject *_wrap_AES_DecryptCFB__SWIG_0(PyObject *SWIGUNUSEDPARM(self)
   arg1 = reinterpret_cast< AES * >(argp1);
   res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p_unsigned_char, 0 |  0 );
   if (!SWIG_IsOK(res2)) {
-    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "AES_DecryptCFB" "', argument " "2"" of type '" "unsigned char const []""'"); 
-  } 
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "AES_DecryptCFB" "', argument " "2"" of type '" "unsigned char const *""'"); 
+  }
   arg2 = reinterpret_cast< unsigned char * >(argp2);
   ecode3 = SWIG_AsVal_unsigned_SS_int(obj2, &val3);
   if (!SWIG_IsOK(ecode3)) {
@@ -3731,15 +3730,15 @@ SWIGINTERN PyObject *_wrap_AES_DecryptCFB__SWIG_0(PyObject *SWIGUNUSEDPARM(self)
   arg3 = static_cast< unsigned int >(val3);
   res4 = SWIG_ConvertPtr(obj3, &argp4,SWIGTYPE_p_unsigned_char, 0 |  0 );
   if (!SWIG_IsOK(res4)) {
-    SWIG_exception_fail(SWIG_ArgError(res4), "in method '" "AES_DecryptCFB" "', argument " "4"" of type '" "unsigned char const []""'"); 
-  } 
+    SWIG_exception_fail(SWIG_ArgError(res4), "in method '" "AES_DecryptCFB" "', argument " "4"" of type '" "unsigned char const *""'"); 
+  }
   arg4 = reinterpret_cast< unsigned char * >(argp4);
   res5 = SWIG_ConvertPtr(obj4, &argp5,SWIGTYPE_p_unsigned_char, 0 |  0 );
   if (!SWIG_IsOK(res5)) {
     SWIG_exception_fail(SWIG_ArgError(res5), "in method '" "AES_DecryptCFB" "', argument " "5"" of type '" "unsigned char const *""'"); 
   }
   arg5 = reinterpret_cast< unsigned char * >(argp5);
-  result = (unsigned char *)(arg1)->DecryptCFB((unsigned char const (*))arg2,arg3,(unsigned char const (*))arg4,(unsigned char const *)arg5);
+  result = (unsigned char *)(arg1)->DecryptCFB((unsigned char const *)arg2,arg3,(unsigned char const *)arg4,(unsigned char const *)arg5);
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_unsigned_char, 0 |  0 );
   return resultobj;
 fail:
@@ -3861,7 +3860,7 @@ SWIGINTERN PyObject *_wrap_AES_EncryptECB(PyObject *self, PyObject *args) {
 fail:
   SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'AES_EncryptECB'.\n"
     "  Possible C/C++ prototypes are:\n"
-    "    AES::EncryptECB(unsigned char const [],unsigned int,unsigned char const [])\n"
+    "    AES::EncryptECB(unsigned char const *,unsigned int,unsigned char const *)\n"
     "    AES::EncryptECB(std::vector< unsigned char >,std::vector< unsigned char >)\n");
   return 0;
 }
@@ -3981,7 +3980,7 @@ SWIGINTERN PyObject *_wrap_AES_DecryptECB(PyObject *self, PyObject *args) {
 fail:
   SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'AES_DecryptECB'.\n"
     "  Possible C/C++ prototypes are:\n"
-    "    AES::DecryptECB(unsigned char const [],unsigned int,unsigned char const [])\n"
+    "    AES::DecryptECB(unsigned char const *,unsigned int,unsigned char const *)\n"
     "    AES::DecryptECB(std::vector< unsigned char >,std::vector< unsigned char >)\n");
   return 0;
 }
@@ -4127,7 +4126,7 @@ SWIGINTERN PyObject *_wrap_AES_EncryptCBC(PyObject *self, PyObject *args) {
 fail:
   SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'AES_EncryptCBC'.\n"
     "  Possible C/C++ prototypes are:\n"
-    "    AES::EncryptCBC(unsigned char const [],unsigned int,unsigned char const [],unsigned char const *)\n"
+    "    AES::EncryptCBC(unsigned char const *,unsigned int,unsigned char const *,unsigned char const *)\n"
     "    AES::EncryptCBC(std::vector< unsigned char >,std::vector< unsigned char >,std::vector< unsigned char >)\n");
   return 0;
 }
@@ -4273,7 +4272,7 @@ SWIGINTERN PyObject *_wrap_AES_DecryptCBC(PyObject *self, PyObject *args) {
 fail:
   SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'AES_DecryptCBC'.\n"
     "  Possible C/C++ prototypes are:\n"
-    "    AES::DecryptCBC(unsigned char const [],unsigned int,unsigned char const [],unsigned char const *)\n"
+    "    AES::DecryptCBC(unsigned char const *,unsigned int,unsigned char const *,unsigned char const *)\n"
     "    AES::DecryptCBC(std::vector< unsigned char >,std::vector< unsigned char >,std::vector< unsigned char >)\n");
   return 0;
 }
@@ -4419,7 +4418,7 @@ SWIGINTERN PyObject *_wrap_AES_EncryptCFB(PyObject *self, PyObject *args) {
 fail:
   SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'AES_EncryptCFB'.\n"
     "  Possible C/C++ prototypes are:\n"
-    "    AES::EncryptCFB(unsigned char const [],unsigned int,unsigned char const [],unsigned char const *)\n"
+    "    AES::EncryptCFB(unsigned char const *,unsigned int,unsigned char const *,unsigned char const *)\n"
     "    AES::EncryptCFB(std::vector< unsigned char >,std::vector< unsigned char >,std::vector< unsigned char >)\n");
   return 0;
 }
@@ -4565,7 +4564,7 @@ SWIGINTERN PyObject *_wrap_AES_DecryptCFB(PyObject *self, PyObject *args) {
 fail:
   SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'AES_DecryptCFB'.\n"
     "  Possible C/C++ prototypes are:\n"
-    "    AES::DecryptCFB(unsigned char const [],unsigned int,unsigned char const [],unsigned char const *)\n"
+    "    AES::DecryptCFB(unsigned char const *,unsigned int,unsigned char const *,unsigned char const *)\n"
     "    AES::DecryptCFB(std::vector< unsigned char >,std::vector< unsigned char >,std::vector< unsigned char >)\n");
   return 0;
 }
@@ -4574,7 +4573,7 @@ fail:
 SWIGINTERN PyObject *_wrap_AES_printHexArray(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   AES *arg1 = (AES *) 0 ;
-  unsigned char *arg2 ;
+  unsigned char *arg2 = (unsigned char *) 0 ;
   unsigned int arg3 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
@@ -4594,8 +4593,8 @@ SWIGINTERN PyObject *_wrap_AES_printHexArray(PyObject *SWIGUNUSEDPARM(self), PyO
   arg1 = reinterpret_cast< AES * >(argp1);
   res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p_unsigned_char, 0 |  0 );
   if (!SWIG_IsOK(res2)) {
-    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "AES_printHexArray" "', argument " "2"" of type '" "unsigned char []""'"); 
-  } 
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "AES_printHexArray" "', argument " "2"" of type '" "unsigned char *""'"); 
+  }
   arg2 = reinterpret_cast< unsigned char * >(argp2);
   ecode3 = SWIG_AsVal_unsigned_SS_int(obj2, &val3);
   if (!SWIG_IsOK(ecode3)) {

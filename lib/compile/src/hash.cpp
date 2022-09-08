@@ -324,8 +324,8 @@ void SHA256::processBuffer() {
 /// return latest hash as 64 hex characters
 std::string SHA256::get_hash() {
   // compute hash (as raw bytes)
-  uint8_t rawHash[HashBytes];
-  get_hash(rawHash);
+  uint8_t* rawHash = nullptr;
+  get_raw_hash(&rawHash);
 
   // convert to hex string
   std::string result;
@@ -336,12 +336,14 @@ std::string SHA256::get_hash() {
     result += dec2hex[ rawHash[i]       & 15];
   }
 
+  delete[] rawHash;
   return result;
 }
 
 /// return latest hash as bytes
-void SHA256::get_hash(uint8_t buffer[SHA256::HashBytes]) {
+void SHA256::get_raw_hash(uint8_t** buffer) {
   // save old hash if buffer is partially filled
+  *buffer = new uint8_t[HashBytes];
   uint32_t oldHash[HashValues];
   for (int i = 0; i < HashValues; i++) {
     oldHash[i] = m_hash[i];
@@ -350,7 +352,7 @@ void SHA256::get_hash(uint8_t buffer[SHA256::HashBytes]) {
   // process remaining bytes
   processBuffer();
 
-  uint8_t* current = buffer;
+  uint8_t* current = *buffer;
   for (int i = 0; i < HashValues; i++) {
     *current++ = (m_hash[i] >> 24) & 0xFF;
     *current++ = (m_hash[i] >> 16) & 0xFF;

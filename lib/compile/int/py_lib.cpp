@@ -3009,12 +3009,15 @@ SWIG_Python_NonDynamicSetAttr(PyObject *obj, PyObject *name, PyObject *value) {
 #define SWIGTYPE_p_a_16__unsigned_char swig_types[3]
 #define SWIGTYPE_p_a_256__unsigned_char swig_types[4]
 #define SWIGTYPE_p_a_4__unsigned_char swig_types[5]
-#define SWIGTYPE_p_char swig_types[6]
-#define SWIGTYPE_p_std__vectorT_unsigned_char_t swig_types[7]
-#define SWIGTYPE_p_uint64_t swig_types[8]
-#define SWIGTYPE_p_unsigned_char swig_types[9]
-static swig_type_info *swig_types[11];
-static swig_module_info swig_module = {swig_types, 10, 0, 0, 0, 0};
+#define SWIGTYPE_p_buffer swig_types[6]
+#define SWIGTYPE_p_char swig_types[7]
+#define SWIGTYPE_p_p_unsigned_char swig_types[8]
+#define SWIGTYPE_p_std__vectorT_unsigned_char_t swig_types[9]
+#define SWIGTYPE_p_uint64_t swig_types[10]
+#define SWIGTYPE_p_uint8_t swig_types[11]
+#define SWIGTYPE_p_unsigned_char swig_types[12]
+static swig_type_info *swig_types[14];
+static swig_module_info swig_module = {swig_types, 13, 0, 0, 0, 0};
 #define SWIG_TypeQuery(name) SWIG_TypeQueryModule(&swig_module, &swig_module, name)
 #define SWIG_MangledTypeQuery(name) SWIG_MangledTypeQueryModule(&swig_module, &swig_module, name)
 
@@ -3122,8 +3125,7 @@ namespace swig {
 #include <string>
 
 
-// #define SWIG_PYTHON_STRICT_BYTE_CHAR
-#include "encryption.hpp"
+	#include "encryption.hpp"
 
 
 SWIGINTERNINLINE PyObject*
@@ -3348,9 +3350,98 @@ SWIG_AsVal_unsigned_SS_int (PyObject * obj, unsigned int *val)
 }
 
 
-// #define SWIG_PYTHON_STRICT_BYTE_CHAR
-#include "hash.hpp"
+	#define SWIG_PYTHON_2_UNICODE
+	// #define SWIG_PYTHON_STRICT_BYTE_CHAR
+	#include "hash.hpp"
 
+
+typedef uint8_t buffer;
+
+
+#if defined(LLONG_MAX) && !defined(SWIG_LONG_LONG_AVAILABLE)
+#  define SWIG_LONG_LONG_AVAILABLE
+#endif
+
+
+#ifdef SWIG_LONG_LONG_AVAILABLE
+SWIGINTERN int
+SWIG_AsVal_unsigned_SS_long_SS_long (PyObject *obj, unsigned long long *val)
+{
+  int res = SWIG_TypeError;
+  if (PyLong_Check(obj)) {
+    unsigned long long v = PyLong_AsUnsignedLongLong(obj);
+    if (!PyErr_Occurred()) {
+      if (val) *val = v;
+      return SWIG_OK;
+    } else {
+      PyErr_Clear();
+      res = SWIG_OverflowError;
+    }
+  } else {
+    unsigned long v;
+    res = SWIG_AsVal_unsigned_SS_long (obj,&v);
+    if (SWIG_IsOK(res)) {
+      if (val) *val = v;
+      return res;
+    }
+  }
+#ifdef SWIG_PYTHON_CAST_MODE
+  {
+    const double mant_max = 1LL << DBL_MANT_DIG;
+    double d;
+    res = SWIG_AsVal_double (obj,&d);
+    if (SWIG_IsOK(res) && !SWIG_CanCastAsInteger(&d, 0, mant_max))
+      return SWIG_OverflowError;
+    if (SWIG_IsOK(res) && SWIG_CanCastAsInteger(&d, 0, mant_max)) {
+      if (val) *val = (unsigned long long)(d);
+      return SWIG_AddCast(res);
+    }
+    res = SWIG_TypeError;
+  }
+#endif
+  return res;
+}
+#endif
+
+
+SWIGINTERNINLINE int
+SWIG_AsVal_size_t (PyObject * obj, size_t *val)
+{
+  int res = SWIG_TypeError;
+#ifdef SWIG_LONG_LONG_AVAILABLE
+  if (sizeof(size_t) <= sizeof(unsigned long)) {
+#endif
+    unsigned long v;
+    res = SWIG_AsVal_unsigned_SS_long (obj, val ? &v : 0);
+    if (SWIG_IsOK(res) && val) *val = static_cast< size_t >(v);
+#ifdef SWIG_LONG_LONG_AVAILABLE
+  } else if (sizeof(size_t) <= sizeof(unsigned long long)) {
+    unsigned long long v;
+    res = SWIG_AsVal_unsigned_SS_long_SS_long (obj, val ? &v : 0);
+    if (SWIG_IsOK(res) && val) *val = static_cast< size_t >(v);
+  }
+#endif
+  return res;
+}
+
+SWIGINTERN buffer *new_buffer(size_t nelements){
+    return (new uint8_t[nelements]());
+  }
+SWIGINTERN void delete_buffer(buffer *self){
+    delete[] self;
+  }
+SWIGINTERN uint8_t buffer___getitem__(buffer *self,size_t index){
+    return self[index];
+  }
+SWIGINTERN void buffer___setitem__(buffer *self,size_t index,uint8_t value){
+    self[index] = value;
+  }
+SWIGINTERN uint8_t *buffer_cast(buffer *self){
+    return self;
+  }
+SWIGINTERN buffer *buffer_frompointer(uint8_t *t){
+    return static_cast< buffer * >(t);
+  }
 
 SWIGINTERN swig_type_info*
 SWIG_pchar_descriptor(void)
@@ -3545,8 +3636,7 @@ SWIG_AsPtr_std_string (PyObject * obj, std::string **val)
 }
 
 
-// #define SWIG_PYTHON_STRICT_BYTE_CHAR
-#include "io.hpp"
+	#include "io.hpp"
 
 
 SWIGINTERN int
@@ -3593,7 +3683,7 @@ SWIG_AsVal_char (PyObject * obj, char *val)
 }
 
 
-
+// #define SWIG_PYTHON_STRICT_BYTE_CHAR
 
 #ifdef __cplusplus
 extern "C" {
@@ -3671,9 +3761,9 @@ fail:
 SWIGINTERN PyObject *_wrap_AES_EncryptECB__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   AES *arg1 = (AES *) 0 ;
-  unsigned char *arg2 ;
+  unsigned char *arg2 = (unsigned char *) 0 ;
   unsigned int arg3 ;
-  unsigned char *arg4 ;
+  unsigned char *arg4 = (unsigned char *) 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   void *argp2 = 0 ;
@@ -3696,8 +3786,8 @@ SWIGINTERN PyObject *_wrap_AES_EncryptECB__SWIG_0(PyObject *SWIGUNUSEDPARM(self)
   arg1 = reinterpret_cast< AES * >(argp1);
   res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p_unsigned_char, 0 |  0 );
   if (!SWIG_IsOK(res2)) {
-    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "AES_EncryptECB" "', argument " "2"" of type '" "unsigned char const []""'"); 
-  } 
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "AES_EncryptECB" "', argument " "2"" of type '" "unsigned char const *""'"); 
+  }
   arg2 = reinterpret_cast< unsigned char * >(argp2);
   ecode3 = SWIG_AsVal_unsigned_SS_int(obj2, &val3);
   if (!SWIG_IsOK(ecode3)) {
@@ -3706,10 +3796,10 @@ SWIGINTERN PyObject *_wrap_AES_EncryptECB__SWIG_0(PyObject *SWIGUNUSEDPARM(self)
   arg3 = static_cast< unsigned int >(val3);
   res4 = SWIG_ConvertPtr(obj3, &argp4,SWIGTYPE_p_unsigned_char, 0 |  0 );
   if (!SWIG_IsOK(res4)) {
-    SWIG_exception_fail(SWIG_ArgError(res4), "in method '" "AES_EncryptECB" "', argument " "4"" of type '" "unsigned char const []""'"); 
-  } 
+    SWIG_exception_fail(SWIG_ArgError(res4), "in method '" "AES_EncryptECB" "', argument " "4"" of type '" "unsigned char const *""'"); 
+  }
   arg4 = reinterpret_cast< unsigned char * >(argp4);
-  result = (unsigned char *)(arg1)->EncryptECB((unsigned char const (*))arg2,arg3,(unsigned char const (*))arg4);
+  result = (unsigned char *)(arg1)->EncryptECB((unsigned char const *)arg2,arg3,(unsigned char const *)arg4);
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_unsigned_char, 0 |  0 );
   return resultobj;
 fail:
@@ -3720,9 +3810,9 @@ fail:
 SWIGINTERN PyObject *_wrap_AES_DecryptECB__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   AES *arg1 = (AES *) 0 ;
-  unsigned char *arg2 ;
+  unsigned char *arg2 = (unsigned char *) 0 ;
   unsigned int arg3 ;
-  unsigned char *arg4 ;
+  unsigned char *arg4 = (unsigned char *) 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   void *argp2 = 0 ;
@@ -3745,8 +3835,8 @@ SWIGINTERN PyObject *_wrap_AES_DecryptECB__SWIG_0(PyObject *SWIGUNUSEDPARM(self)
   arg1 = reinterpret_cast< AES * >(argp1);
   res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p_unsigned_char, 0 |  0 );
   if (!SWIG_IsOK(res2)) {
-    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "AES_DecryptECB" "', argument " "2"" of type '" "unsigned char const []""'"); 
-  } 
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "AES_DecryptECB" "', argument " "2"" of type '" "unsigned char const *""'"); 
+  }
   arg2 = reinterpret_cast< unsigned char * >(argp2);
   ecode3 = SWIG_AsVal_unsigned_SS_int(obj2, &val3);
   if (!SWIG_IsOK(ecode3)) {
@@ -3755,10 +3845,10 @@ SWIGINTERN PyObject *_wrap_AES_DecryptECB__SWIG_0(PyObject *SWIGUNUSEDPARM(self)
   arg3 = static_cast< unsigned int >(val3);
   res4 = SWIG_ConvertPtr(obj3, &argp4,SWIGTYPE_p_unsigned_char, 0 |  0 );
   if (!SWIG_IsOK(res4)) {
-    SWIG_exception_fail(SWIG_ArgError(res4), "in method '" "AES_DecryptECB" "', argument " "4"" of type '" "unsigned char const []""'"); 
-  } 
+    SWIG_exception_fail(SWIG_ArgError(res4), "in method '" "AES_DecryptECB" "', argument " "4"" of type '" "unsigned char const *""'"); 
+  }
   arg4 = reinterpret_cast< unsigned char * >(argp4);
-  result = (unsigned char *)(arg1)->DecryptECB((unsigned char const (*))arg2,arg3,(unsigned char const (*))arg4);
+  result = (unsigned char *)(arg1)->DecryptECB((unsigned char const *)arg2,arg3,(unsigned char const *)arg4);
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_unsigned_char, 0 |  0 );
   return resultobj;
 fail:
@@ -3769,9 +3859,9 @@ fail:
 SWIGINTERN PyObject *_wrap_AES_EncryptCBC__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   AES *arg1 = (AES *) 0 ;
-  unsigned char *arg2 ;
+  unsigned char *arg2 = (unsigned char *) 0 ;
   unsigned int arg3 ;
-  unsigned char *arg4 ;
+  unsigned char *arg4 = (unsigned char *) 0 ;
   unsigned char *arg5 = (unsigned char *) 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
@@ -3798,8 +3888,8 @@ SWIGINTERN PyObject *_wrap_AES_EncryptCBC__SWIG_0(PyObject *SWIGUNUSEDPARM(self)
   arg1 = reinterpret_cast< AES * >(argp1);
   res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p_unsigned_char, 0 |  0 );
   if (!SWIG_IsOK(res2)) {
-    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "AES_EncryptCBC" "', argument " "2"" of type '" "unsigned char const []""'"); 
-  } 
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "AES_EncryptCBC" "', argument " "2"" of type '" "unsigned char const *""'"); 
+  }
   arg2 = reinterpret_cast< unsigned char * >(argp2);
   ecode3 = SWIG_AsVal_unsigned_SS_int(obj2, &val3);
   if (!SWIG_IsOK(ecode3)) {
@@ -3808,15 +3898,15 @@ SWIGINTERN PyObject *_wrap_AES_EncryptCBC__SWIG_0(PyObject *SWIGUNUSEDPARM(self)
   arg3 = static_cast< unsigned int >(val3);
   res4 = SWIG_ConvertPtr(obj3, &argp4,SWIGTYPE_p_unsigned_char, 0 |  0 );
   if (!SWIG_IsOK(res4)) {
-    SWIG_exception_fail(SWIG_ArgError(res4), "in method '" "AES_EncryptCBC" "', argument " "4"" of type '" "unsigned char const []""'"); 
-  } 
+    SWIG_exception_fail(SWIG_ArgError(res4), "in method '" "AES_EncryptCBC" "', argument " "4"" of type '" "unsigned char const *""'"); 
+  }
   arg4 = reinterpret_cast< unsigned char * >(argp4);
   res5 = SWIG_ConvertPtr(obj4, &argp5,SWIGTYPE_p_unsigned_char, 0 |  0 );
   if (!SWIG_IsOK(res5)) {
     SWIG_exception_fail(SWIG_ArgError(res5), "in method '" "AES_EncryptCBC" "', argument " "5"" of type '" "unsigned char const *""'"); 
   }
   arg5 = reinterpret_cast< unsigned char * >(argp5);
-  result = (unsigned char *)(arg1)->EncryptCBC((unsigned char const (*))arg2,arg3,(unsigned char const (*))arg4,(unsigned char const *)arg5);
+  result = (unsigned char *)(arg1)->EncryptCBC((unsigned char const *)arg2,arg3,(unsigned char const *)arg4,(unsigned char const *)arg5);
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_unsigned_char, 0 |  0 );
   return resultobj;
 fail:
@@ -3827,9 +3917,9 @@ fail:
 SWIGINTERN PyObject *_wrap_AES_DecryptCBC__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   AES *arg1 = (AES *) 0 ;
-  unsigned char *arg2 ;
+  unsigned char *arg2 = (unsigned char *) 0 ;
   unsigned int arg3 ;
-  unsigned char *arg4 ;
+  unsigned char *arg4 = (unsigned char *) 0 ;
   unsigned char *arg5 = (unsigned char *) 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
@@ -3856,8 +3946,8 @@ SWIGINTERN PyObject *_wrap_AES_DecryptCBC__SWIG_0(PyObject *SWIGUNUSEDPARM(self)
   arg1 = reinterpret_cast< AES * >(argp1);
   res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p_unsigned_char, 0 |  0 );
   if (!SWIG_IsOK(res2)) {
-    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "AES_DecryptCBC" "', argument " "2"" of type '" "unsigned char const []""'"); 
-  } 
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "AES_DecryptCBC" "', argument " "2"" of type '" "unsigned char const *""'"); 
+  }
   arg2 = reinterpret_cast< unsigned char * >(argp2);
   ecode3 = SWIG_AsVal_unsigned_SS_int(obj2, &val3);
   if (!SWIG_IsOK(ecode3)) {
@@ -3866,15 +3956,15 @@ SWIGINTERN PyObject *_wrap_AES_DecryptCBC__SWIG_0(PyObject *SWIGUNUSEDPARM(self)
   arg3 = static_cast< unsigned int >(val3);
   res4 = SWIG_ConvertPtr(obj3, &argp4,SWIGTYPE_p_unsigned_char, 0 |  0 );
   if (!SWIG_IsOK(res4)) {
-    SWIG_exception_fail(SWIG_ArgError(res4), "in method '" "AES_DecryptCBC" "', argument " "4"" of type '" "unsigned char const []""'"); 
-  } 
+    SWIG_exception_fail(SWIG_ArgError(res4), "in method '" "AES_DecryptCBC" "', argument " "4"" of type '" "unsigned char const *""'"); 
+  }
   arg4 = reinterpret_cast< unsigned char * >(argp4);
   res5 = SWIG_ConvertPtr(obj4, &argp5,SWIGTYPE_p_unsigned_char, 0 |  0 );
   if (!SWIG_IsOK(res5)) {
     SWIG_exception_fail(SWIG_ArgError(res5), "in method '" "AES_DecryptCBC" "', argument " "5"" of type '" "unsigned char const *""'"); 
   }
   arg5 = reinterpret_cast< unsigned char * >(argp5);
-  result = (unsigned char *)(arg1)->DecryptCBC((unsigned char const (*))arg2,arg3,(unsigned char const (*))arg4,(unsigned char const *)arg5);
+  result = (unsigned char *)(arg1)->DecryptCBC((unsigned char const *)arg2,arg3,(unsigned char const *)arg4,(unsigned char const *)arg5);
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_unsigned_char, 0 |  0 );
   return resultobj;
 fail:
@@ -3885,9 +3975,9 @@ fail:
 SWIGINTERN PyObject *_wrap_AES_EncryptCFB__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   AES *arg1 = (AES *) 0 ;
-  unsigned char *arg2 ;
+  unsigned char *arg2 = (unsigned char *) 0 ;
   unsigned int arg3 ;
-  unsigned char *arg4 ;
+  unsigned char *arg4 = (unsigned char *) 0 ;
   unsigned char *arg5 = (unsigned char *) 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
@@ -3914,8 +4004,8 @@ SWIGINTERN PyObject *_wrap_AES_EncryptCFB__SWIG_0(PyObject *SWIGUNUSEDPARM(self)
   arg1 = reinterpret_cast< AES * >(argp1);
   res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p_unsigned_char, 0 |  0 );
   if (!SWIG_IsOK(res2)) {
-    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "AES_EncryptCFB" "', argument " "2"" of type '" "unsigned char const []""'"); 
-  } 
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "AES_EncryptCFB" "', argument " "2"" of type '" "unsigned char const *""'"); 
+  }
   arg2 = reinterpret_cast< unsigned char * >(argp2);
   ecode3 = SWIG_AsVal_unsigned_SS_int(obj2, &val3);
   if (!SWIG_IsOK(ecode3)) {
@@ -3924,15 +4014,15 @@ SWIGINTERN PyObject *_wrap_AES_EncryptCFB__SWIG_0(PyObject *SWIGUNUSEDPARM(self)
   arg3 = static_cast< unsigned int >(val3);
   res4 = SWIG_ConvertPtr(obj3, &argp4,SWIGTYPE_p_unsigned_char, 0 |  0 );
   if (!SWIG_IsOK(res4)) {
-    SWIG_exception_fail(SWIG_ArgError(res4), "in method '" "AES_EncryptCFB" "', argument " "4"" of type '" "unsigned char const []""'"); 
-  } 
+    SWIG_exception_fail(SWIG_ArgError(res4), "in method '" "AES_EncryptCFB" "', argument " "4"" of type '" "unsigned char const *""'"); 
+  }
   arg4 = reinterpret_cast< unsigned char * >(argp4);
   res5 = SWIG_ConvertPtr(obj4, &argp5,SWIGTYPE_p_unsigned_char, 0 |  0 );
   if (!SWIG_IsOK(res5)) {
     SWIG_exception_fail(SWIG_ArgError(res5), "in method '" "AES_EncryptCFB" "', argument " "5"" of type '" "unsigned char const *""'"); 
   }
   arg5 = reinterpret_cast< unsigned char * >(argp5);
-  result = (unsigned char *)(arg1)->EncryptCFB((unsigned char const (*))arg2,arg3,(unsigned char const (*))arg4,(unsigned char const *)arg5);
+  result = (unsigned char *)(arg1)->EncryptCFB((unsigned char const *)arg2,arg3,(unsigned char const *)arg4,(unsigned char const *)arg5);
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_unsigned_char, 0 |  0 );
   return resultobj;
 fail:
@@ -3943,9 +4033,9 @@ fail:
 SWIGINTERN PyObject *_wrap_AES_DecryptCFB__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   AES *arg1 = (AES *) 0 ;
-  unsigned char *arg2 ;
+  unsigned char *arg2 = (unsigned char *) 0 ;
   unsigned int arg3 ;
-  unsigned char *arg4 ;
+  unsigned char *arg4 = (unsigned char *) 0 ;
   unsigned char *arg5 = (unsigned char *) 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
@@ -3972,8 +4062,8 @@ SWIGINTERN PyObject *_wrap_AES_DecryptCFB__SWIG_0(PyObject *SWIGUNUSEDPARM(self)
   arg1 = reinterpret_cast< AES * >(argp1);
   res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p_unsigned_char, 0 |  0 );
   if (!SWIG_IsOK(res2)) {
-    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "AES_DecryptCFB" "', argument " "2"" of type '" "unsigned char const []""'"); 
-  } 
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "AES_DecryptCFB" "', argument " "2"" of type '" "unsigned char const *""'"); 
+  }
   arg2 = reinterpret_cast< unsigned char * >(argp2);
   ecode3 = SWIG_AsVal_unsigned_SS_int(obj2, &val3);
   if (!SWIG_IsOK(ecode3)) {
@@ -3982,15 +4072,15 @@ SWIGINTERN PyObject *_wrap_AES_DecryptCFB__SWIG_0(PyObject *SWIGUNUSEDPARM(self)
   arg3 = static_cast< unsigned int >(val3);
   res4 = SWIG_ConvertPtr(obj3, &argp4,SWIGTYPE_p_unsigned_char, 0 |  0 );
   if (!SWIG_IsOK(res4)) {
-    SWIG_exception_fail(SWIG_ArgError(res4), "in method '" "AES_DecryptCFB" "', argument " "4"" of type '" "unsigned char const []""'"); 
-  } 
+    SWIG_exception_fail(SWIG_ArgError(res4), "in method '" "AES_DecryptCFB" "', argument " "4"" of type '" "unsigned char const *""'"); 
+  }
   arg4 = reinterpret_cast< unsigned char * >(argp4);
   res5 = SWIG_ConvertPtr(obj4, &argp5,SWIGTYPE_p_unsigned_char, 0 |  0 );
   if (!SWIG_IsOK(res5)) {
     SWIG_exception_fail(SWIG_ArgError(res5), "in method '" "AES_DecryptCFB" "', argument " "5"" of type '" "unsigned char const *""'"); 
   }
   arg5 = reinterpret_cast< unsigned char * >(argp5);
-  result = (unsigned char *)(arg1)->DecryptCFB((unsigned char const (*))arg2,arg3,(unsigned char const (*))arg4,(unsigned char const *)arg5);
+  result = (unsigned char *)(arg1)->DecryptCFB((unsigned char const *)arg2,arg3,(unsigned char const *)arg4,(unsigned char const *)arg5);
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_unsigned_char, 0 |  0 );
   return resultobj;
 fail:
@@ -4112,7 +4202,7 @@ SWIGINTERN PyObject *_wrap_AES_EncryptECB(PyObject *self, PyObject *args) {
 fail:
   SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'AES_EncryptECB'.\n"
     "  Possible C/C++ prototypes are:\n"
-    "    AES::EncryptECB(unsigned char const [],unsigned int,unsigned char const [])\n"
+    "    AES::EncryptECB(unsigned char const *,unsigned int,unsigned char const *)\n"
     "    AES::EncryptECB(std::vector< unsigned char >,std::vector< unsigned char >)\n");
   return 0;
 }
@@ -4232,7 +4322,7 @@ SWIGINTERN PyObject *_wrap_AES_DecryptECB(PyObject *self, PyObject *args) {
 fail:
   SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'AES_DecryptECB'.\n"
     "  Possible C/C++ prototypes are:\n"
-    "    AES::DecryptECB(unsigned char const [],unsigned int,unsigned char const [])\n"
+    "    AES::DecryptECB(unsigned char const *,unsigned int,unsigned char const *)\n"
     "    AES::DecryptECB(std::vector< unsigned char >,std::vector< unsigned char >)\n");
   return 0;
 }
@@ -4378,7 +4468,7 @@ SWIGINTERN PyObject *_wrap_AES_EncryptCBC(PyObject *self, PyObject *args) {
 fail:
   SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'AES_EncryptCBC'.\n"
     "  Possible C/C++ prototypes are:\n"
-    "    AES::EncryptCBC(unsigned char const [],unsigned int,unsigned char const [],unsigned char const *)\n"
+    "    AES::EncryptCBC(unsigned char const *,unsigned int,unsigned char const *,unsigned char const *)\n"
     "    AES::EncryptCBC(std::vector< unsigned char >,std::vector< unsigned char >,std::vector< unsigned char >)\n");
   return 0;
 }
@@ -4524,7 +4614,7 @@ SWIGINTERN PyObject *_wrap_AES_DecryptCBC(PyObject *self, PyObject *args) {
 fail:
   SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'AES_DecryptCBC'.\n"
     "  Possible C/C++ prototypes are:\n"
-    "    AES::DecryptCBC(unsigned char const [],unsigned int,unsigned char const [],unsigned char const *)\n"
+    "    AES::DecryptCBC(unsigned char const *,unsigned int,unsigned char const *,unsigned char const *)\n"
     "    AES::DecryptCBC(std::vector< unsigned char >,std::vector< unsigned char >,std::vector< unsigned char >)\n");
   return 0;
 }
@@ -4670,7 +4760,7 @@ SWIGINTERN PyObject *_wrap_AES_EncryptCFB(PyObject *self, PyObject *args) {
 fail:
   SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'AES_EncryptCFB'.\n"
     "  Possible C/C++ prototypes are:\n"
-    "    AES::EncryptCFB(unsigned char const [],unsigned int,unsigned char const [],unsigned char const *)\n"
+    "    AES::EncryptCFB(unsigned char const *,unsigned int,unsigned char const *,unsigned char const *)\n"
     "    AES::EncryptCFB(std::vector< unsigned char >,std::vector< unsigned char >,std::vector< unsigned char >)\n");
   return 0;
 }
@@ -4816,7 +4906,7 @@ SWIGINTERN PyObject *_wrap_AES_DecryptCFB(PyObject *self, PyObject *args) {
 fail:
   SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'AES_DecryptCFB'.\n"
     "  Possible C/C++ prototypes are:\n"
-    "    AES::DecryptCFB(unsigned char const [],unsigned int,unsigned char const [],unsigned char const *)\n"
+    "    AES::DecryptCFB(unsigned char const *,unsigned int,unsigned char const *,unsigned char const *)\n"
     "    AES::DecryptCFB(std::vector< unsigned char >,std::vector< unsigned char >,std::vector< unsigned char >)\n");
   return 0;
 }
@@ -4825,7 +4915,7 @@ fail:
 SWIGINTERN PyObject *_wrap_AES_printHexArray(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   AES *arg1 = (AES *) 0 ;
-  unsigned char *arg2 ;
+  unsigned char *arg2 = (unsigned char *) 0 ;
   unsigned int arg3 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
@@ -4845,8 +4935,8 @@ SWIGINTERN PyObject *_wrap_AES_printHexArray(PyObject *SWIGUNUSEDPARM(self), PyO
   arg1 = reinterpret_cast< AES * >(argp1);
   res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p_unsigned_char, 0 |  0 );
   if (!SWIG_IsOK(res2)) {
-    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "AES_printHexArray" "', argument " "2"" of type '" "unsigned char []""'"); 
-  } 
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "AES_printHexArray" "', argument " "2"" of type '" "unsigned char *""'"); 
+  }
   arg2 = reinterpret_cast< unsigned char * >(argp2);
   ecode3 = SWIG_AsVal_unsigned_SS_int(obj2, &val3);
   if (!SWIG_IsOK(ecode3)) {
@@ -4996,6 +5086,178 @@ SWIGINTERN PyObject *Swig_var_INV_CMDS_get(void) {
   return pyobj;
 }
 
+
+SWIGINTERN PyObject *_wrap_new_buffer(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  size_t arg1 ;
+  size_t val1 ;
+  int ecode1 = 0 ;
+  PyObject * obj0 = 0 ;
+  buffer *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:new_buffer",&obj0)) SWIG_fail;
+  ecode1 = SWIG_AsVal_size_t(obj0, &val1);
+  if (!SWIG_IsOK(ecode1)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode1), "in method '" "new_buffer" "', argument " "1"" of type '" "size_t""'");
+  } 
+  arg1 = static_cast< size_t >(val1);
+  result = (buffer *)new_buffer(arg1);
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_buffer, SWIG_POINTER_NEW |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_delete_buffer(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  buffer *arg1 = (buffer *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:delete_buffer",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_buffer, SWIG_POINTER_DISOWN |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "delete_buffer" "', argument " "1"" of type '" "buffer *""'"); 
+  }
+  arg1 = reinterpret_cast< buffer * >(argp1);
+  delete_buffer(arg1);
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_buffer___getitem__(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  buffer *arg1 = (buffer *) 0 ;
+  size_t arg2 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  size_t val2 ;
+  int ecode2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  uint8_t result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:buffer___getitem__",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_buffer, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "buffer___getitem__" "', argument " "1"" of type '" "buffer *""'"); 
+  }
+  arg1 = reinterpret_cast< buffer * >(argp1);
+  ecode2 = SWIG_AsVal_size_t(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "buffer___getitem__" "', argument " "2"" of type '" "size_t""'");
+  } 
+  arg2 = static_cast< size_t >(val2);
+  result = buffer___getitem__(arg1,arg2);
+  resultobj = SWIG_NewPointerObj((new uint8_t(static_cast< const uint8_t& >(result))), SWIGTYPE_p_uint8_t, SWIG_POINTER_OWN |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_buffer___setitem__(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  buffer *arg1 = (buffer *) 0 ;
+  size_t arg2 ;
+  uint8_t arg3 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  size_t val2 ;
+  int ecode2 = 0 ;
+  void *argp3 ;
+  int res3 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OOO:buffer___setitem__",&obj0,&obj1,&obj2)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_buffer, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "buffer___setitem__" "', argument " "1"" of type '" "buffer *""'"); 
+  }
+  arg1 = reinterpret_cast< buffer * >(argp1);
+  ecode2 = SWIG_AsVal_size_t(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "buffer___setitem__" "', argument " "2"" of type '" "size_t""'");
+  } 
+  arg2 = static_cast< size_t >(val2);
+  {
+    res3 = SWIG_ConvertPtr(obj2, &argp3, SWIGTYPE_p_uint8_t,  0  | 0);
+    if (!SWIG_IsOK(res3)) {
+      SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "buffer___setitem__" "', argument " "3"" of type '" "uint8_t""'"); 
+    }  
+    if (!argp3) {
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "buffer___setitem__" "', argument " "3"" of type '" "uint8_t""'");
+    } else {
+      uint8_t * temp = reinterpret_cast< uint8_t * >(argp3);
+      arg3 = *temp;
+      if (SWIG_IsNewObj(res3)) delete temp;
+    }
+  }
+  buffer___setitem__(arg1,arg2,arg3);
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_buffer_cast(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  buffer *arg1 = (buffer *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  uint8_t *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:buffer_cast",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_buffer, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "buffer_cast" "', argument " "1"" of type '" "buffer *""'"); 
+  }
+  arg1 = reinterpret_cast< buffer * >(argp1);
+  result = (uint8_t *)buffer_cast(arg1);
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_uint8_t, 0 |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_buffer_frompointer(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  uint8_t *arg1 = (uint8_t *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  buffer *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:buffer_frompointer",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_uint8_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "buffer_frompointer" "', argument " "1"" of type '" "uint8_t *""'"); 
+  }
+  arg1 = reinterpret_cast< uint8_t * >(argp1);
+  result = (buffer *)buffer_frompointer(arg1);
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_buffer, 0 |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *buffer_swigregister(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *obj;
+  if (!PyArg_ParseTuple(args,(char *)"O:swigregister", &obj)) return NULL;
+  SWIG_TypeNewClientData(SWIGTYPE_p_buffer, SWIG_NewClientData(obj));
+  return SWIG_Py_Void();
+}
 
 SWIGINTERN PyObject *_wrap_Hash___call____SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
@@ -5625,7 +5887,7 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_SHA256_get_hash__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_SHA256_get_hash(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   SHA256 *arg1 = (SHA256 *) 0 ;
   void *argp1 = 0 ;
@@ -5647,78 +5909,35 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_SHA256_get_hash__SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_SHA256_get_raw_hash(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   SHA256 *arg1 = (SHA256 *) 0 ;
-  unsigned char *arg2 ;
+  unsigned char **arg2 = (unsigned char **) 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
-  void *argp2 = 0 ;
-  int res2 = 0 ;
+  unsigned char *temp2 ;
   PyObject * obj0 = 0 ;
-  PyObject * obj1 = 0 ;
   
-  if (!PyArg_ParseTuple(args,(char *)"OO:SHA256_get_hash",&obj0,&obj1)) SWIG_fail;
+  {
+    arg2 = &temp2;
+  }
+  if (!PyArg_ParseTuple(args,(char *)"O:SHA256_get_raw_hash",&obj0)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_SHA256, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "SHA256_get_hash" "', argument " "1"" of type '" "SHA256 *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "SHA256_get_raw_hash" "', argument " "1"" of type '" "SHA256 *""'"); 
   }
   arg1 = reinterpret_cast< SHA256 * >(argp1);
-  res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p_unsigned_char, 0 |  0 );
-  if (!SWIG_IsOK(res2)) {
-    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "SHA256_get_hash" "', argument " "2"" of type '" "unsigned char [SHA256::HashBytes]""'"); 
-  } 
-  arg2 = reinterpret_cast< unsigned char * >(argp2);
-  (arg1)->get_hash(arg2);
+  (arg1)->get_raw_hash(arg2);
   resultobj = SWIG_Py_Void();
+  {
+    if (*arg2) {
+      resultobj = PyBytes_FromStringAndSize((char*)*arg2, 32);
+      free(*arg2);
+    }
+  }
   return resultobj;
 fail:
   return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_SHA256_get_hash(PyObject *self, PyObject *args) {
-  Py_ssize_t argc;
-  PyObject *argv[3] = {
-    0
-  };
-  Py_ssize_t ii;
-  
-  if (!PyTuple_Check(args)) SWIG_fail;
-  argc = args ? PyObject_Length(args) : 0;
-  for (ii = 0; (ii < 2) && (ii < argc); ii++) {
-    argv[ii] = PyTuple_GET_ITEM(args,ii);
-  }
-  if (argc == 1) {
-    int _v;
-    void *vptr = 0;
-    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_SHA256, 0);
-    _v = SWIG_CheckState(res);
-    if (_v) {
-      return _wrap_SHA256_get_hash__SWIG_0(self, args);
-    }
-  }
-  if (argc == 2) {
-    int _v;
-    void *vptr = 0;
-    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_SHA256, 0);
-    _v = SWIG_CheckState(res);
-    if (_v) {
-      void *vptr = 0;
-      int res = SWIG_ConvertPtr(argv[1], &vptr, SWIGTYPE_p_unsigned_char, 0);
-      _v = SWIG_CheckState(res);
-      if (_v) {
-        return _wrap_SHA256_get_hash__SWIG_1(self, args);
-      }
-    }
-  }
-  
-fail:
-  SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'SHA256_get_hash'.\n"
-    "  Possible C/C++ prototypes are:\n"
-    "    SHA256::get_hash()\n"
-    "    SHA256::get_hash(unsigned char [SHA256::HashBytes])\n");
-  return 0;
 }
 
 
@@ -5885,6 +6104,13 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"AES_printHexVector", _wrap_AES_printHexVector, METH_VARARGS, NULL},
 	 { (char *)"delete_AES", _wrap_delete_AES, METH_VARARGS, NULL},
 	 { (char *)"AES_swigregister", AES_swigregister, METH_VARARGS, NULL},
+	 { (char *)"new_buffer", _wrap_new_buffer, METH_VARARGS, NULL},
+	 { (char *)"delete_buffer", _wrap_delete_buffer, METH_VARARGS, NULL},
+	 { (char *)"buffer___getitem__", _wrap_buffer___getitem__, METH_VARARGS, NULL},
+	 { (char *)"buffer___setitem__", _wrap_buffer___setitem__, METH_VARARGS, NULL},
+	 { (char *)"buffer_cast", _wrap_buffer_cast, METH_VARARGS, NULL},
+	 { (char *)"buffer_frompointer", _wrap_buffer_frompointer, METH_VARARGS, NULL},
+	 { (char *)"buffer_swigregister", buffer_swigregister, METH_VARARGS, NULL},
 	 { (char *)"Hash___call__", _wrap_Hash___call__, METH_VARARGS, NULL},
 	 { (char *)"Hash_add", _wrap_Hash_add, METH_VARARGS, NULL},
 	 { (char *)"Hash_get_hash", _wrap_Hash_get_hash, METH_VARARGS, NULL},
@@ -5895,6 +6121,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"SHA256___call__", _wrap_SHA256___call__, METH_VARARGS, NULL},
 	 { (char *)"SHA256_add", _wrap_SHA256_add, METH_VARARGS, NULL},
 	 { (char *)"SHA256_get_hash", _wrap_SHA256_get_hash, METH_VARARGS, NULL},
+	 { (char *)"SHA256_get_raw_hash", _wrap_SHA256_get_raw_hash, METH_VARARGS, NULL},
 	 { (char *)"SHA256_reset", _wrap_SHA256_reset, METH_VARARGS, NULL},
 	 { (char *)"delete_SHA256", _wrap_delete_SHA256, METH_VARARGS, NULL},
 	 { (char *)"SHA256_swigregister", SHA256_swigregister, METH_VARARGS, NULL},
@@ -5908,15 +6135,21 @@ static PyMethodDef SwigMethods[] = {
 static void *_p_SHA256To_p_Hash(void *x, int *SWIGUNUSEDPARM(newmemory)) {
     return (void *)((Hash *)  ((SHA256 *) x));
 }
+static void *_p_bufferTo_p_uint8_t(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((uint8_t *)  ((buffer *) x));
+}
 static swig_type_info _swigt__p_AES = {"_p_AES", "AES *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_Hash = {"_p_Hash", "Hash *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_SHA256 = {"_p_SHA256", "SHA256 *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_a_16__unsigned_char = {"_p_a_16__unsigned_char", "unsigned char (*)[16]", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_a_256__unsigned_char = {"_p_a_256__unsigned_char", "unsigned char (*)[256]", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_a_4__unsigned_char = {"_p_a_4__unsigned_char", "unsigned char (*)[4]", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_buffer = {"_p_buffer", "buffer *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_char = {"_p_char", "char *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_p_unsigned_char = {"_p_p_unsigned_char", "unsigned char **", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_std__vectorT_unsigned_char_t = {"_p_std__vectorT_unsigned_char_t", "std::vector< unsigned char > *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_uint64_t = {"_p_uint64_t", "uint64_t *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_uint8_t = {"_p_uint8_t", "uint8_t *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_unsigned_char = {"_p_unsigned_char", "unsigned char *", 0, 0, (void*)0, 0};
 
 static swig_type_info *swig_type_initial[] = {
@@ -5926,9 +6159,12 @@ static swig_type_info *swig_type_initial[] = {
   &_swigt__p_a_16__unsigned_char,
   &_swigt__p_a_256__unsigned_char,
   &_swigt__p_a_4__unsigned_char,
+  &_swigt__p_buffer,
   &_swigt__p_char,
+  &_swigt__p_p_unsigned_char,
   &_swigt__p_std__vectorT_unsigned_char_t,
   &_swigt__p_uint64_t,
+  &_swigt__p_uint8_t,
   &_swigt__p_unsigned_char,
 };
 
@@ -5938,9 +6174,12 @@ static swig_cast_info _swigc__p_SHA256[] = {  {&_swigt__p_SHA256, 0, 0, 0},{0, 0
 static swig_cast_info _swigc__p_a_16__unsigned_char[] = {  {&_swigt__p_a_16__unsigned_char, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_a_256__unsigned_char[] = {  {&_swigt__p_a_256__unsigned_char, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_a_4__unsigned_char[] = {  {&_swigt__p_a_4__unsigned_char, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_buffer[] = {  {&_swigt__p_buffer, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_char[] = {  {&_swigt__p_char, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_p_unsigned_char[] = {  {&_swigt__p_p_unsigned_char, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_std__vectorT_unsigned_char_t[] = {  {&_swigt__p_std__vectorT_unsigned_char_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_uint64_t[] = {  {&_swigt__p_uint64_t, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_uint8_t[] = {  {&_swigt__p_buffer, _p_bufferTo_p_uint8_t, 0, 0},  {&_swigt__p_uint8_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_unsigned_char[] = {  {&_swigt__p_unsigned_char, 0, 0, 0},{0, 0, 0, 0}};
 
 static swig_cast_info *swig_cast_initial[] = {
@@ -5950,9 +6189,12 @@ static swig_cast_info *swig_cast_initial[] = {
   _swigc__p_a_16__unsigned_char,
   _swigc__p_a_256__unsigned_char,
   _swigc__p_a_4__unsigned_char,
+  _swigc__p_buffer,
   _swigc__p_char,
+  _swigc__p_p_unsigned_char,
   _swigc__p_std__vectorT_unsigned_char_t,
   _swigc__p_uint64_t,
+  _swigc__p_uint8_t,
   _swigc__p_unsigned_char,
 };
 

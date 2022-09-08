@@ -46,11 +46,11 @@ class AES {
 
 	void CheckLength(unsigned int len);
 
-	void KeyExpansion(const unsigned char key[], unsigned char w[]);
+	void KeyExpansion(const unsigned char* key, unsigned char* w);
 
-	void EncryptBlock(const unsigned char in[], unsigned char out[],  unsigned char key[]);
+	void EncryptBlock(const unsigned char* in, unsigned char* out,  unsigned char* key);
 
-	void DecryptBlock(const unsigned char in[], unsigned char out[], unsigned char key[]);
+	void DecryptBlock(const unsigned char* in, unsigned char* out, unsigned char* key);
 
 	void XorBlocks(const unsigned char *a, const unsigned char *b, unsigned char *c, unsigned int len);
 
@@ -61,17 +61,17 @@ class AES {
  public:
 	explicit AES(const AESKeyLength keyLength = AESKeyLength::AES_256);
 
-	unsigned char *EncryptECB(const unsigned char in[], unsigned int inLen, const unsigned char key[]);
+	unsigned char *EncryptECB(const unsigned char* in, unsigned int inLen, const unsigned char* key);
 
-	unsigned char *DecryptECB(const unsigned char in[], unsigned int inLen, const unsigned char key[]);
+	unsigned char *DecryptECB(const unsigned char* in, unsigned int inLen, const unsigned char* key);
 
-	unsigned char *EncryptCBC(const unsigned char in[], unsigned int inLen, const unsigned char key[], const unsigned char *iv);
+	unsigned char *EncryptCBC(const unsigned char* in, unsigned int inLen, const unsigned char* key, const unsigned char *iv);
 
-	unsigned char *DecryptCBC(const unsigned char in[], unsigned int inLen, const unsigned char key[], const unsigned char *iv);
+	unsigned char *DecryptCBC(const unsigned char* in, unsigned int inLen, const unsigned char* key, const unsigned char *iv);
 
-	unsigned char *EncryptCFB(const unsigned char in[], unsigned int inLen, const unsigned char key[], const unsigned char *iv);
+	unsigned char *EncryptCFB(const unsigned char* in, unsigned int inLen, const unsigned char* key, const unsigned char *iv);
 
-	unsigned char *DecryptCFB(const unsigned char in[], unsigned int inLen, const unsigned char key[], const unsigned char *iv);
+	unsigned char *DecryptCFB(const unsigned char* in, unsigned int inLen, const unsigned char* key, const unsigned char *iv);
 
 	std::vector<unsigned char> EncryptECB(std::vector<unsigned char> in, std::vector<unsigned char> key);
 
@@ -85,7 +85,7 @@ class AES {
 
 	std::vector<unsigned char> DecryptCFB(std::vector<unsigned char> in, std::vector<unsigned char> key, std::vector<unsigned char> iv);
 
-	void printHexArray(unsigned char a[], unsigned int n);
+	void printHexArray(unsigned char* a, unsigned int n);
 
 	void printHexVector(std::vector<unsigned char> a);
 };

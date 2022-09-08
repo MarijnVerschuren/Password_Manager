@@ -55,9 +55,9 @@ public:
 	void add(const void* data, uint64_t numBytes) override;
 	void add(const std::string& text) override;
 	/// return latest hash as 64 hex characters
-	std::string get_hash() override;
+	std::string		get_hash() override;
 	/// return latest hash as bytes
-	void        get_hash(unsigned char buffer[HashBytes]);
+	void			get_raw_hash(unsigned char** buffer);
 
 	/// restart
 	void reset() override;

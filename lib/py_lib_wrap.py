@@ -140,6 +140,47 @@ class AES(_object):
 AES_swigregister = _py_lib.AES_swigregister
 AES_swigregister(AES)
 
+class buffer(_object):
+    __swig_setmethods__ = {}
+    __setattr__ = lambda self, name, value: _swig_setattr(self, buffer, name, value)
+    __swig_getmethods__ = {}
+    __getattr__ = lambda self, name: _swig_getattr(self, buffer, name)
+    __repr__ = _swig_repr
+
+    def __init__(self, nelements):
+        this = _py_lib.new_buffer(nelements)
+        try:
+            self.this.append(this)
+        except __builtin__.Exception:
+            self.this = this
+    __swig_destroy__ = _py_lib.delete_buffer
+    __del__ = lambda self: None
+
+    def __getitem__(self, index):
+        return _py_lib.buffer___getitem__(self, index)
+
+    def __setitem__(self, index, value):
+        return _py_lib.buffer___setitem__(self, index, value)
+
+    def cast(self):
+        return _py_lib.buffer_cast(self)
+    if _newclass:
+        frompointer = staticmethod(_py_lib.buffer_frompointer)
+    else:
+        frompointer = _py_lib.buffer_frompointer
+buffer_swigregister = _py_lib.buffer_swigregister
+buffer_swigregister(buffer)
+cvar = _py_lib.cvar
+sbox = cvar.sbox
+inv_sbox = cvar.inv_sbox
+GF_MUL_TABLE = cvar.GF_MUL_TABLE
+CMDS = cvar.CMDS
+INV_CMDS = cvar.INV_CMDS
+
+def buffer_frompointer(t):
+    return _py_lib.buffer_frompointer(t)
+buffer_frompointer = _py_lib.buffer_frompointer
+
 class Hash(_object):
     __swig_setmethods__ = {}
     __setattr__ = lambda self, name, value: _swig_setattr(self, Hash, name, value)
@@ -165,12 +206,6 @@ class Hash(_object):
     __del__ = lambda self: None
 Hash_swigregister = _py_lib.Hash_swigregister
 Hash_swigregister(Hash)
-cvar = _py_lib.cvar
-sbox = cvar.sbox
-inv_sbox = cvar.inv_sbox
-GF_MUL_TABLE = cvar.GF_MUL_TABLE
-CMDS = cvar.CMDS
-INV_CMDS = cvar.INV_CMDS
 
 class SHA256(Hash):
     __swig_setmethods__ = {}
@@ -198,8 +233,11 @@ class SHA256(Hash):
     def add(self, *args):
         return _py_lib.SHA256_add(self, *args)
 
-    def get_hash(self, *args):
-        return _py_lib.SHA256_get_hash(self, *args)
+    def get_hash(self):
+        return _py_lib.SHA256_get_hash(self)
+
+    def get_raw_hash(self):
+        return _py_lib.SHA256_get_raw_hash(self)
 
     def reset(self):
         return _py_lib.SHA256_reset(self)

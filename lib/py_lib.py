@@ -1,4 +1,5 @@
 import os
+import struct
 
 from . import py_lib_wrap
 
@@ -12,10 +13,14 @@ class SHA256(py_lib_wrap.SHA256):
 	def __init__(self) -> None:
 		super(SHA256, self).__init__()
 
+	@property
+	def raw_hash(self) -> bytes:
+		return self.get_raw_hash()
+	
+
 class AES(py_lib_wrap.AES):
 	def __init__(self, key_lenght = AESKeyLength_AES_256) -> None:
 		super(AES, self).__init__(key_lenght)
-
 
 # c++ functions
 def getpass(prompt: str, replacement: str = "*") -> str:

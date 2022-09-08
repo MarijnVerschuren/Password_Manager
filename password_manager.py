@@ -88,10 +88,14 @@ def gui_mode(new_user: bool) -> None:
 
 
 if __name__ == "__main__":
-	#a = AES()
-	#a.EncryptCBC(plain, plainLen, key);
 	s = SHA256()
-	print(s("abcdef"))
+	s.add("abcdef")
+	data = s.raw_hash
+	print(data.hex())
+	a = AES()
+	#a.EncryptCBC(plain, plainLen, s.add("abcdef"));
+	#s = SHA256()
+	#print(s("abcdef"))
 	input()
 	if "-help" in sys.argv: print(
 			"[-new]\t\tmake new user",

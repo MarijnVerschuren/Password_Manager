@@ -3113,8 +3113,7 @@ namespace swig {
 #include <string>
 
 
-// #define SWIG_PYTHON_STRICT_BYTE_CHAR
-#include "io.hpp"
+	#include "io.hpp"
 
 
 SWIGINTERNINLINE PyObject*
