@@ -7,9 +7,10 @@ clear_console = lambda: os.system("cls" if os.name in ["nt", "dos"] else "clear"
 compile_folder = os.path.dirname(os.path.abspath(__file__))
 root_folder = os.path.dirname(compile_folder)
 if __name__ == "__main__":
-	run(rf"echo y|del {compile_folder}\int\*.*")
-	run(rf"echo y|rmdir {compile_folder}\int\Release /S")
-	run(rf"echo y|del {compile_folder}\bin\*.*")
+	run(rf"echo y|rmdir {compile_folder}\int /S")
+	run(rf"mkdir {compile_folder}\int")
+	run(rf"echo y|rmdir {compile_folder}\bin /S")
+	run(rf"mkdir {compile_folder}\bin")
 
 	run(rf"swig -c++ -python -outdir {compile_folder}/int -o {compile_folder}/int/hash.cpp {compile_folder}/src/hash.i")
 	run(rf"swig -c++ -python -outdir {compile_folder}/int -o {compile_folder}/int/encryption.cpp {compile_folder}/src/encryption.i")
