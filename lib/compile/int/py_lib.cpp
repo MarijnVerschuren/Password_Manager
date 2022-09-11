@@ -3035,8 +3035,6 @@ SWIG_AsVal_unsigned_SS_int (PyObject * obj, unsigned int *val)
 }
 
 
-	#define SWIG_PYTHON_2_UNICODE
-	// #define SWIG_PYTHON_STRICT_BYTE_CHAR
 	#include "hash.hpp"
 
 
@@ -5507,6 +5505,9 @@ SWIGINTERN PyObject *_wrap_SHA256_get_raw_hash(PyObject *SWIGUNUSEDPARM(self), P
     if (*arg2) {
       resultobj = PyBytes_FromStringAndSize((char*)*arg2, 32);
       free(*arg2);
+    }
+    else {
+      resultobj = Py_None;
     }
   }
   return resultobj;

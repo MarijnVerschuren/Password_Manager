@@ -91,7 +91,7 @@ if __name__ == "__main__":
 	s = SHA256()
 	s.add("abcdef")
 	data = s.raw_hash
-	print(data.hex())
+	print(data)
 	a = AES()
 	#a.EncryptCBC(plain, plainLen, s.add("abcdef"));
 	#s = SHA256()
