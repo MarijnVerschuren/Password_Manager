@@ -64,9 +64,9 @@ public:
 
 private:
 	/// process 64 bytes
-	void processBlock(const void* data);
+	void process_block(const void* data);
 	/// process everything left in the internal buffer
-	void processBuffer();
+	void process_buffer();
 
 	/// size of processed data in bytes
 	uint64_t m_numBytes;
