@@ -5,7 +5,7 @@ import os
 root_folder = os.path.dirname(os.path.abspath(__file__))
 user_folder = os.path.join(root_folder, "user")
 data_folder = os.path.join(root_folder, "data")
-
+password_char = "*"
 
 """
 import base64
@@ -63,7 +63,7 @@ class Lockbox:
 
 	def unlock(self) -> None:  # TODO
 		self.name =	input("lockbox name: ")
-		self.key =	getpass("lockbox key: ", "#")
+		self.key =	getpass("lockbox key: ", password_char)
 		self.path =	os.path.join(user_folder, self.name)
 		# check if the hash in the user file is the same
 		# then load passwords
@@ -88,15 +88,14 @@ def gui_mode(new_user: bool) -> None:
 
 
 if __name__ == "__main__":
-	s = SHA256()
-	s.add("abcdef")
-	data = s.raw_hash
-	print(data)
-	a = AES()
+	# s = SHA256()
+	# s.add("abcdef")
+	# print(s.raw_hash.hex())
+	# a = AES()
 	#a.EncryptCBC(plain, plainLen, s.add("abcdef"));
 	#s = SHA256()
 	#print(s("abcdef"))
-	input()
+
 	if "-help" in sys.argv: print(
 			"[-new]\t\tmake new user",
 			"[-nogui]\trun password manager in console mode",
