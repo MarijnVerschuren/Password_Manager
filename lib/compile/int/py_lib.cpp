@@ -3120,6 +3120,9 @@ namespace swig {
 }
 
 
+#include <string>
+
+
 	#include "encryption.hpp"
 
 
@@ -3343,9 +3346,6 @@ SWIG_AsVal_unsigned_SS_int (PyObject * obj, unsigned int *val)
   }  
   return res;
 }
-
-
-#include <string>
 
 
     #undef SWIG_PYTHON_STRICT_BYTE_CHAR

@@ -11,6 +11,9 @@ AESKeyLength_AES_192 = py_lib_wrap.AESKeyLength_AES_192
 AESKeyLength_AES_256 = py_lib_wrap.AESKeyLength_AES_256
 
 
+def func(data: bytes) -> bytes:
+	return py_lib_wrap.func(data, len(data))
+
 
 # c++ classes
 class SHA256(py_lib_wrap.SHA256):
@@ -27,8 +30,7 @@ class AES(py_lib_wrap.AES):
 		super(AES, self).__init__(key_lenght)
 
 	def CBC_encrypt(self, msg: bytes, key: bytes, iv: bytes) -> bytes:
-		print(type(msg), type(len(msg)), type(key), type(iv))
-		return self.EncryptCBC()  # b"abc", 3, b"abc", b"abc", b"abc"
+		return self.EncryptCBC(msg, len(msg), key, iv)
 
 
 
