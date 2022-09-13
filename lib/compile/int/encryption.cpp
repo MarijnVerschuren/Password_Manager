@@ -3116,9 +3116,6 @@ namespace swig {
 }
 
 
-#include <string>
-
-
 	#include "encryption.hpp"
 
 

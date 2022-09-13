@@ -3011,11 +3011,12 @@ SWIG_Python_NonDynamicSetAttr(PyObject *obj, PyObject *name, PyObject *value) {
 #define SWIGTYPE_p_a_4__unsigned_char swig_types[5]
 #define SWIGTYPE_p_char swig_types[6]
 #define SWIGTYPE_p_p_unsigned_char swig_types[7]
-#define SWIGTYPE_p_std__vectorT_unsigned_char_t swig_types[8]
-#define SWIGTYPE_p_uint64_t swig_types[9]
-#define SWIGTYPE_p_unsigned_char swig_types[10]
-static swig_type_info *swig_types[12];
-static swig_module_info swig_module = {swig_types, 11, 0, 0, 0, 0};
+#define SWIGTYPE_p_std__string swig_types[8]
+#define SWIGTYPE_p_std__vectorT_unsigned_char_t swig_types[9]
+#define SWIGTYPE_p_uint64_t swig_types[10]
+#define SWIGTYPE_p_unsigned_char swig_types[11]
+static swig_type_info *swig_types[13];
+static swig_module_info swig_module = {swig_types, 12, 0, 0, 0, 0};
 #define SWIG_TypeQuery(name) SWIG_TypeQueryModule(&swig_module, &swig_module, name)
 #define SWIG_MangledTypeQuery(name) SWIG_MangledTypeQueryModule(&swig_module, &swig_module, name)
 
@@ -3118,9 +3119,6 @@ namespace swig {
     }
   };
 }
-
-
-#include <string>
 
 
 	#include "encryption.hpp"
@@ -3348,8 +3346,103 @@ SWIG_AsVal_unsigned_SS_int (PyObject * obj, unsigned int *val)
 }
 
 
-    #undef SWIG_PYTHON_STRICT_BYTE_CHAR
 	#include "hash.hpp"
+
+
+typedef struct SWIGCDATA {
+    char *data;
+    size_t   len;
+} SWIGCDATA;
+
+
+
+extern "C"  {    
+
+
+static SWIGCDATA cdata_void(void *ptr, size_t nelements)
+
+
+
+{
+  SWIGCDATA d;
+  d.data = (char *) ptr;
+
+
+
+  d.len  = nelements;
+
+   return d;
+}
+
+}
+
+
+
+#if defined(LLONG_MAX) && !defined(SWIG_LONG_LONG_AVAILABLE)
+#  define SWIG_LONG_LONG_AVAILABLE
+#endif
+
+
+#ifdef SWIG_LONG_LONG_AVAILABLE
+SWIGINTERN int
+SWIG_AsVal_unsigned_SS_long_SS_long (PyObject *obj, unsigned long long *val)
+{
+  int res = SWIG_TypeError;
+  if (PyLong_Check(obj)) {
+    unsigned long long v = PyLong_AsUnsignedLongLong(obj);
+    if (!PyErr_Occurred()) {
+      if (val) *val = v;
+      return SWIG_OK;
+    } else {
+      PyErr_Clear();
+      res = SWIG_OverflowError;
+    }
+  } else {
+    unsigned long v;
+    res = SWIG_AsVal_unsigned_SS_long (obj,&v);
+    if (SWIG_IsOK(res)) {
+      if (val) *val = v;
+      return res;
+    }
+  }
+#ifdef SWIG_PYTHON_CAST_MODE
+  {
+    const double mant_max = 1LL << DBL_MANT_DIG;
+    double d;
+    res = SWIG_AsVal_double (obj,&d);
+    if (SWIG_IsOK(res) && !SWIG_CanCastAsInteger(&d, 0, mant_max))
+      return SWIG_OverflowError;
+    if (SWIG_IsOK(res) && SWIG_CanCastAsInteger(&d, 0, mant_max)) {
+      if (val) *val = (unsigned long long)(d);
+      return SWIG_AddCast(res);
+    }
+    res = SWIG_TypeError;
+  }
+#endif
+  return res;
+}
+#endif
+
+
+SWIGINTERNINLINE int
+SWIG_AsVal_size_t (PyObject * obj, size_t *val)
+{
+  int res = SWIG_TypeError;
+#ifdef SWIG_LONG_LONG_AVAILABLE
+  if (sizeof(size_t) <= sizeof(unsigned long)) {
+#endif
+    unsigned long v;
+    res = SWIG_AsVal_unsigned_SS_long (obj, val ? &v : 0);
+    if (SWIG_IsOK(res) && val) *val = static_cast< size_t >(v);
+#ifdef SWIG_LONG_LONG_AVAILABLE
+  } else if (sizeof(size_t) <= sizeof(unsigned long long)) {
+    unsigned long long v;
+    res = SWIG_AsVal_unsigned_SS_long_SS_long (obj, val ? &v : 0);
+    if (SWIG_IsOK(res) && val) *val = static_cast< size_t >(v);
+  }
+#endif
+  return res;
+}
 
 
 SWIGINTERN swig_type_info*
@@ -3391,13 +3484,6 @@ SWIG_FromCharPtrAndSize(const char* carray, size_t size)
   } else {
     return SWIG_Py_Void();
   }
-}
-
-
-SWIGINTERNINLINE PyObject *
-SWIG_From_std_string  (const std::string& s)
-{
-  return SWIG_FromCharPtrAndSize(s.data(), s.size());
 }
 
 
@@ -3514,38 +3600,7 @@ SWIG_AsCharPtrAndSize(PyObject *obj, char** cptr, size_t* psize, int *alloc)
 }
 
 
-SWIGINTERN int
-SWIG_AsPtr_std_string (PyObject * obj, std::string **val) 
-{
-  char* buf = 0 ; size_t size = 0; int alloc = SWIG_OLDOBJ;
-  if (SWIG_IsOK((SWIG_AsCharPtrAndSize(obj, &buf, &size, &alloc)))) {
-    if (buf) {
-      if (val) *val = new std::string(buf, size - 1);
-      if (alloc == SWIG_NEWOBJ) delete[] buf;
-      return SWIG_NEWOBJ;
-    } else {
-      if (val) *val = 0;
-      return SWIG_OLDOBJ;
-    }
-  } else {
-    static int init = 0;
-    static swig_type_info* descriptor = 0;
-    if (!init) {
-      descriptor = SWIG_TypeQuery("std::string" " *");
-      init = 1;
-    }
-    if (descriptor) {
-      std::string *vptr;
-      int res = SWIG_ConvertPtr(obj, (void**)&vptr, descriptor, 0);
-      if (SWIG_IsOK(res) && val) *val = vptr;
-      return res;
-    }
-  }
-  return SWIG_ERROR;
-}
-
-
-	#undef SWIG_PYTHON_STRICT_BYTE_CHAR
+	// #define SWIG_PYTHON_STRICT_BYTE_CHAR
 	#include "io.hpp"
 
 
@@ -5036,7 +5091,7 @@ SWIGINTERN PyObject *_wrap_Hash___call____SWIG_0(PyObject *SWIGUNUSEDPARM(self),
     }
   }
   result = (arg1)->operator ()((void const *)arg2,arg3);
-  resultobj = SWIG_From_std_string(static_cast< std::string >(result));
+  resultobj = SWIG_NewPointerObj((new std::string(static_cast< const std::string& >(result))), SWIGTYPE_p_std__string, SWIG_POINTER_OWN |  0 );
   return resultobj;
 fail:
   return NULL;
@@ -5049,7 +5104,8 @@ SWIGINTERN PyObject *_wrap_Hash___call____SWIG_1(PyObject *SWIGUNUSEDPARM(self),
   std::string *arg2 = 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
-  int res2 = SWIG_OLDOBJ ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
   std::string result;
@@ -5060,23 +5116,18 @@ SWIGINTERN PyObject *_wrap_Hash___call____SWIG_1(PyObject *SWIGUNUSEDPARM(self),
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Hash___call__" "', argument " "1"" of type '" "Hash *""'"); 
   }
   arg1 = reinterpret_cast< Hash * >(argp1);
-  {
-    std::string *ptr = (std::string *)0;
-    res2 = SWIG_AsPtr_std_string(obj1, &ptr);
-    if (!SWIG_IsOK(res2)) {
-      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "Hash___call__" "', argument " "2"" of type '" "std::string const &""'"); 
-    }
-    if (!ptr) {
-      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "Hash___call__" "', argument " "2"" of type '" "std::string const &""'"); 
-    }
-    arg2 = ptr;
+  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_std__string,  0  | 0);
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "Hash___call__" "', argument " "2"" of type '" "std::string const &""'"); 
   }
+  if (!argp2) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "Hash___call__" "', argument " "2"" of type '" "std::string const &""'"); 
+  }
+  arg2 = reinterpret_cast< std::string * >(argp2);
   result = (arg1)->operator ()((std::string const &)*arg2);
-  resultobj = SWIG_From_std_string(static_cast< std::string >(result));
-  if (SWIG_IsNewObj(res2)) delete arg2;
+  resultobj = SWIG_NewPointerObj((new std::string(static_cast< const std::string& >(result))), SWIGTYPE_p_std__string, SWIG_POINTER_OWN |  0 );
   return resultobj;
 fail:
-  if (SWIG_IsNewObj(res2)) delete arg2;
   return NULL;
 }
 
@@ -5099,7 +5150,7 @@ SWIGINTERN PyObject *_wrap_Hash___call__(PyObject *self, PyObject *args) {
     int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_Hash, 0);
     _v = SWIG_CheckState(res);
     if (_v) {
-      int res = SWIG_AsPtr_std_string(argv[1], (std::string**)(0));
+      int res = SWIG_ConvertPtr(argv[1], 0, SWIGTYPE_p_std__string, 0);
       _v = SWIG_CheckState(res);
       if (_v) {
         return _wrap_Hash___call____SWIG_1(self, args);
@@ -5185,7 +5236,8 @@ SWIGINTERN PyObject *_wrap_Hash_add__SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyOb
   std::string *arg2 = 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
-  int res2 = SWIG_OLDOBJ ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
   
@@ -5195,23 +5247,18 @@ SWIGINTERN PyObject *_wrap_Hash_add__SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyOb
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Hash_add" "', argument " "1"" of type '" "Hash *""'"); 
   }
   arg1 = reinterpret_cast< Hash * >(argp1);
-  {
-    std::string *ptr = (std::string *)0;
-    res2 = SWIG_AsPtr_std_string(obj1, &ptr);
-    if (!SWIG_IsOK(res2)) {
-      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "Hash_add" "', argument " "2"" of type '" "std::string const &""'"); 
-    }
-    if (!ptr) {
-      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "Hash_add" "', argument " "2"" of type '" "std::string const &""'"); 
-    }
-    arg2 = ptr;
+  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_std__string,  0  | 0);
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "Hash_add" "', argument " "2"" of type '" "std::string const &""'"); 
   }
+  if (!argp2) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "Hash_add" "', argument " "2"" of type '" "std::string const &""'"); 
+  }
+  arg2 = reinterpret_cast< std::string * >(argp2);
   (arg1)->add((std::string const &)*arg2);
   resultobj = SWIG_Py_Void();
-  if (SWIG_IsNewObj(res2)) delete arg2;
   return resultobj;
 fail:
-  if (SWIG_IsNewObj(res2)) delete arg2;
   return NULL;
 }
 
@@ -5234,7 +5281,7 @@ SWIGINTERN PyObject *_wrap_Hash_add(PyObject *self, PyObject *args) {
     int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_Hash, 0);
     _v = SWIG_CheckState(res);
     if (_v) {
-      int res = SWIG_AsPtr_std_string(argv[1], (std::string**)(0));
+      int res = SWIG_ConvertPtr(argv[1], 0, SWIGTYPE_p_std__string, 0);
       _v = SWIG_CheckState(res);
       if (_v) {
         return _wrap_Hash_add__SWIG_1(self, args);
@@ -5284,7 +5331,7 @@ SWIGINTERN PyObject *_wrap_Hash_get_hash(PyObject *SWIGUNUSEDPARM(self), PyObjec
   }
   arg1 = reinterpret_cast< Hash * >(argp1);
   result = (arg1)->get_hash();
-  resultobj = SWIG_From_std_string(static_cast< std::string >(result));
+  resultobj = SWIG_NewPointerObj((new std::string(static_cast< const std::string& >(result))), SWIGTYPE_p_std__string, SWIG_POINTER_OWN |  0 );
   return resultobj;
 fail:
   return NULL;
@@ -5392,7 +5439,7 @@ SWIGINTERN PyObject *_wrap_SHA256___call____SWIG_0(PyObject *SWIGUNUSEDPARM(self
     }
   }
   result = (arg1)->operator ()((void const *)arg2,arg3);
-  resultobj = SWIG_From_std_string(static_cast< std::string >(result));
+  resultobj = SWIG_NewPointerObj((new std::string(static_cast< const std::string& >(result))), SWIGTYPE_p_std__string, SWIG_POINTER_OWN |  0 );
   return resultobj;
 fail:
   return NULL;
@@ -5405,7 +5452,8 @@ SWIGINTERN PyObject *_wrap_SHA256___call____SWIG_1(PyObject *SWIGUNUSEDPARM(self
   std::string *arg2 = 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
-  int res2 = SWIG_OLDOBJ ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
   std::string result;
@@ -5416,23 +5464,18 @@ SWIGINTERN PyObject *_wrap_SHA256___call____SWIG_1(PyObject *SWIGUNUSEDPARM(self
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "SHA256___call__" "', argument " "1"" of type '" "SHA256 *""'"); 
   }
   arg1 = reinterpret_cast< SHA256 * >(argp1);
-  {
-    std::string *ptr = (std::string *)0;
-    res2 = SWIG_AsPtr_std_string(obj1, &ptr);
-    if (!SWIG_IsOK(res2)) {
-      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "SHA256___call__" "', argument " "2"" of type '" "std::string const &""'"); 
-    }
-    if (!ptr) {
-      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "SHA256___call__" "', argument " "2"" of type '" "std::string const &""'"); 
-    }
-    arg2 = ptr;
+  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_std__string,  0  | 0);
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "SHA256___call__" "', argument " "2"" of type '" "std::string const &""'"); 
   }
+  if (!argp2) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "SHA256___call__" "', argument " "2"" of type '" "std::string const &""'"); 
+  }
+  arg2 = reinterpret_cast< std::string * >(argp2);
   result = (arg1)->operator ()((std::string const &)*arg2);
-  resultobj = SWIG_From_std_string(static_cast< std::string >(result));
-  if (SWIG_IsNewObj(res2)) delete arg2;
+  resultobj = SWIG_NewPointerObj((new std::string(static_cast< const std::string& >(result))), SWIGTYPE_p_std__string, SWIG_POINTER_OWN |  0 );
   return resultobj;
 fail:
-  if (SWIG_IsNewObj(res2)) delete arg2;
   return NULL;
 }
 
@@ -5455,7 +5498,7 @@ SWIGINTERN PyObject *_wrap_SHA256___call__(PyObject *self, PyObject *args) {
     int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_SHA256, 0);
     _v = SWIG_CheckState(res);
     if (_v) {
-      int res = SWIG_AsPtr_std_string(argv[1], (std::string**)(0));
+      int res = SWIG_ConvertPtr(argv[1], 0, SWIGTYPE_p_std__string, 0);
       _v = SWIG_CheckState(res);
       if (_v) {
         return _wrap_SHA256___call____SWIG_1(self, args);
@@ -5541,7 +5584,8 @@ SWIGINTERN PyObject *_wrap_SHA256_add__SWIG_1(PyObject *SWIGUNUSEDPARM(self), Py
   std::string *arg2 = 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
-  int res2 = SWIG_OLDOBJ ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
   
@@ -5551,23 +5595,18 @@ SWIGINTERN PyObject *_wrap_SHA256_add__SWIG_1(PyObject *SWIGUNUSEDPARM(self), Py
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "SHA256_add" "', argument " "1"" of type '" "SHA256 *""'"); 
   }
   arg1 = reinterpret_cast< SHA256 * >(argp1);
-  {
-    std::string *ptr = (std::string *)0;
-    res2 = SWIG_AsPtr_std_string(obj1, &ptr);
-    if (!SWIG_IsOK(res2)) {
-      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "SHA256_add" "', argument " "2"" of type '" "std::string const &""'"); 
-    }
-    if (!ptr) {
-      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "SHA256_add" "', argument " "2"" of type '" "std::string const &""'"); 
-    }
-    arg2 = ptr;
+  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_std__string,  0  | 0);
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "SHA256_add" "', argument " "2"" of type '" "std::string const &""'"); 
   }
+  if (!argp2) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "SHA256_add" "', argument " "2"" of type '" "std::string const &""'"); 
+  }
+  arg2 = reinterpret_cast< std::string * >(argp2);
   (arg1)->add((std::string const &)*arg2);
   resultobj = SWIG_Py_Void();
-  if (SWIG_IsNewObj(res2)) delete arg2;
   return resultobj;
 fail:
-  if (SWIG_IsNewObj(res2)) delete arg2;
   return NULL;
 }
 
@@ -5590,7 +5629,7 @@ SWIGINTERN PyObject *_wrap_SHA256_add(PyObject *self, PyObject *args) {
     int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_SHA256, 0);
     _v = SWIG_CheckState(res);
     if (_v) {
-      int res = SWIG_AsPtr_std_string(argv[1], (std::string**)(0));
+      int res = SWIG_ConvertPtr(argv[1], 0, SWIGTYPE_p_std__string, 0);
       _v = SWIG_CheckState(res);
       if (_v) {
         return _wrap_SHA256_add__SWIG_1(self, args);
@@ -5640,7 +5679,7 @@ SWIGINTERN PyObject *_wrap_SHA256_get_hash(PyObject *SWIGUNUSEDPARM(self), PyObj
   }
   arg1 = reinterpret_cast< SHA256 * >(argp1);
   result = (arg1)->get_hash();
-  resultobj = SWIG_From_std_string(static_cast< std::string >(result));
+  resultobj = SWIG_NewPointerObj((new std::string(static_cast< const std::string& >(result))), SWIGTYPE_p_std__string, SWIG_POINTER_OWN |  0 );
   return resultobj;
 fail:
   return NULL;
@@ -5731,10 +5770,75 @@ SWIGINTERN PyObject *SHA256_swigregister(PyObject *SWIGUNUSEDPARM(self), PyObjec
   return SWIG_Py_Void();
 }
 
+SWIGINTERN PyObject *_wrap_cdata(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  void *arg1 = (void *) 0 ;
+  size_t arg2 = (size_t) 1 ;
+  int res1 ;
+  size_t val2 ;
+  int ecode2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  SWIGCDATA result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O|O:cdata",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0,SWIG_as_voidptrptr(&arg1), 0, 0);
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "cdata" "', argument " "1"" of type '" "void *""'"); 
+  }
+  if (obj1) {
+    ecode2 = SWIG_AsVal_size_t(obj1, &val2);
+    if (!SWIG_IsOK(ecode2)) {
+      SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "cdata" "', argument " "2"" of type '" "size_t""'");
+    } 
+    arg2 = static_cast< size_t >(val2);
+  }
+  result = cdata_void(arg1,arg2);
+  resultobj = SWIG_FromCharPtrAndSize((&result)->data,(&result)->len);
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_memmove(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  void *arg1 = (void *) 0 ;
+  void *arg2 = (void *) 0 ;
+  size_t arg3 ;
+  int res1 ;
+  int res2 ;
+  char *buf2 = 0 ;
+  size_t size2 = 0 ;
+  int alloc2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:memmove",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0,SWIG_as_voidptrptr(&arg1), 0, 0);
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "memmove" "', argument " "1"" of type '" "void *""'"); 
+  }
+  res2 = SWIG_AsCharPtrAndSize(obj1, &buf2, &size2, &alloc2);
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "memmove" "', argument " "2"" of type '" "void const *""'");
+  }
+  arg2 = reinterpret_cast< void * >(buf2);
+  arg3 = static_cast< size_t >(size2);
+  memmove(arg1,(void const *)arg2,arg3);
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
 SWIGINTERN PyObject *_wrap_getpass__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   std::string arg1 ;
   char arg2 ;
+  void *argp1 ;
+  int res1 = 0 ;
   char val2 ;
   int ecode2 = 0 ;
   PyObject * obj0 = 0 ;
@@ -5743,13 +5847,17 @@ SWIGINTERN PyObject *_wrap_getpass__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObj
   
   if (!PyArg_ParseTuple(args,(char *)"OO:getpass",&obj0,&obj1)) SWIG_fail;
   {
-    std::string *ptr = (std::string *)0;
-    int res = SWIG_AsPtr_std_string(obj0, &ptr);
-    if (!SWIG_IsOK(res) || !ptr) {
-      SWIG_exception_fail(SWIG_ArgError((ptr ? res : SWIG_TypeError)), "in method '" "getpass" "', argument " "1"" of type '" "std::string""'"); 
+    res1 = SWIG_ConvertPtr(obj0, &argp1, SWIGTYPE_p_std__string,  0  | 0);
+    if (!SWIG_IsOK(res1)) {
+      SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "getpass" "', argument " "1"" of type '" "std::string""'"); 
+    }  
+    if (!argp1) {
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "getpass" "', argument " "1"" of type '" "std::string""'");
+    } else {
+      std::string * temp = reinterpret_cast< std::string * >(argp1);
+      arg1 = *temp;
+      if (SWIG_IsNewObj(res1)) delete temp;
     }
-    arg1 = *ptr;
-    if (SWIG_IsNewObj(res)) delete ptr;
   }
   ecode2 = SWIG_AsVal_char(obj1, &val2);
   if (!SWIG_IsOK(ecode2)) {
@@ -5757,7 +5865,7 @@ SWIGINTERN PyObject *_wrap_getpass__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObj
   } 
   arg2 = static_cast< char >(val2);
   result = getpass(arg1,arg2);
-  resultobj = SWIG_From_std_string(static_cast< std::string >(result));
+  resultobj = SWIG_NewPointerObj((new std::string(static_cast< const std::string& >(result))), SWIGTYPE_p_std__string, SWIG_POINTER_OWN |  0 );
   return resultobj;
 fail:
   return NULL;
@@ -5767,21 +5875,27 @@ fail:
 SWIGINTERN PyObject *_wrap_getpass__SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   std::string arg1 ;
+  void *argp1 ;
+  int res1 = 0 ;
   PyObject * obj0 = 0 ;
   std::string result;
   
   if (!PyArg_ParseTuple(args,(char *)"O:getpass",&obj0)) SWIG_fail;
   {
-    std::string *ptr = (std::string *)0;
-    int res = SWIG_AsPtr_std_string(obj0, &ptr);
-    if (!SWIG_IsOK(res) || !ptr) {
-      SWIG_exception_fail(SWIG_ArgError((ptr ? res : SWIG_TypeError)), "in method '" "getpass" "', argument " "1"" of type '" "std::string""'"); 
+    res1 = SWIG_ConvertPtr(obj0, &argp1, SWIGTYPE_p_std__string,  0  | 0);
+    if (!SWIG_IsOK(res1)) {
+      SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "getpass" "', argument " "1"" of type '" "std::string""'"); 
+    }  
+    if (!argp1) {
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "getpass" "', argument " "1"" of type '" "std::string""'");
+    } else {
+      std::string * temp = reinterpret_cast< std::string * >(argp1);
+      arg1 = *temp;
+      if (SWIG_IsNewObj(res1)) delete temp;
     }
-    arg1 = *ptr;
-    if (SWIG_IsNewObj(res)) delete ptr;
   }
   result = getpass(arg1);
-  resultobj = SWIG_From_std_string(static_cast< std::string >(result));
+  resultobj = SWIG_NewPointerObj((new std::string(static_cast< const std::string& >(result))), SWIGTYPE_p_std__string, SWIG_POINTER_OWN |  0 );
   return resultobj;
 fail:
   return NULL;
@@ -5802,7 +5916,7 @@ SWIGINTERN PyObject *_wrap_getpass(PyObject *self, PyObject *args) {
   }
   if (argc == 1) {
     int _v;
-    int res = SWIG_AsPtr_std_string(argv[0], (std::string**)(0));
+    int res = SWIG_ConvertPtr(argv[0], 0, SWIGTYPE_p_std__string, 0);
     _v = SWIG_CheckState(res);
     if (_v) {
       return _wrap_getpass__SWIG_1(self, args);
@@ -5810,7 +5924,7 @@ SWIGINTERN PyObject *_wrap_getpass(PyObject *self, PyObject *args) {
   }
   if (argc == 2) {
     int _v;
-    int res = SWIG_AsPtr_std_string(argv[0], (std::string**)(0));
+    int res = SWIG_ConvertPtr(argv[0], 0, SWIGTYPE_p_std__string, 0);
     _v = SWIG_CheckState(res);
     if (_v) {
       {
@@ -5829,6 +5943,27 @@ fail:
     "    getpass(std::string,char const)\n"
     "    getpass(std::string)\n");
   return 0;
+}
+
+
+SWIGINTERN PyObject *_wrap_func(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  unsigned char *arg1 = (unsigned char *) 0 ;
+  unsigned int arg2 ;
+  PyObject * obj0 = 0 ;
+  unsigned char *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:func",&obj0)) SWIG_fail;
+  {
+    Py_ssize_t len;
+    PyBytes_AsStringAndSize(obj0, &(char*)arg1, &len);
+    arg2 = (unsigned int)len;
+  }
+  result = (unsigned char *)func(arg1,arg2);
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_unsigned_char, 0 |  0 );
+  return resultobj;
+fail:
+  return NULL;
 }
 
 
@@ -5859,7 +5994,10 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"SHA256_reset", _wrap_SHA256_reset, METH_VARARGS, NULL},
 	 { (char *)"delete_SHA256", _wrap_delete_SHA256, METH_VARARGS, NULL},
 	 { (char *)"SHA256_swigregister", SHA256_swigregister, METH_VARARGS, NULL},
+	 { (char *)"cdata", _wrap_cdata, METH_VARARGS, NULL},
+	 { (char *)"memmove", _wrap_memmove, METH_VARARGS, NULL},
 	 { (char *)"getpass", _wrap_getpass, METH_VARARGS, NULL},
+	 { (char *)"func", _wrap_func, METH_VARARGS, NULL},
 	 { NULL, NULL, 0, NULL }
 };
 
@@ -5877,6 +6015,7 @@ static swig_type_info _swigt__p_a_256__unsigned_char = {"_p_a_256__unsigned_char
 static swig_type_info _swigt__p_a_4__unsigned_char = {"_p_a_4__unsigned_char", "unsigned char (*)[4]", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_char = {"_p_char", "char *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_p_unsigned_char = {"_p_p_unsigned_char", "unsigned char **", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_std__string = {"_p_std__string", "std::string *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_std__vectorT_unsigned_char_t = {"_p_std__vectorT_unsigned_char_t", "std::vector< unsigned char > *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_uint64_t = {"_p_uint64_t", "uint64_t *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_unsigned_char = {"_p_unsigned_char", "unsigned char *", 0, 0, (void*)0, 0};
@@ -5890,6 +6029,7 @@ static swig_type_info *swig_type_initial[] = {
   &_swigt__p_a_4__unsigned_char,
   &_swigt__p_char,
   &_swigt__p_p_unsigned_char,
+  &_swigt__p_std__string,
   &_swigt__p_std__vectorT_unsigned_char_t,
   &_swigt__p_uint64_t,
   &_swigt__p_unsigned_char,
@@ -5903,6 +6043,7 @@ static swig_cast_info _swigc__p_a_256__unsigned_char[] = {  {&_swigt__p_a_256__u
 static swig_cast_info _swigc__p_a_4__unsigned_char[] = {  {&_swigt__p_a_4__unsigned_char, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_char[] = {  {&_swigt__p_char, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_p_unsigned_char[] = {  {&_swigt__p_p_unsigned_char, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_std__string[] = {  {&_swigt__p_std__string, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_std__vectorT_unsigned_char_t[] = {  {&_swigt__p_std__vectorT_unsigned_char_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_uint64_t[] = {  {&_swigt__p_uint64_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_unsigned_char[] = {  {&_swigt__p_unsigned_char, 0, 0, 0},{0, 0, 0, 0}};
@@ -5916,6 +6057,7 @@ static swig_cast_info *swig_cast_initial[] = {
   _swigc__p_a_4__unsigned_char,
   _swigc__p_char,
   _swigc__p_p_unsigned_char,
+  _swigc__p_std__string,
   _swigc__p_std__vectorT_unsigned_char_t,
   _swigc__p_uint64_t,
   _swigc__p_unsigned_char,

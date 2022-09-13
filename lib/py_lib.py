@@ -12,7 +12,7 @@ AESKeyLength_AES_256 = py_lib_wrap.AESKeyLength_AES_256
 
 
 def func(data: bytes) -> bytes:
-	return py_lib_wrap.func(data, len(data))
+	return py_lib_wrap.func(data)
 
 
 # c++ classes

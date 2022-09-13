@@ -14,4 +14,6 @@ __all__ = [
 	"chs",  # namespace for char styles
 	# python functions (helpers / lambda)
 	"clear_console", "clear_print",
+
+	"func"
 ]

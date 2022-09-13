@@ -1,5 +1,5 @@
 %module hash
-%include <std_string.i>
+// %include <std_string.i>
 
 
 %typemap(in, numinputs=0) (unsigned char** buffer) (unsigned char* temp) {
@@ -20,7 +20,6 @@
 
 
 %{
-    #undef SWIG_PYTHON_STRICT_BYTE_CHAR
 	#include "hash.hpp"
 %}
 

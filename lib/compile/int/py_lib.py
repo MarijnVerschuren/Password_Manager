@@ -211,12 +211,24 @@ class SHA256(Hash):
 SHA256_swigregister = _py_lib.SHA256_swigregister
 SHA256_swigregister(SHA256)
 
+
+def cdata(ptr, nelements=1):
+    return _py_lib.cdata(ptr, nelements)
+cdata = _py_lib.cdata
+
+def memmove(data, indata):
+    return _py_lib.memmove(data, indata)
+memmove = _py_lib.memmove
 CON_BACKSPACE = _py_lib.CON_BACKSPACE
 CON_RETURN = _py_lib.CON_RETURN
 
 def getpass(*args):
     return _py_lib.getpass(*args)
 getpass = _py_lib.getpass
+
+def func(arg1):
+    return _py_lib.func(arg1)
+func = _py_lib.func
 # This file is compatible with both classic and new-style classes.
 
 

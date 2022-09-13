@@ -95,12 +95,24 @@ except __builtin__.Exception:
         pass
     _newclass = 0
 
+
+def cdata(ptr, nelements=1):
+    return _io.cdata(ptr, nelements)
+cdata = _io.cdata
+
+def memmove(data, indata):
+    return _io.memmove(data, indata)
+memmove = _io.memmove
 CON_BACKSPACE = _io.CON_BACKSPACE
 CON_RETURN = _io.CON_RETURN
 
 def getpass(*args):
     return _io.getpass(*args)
 getpass = _io.getpass
+
+def func(arg1):
+    return _io.func(arg1)
+func = _io.func
 # This file is compatible with both classic and new-style classes.
 
 

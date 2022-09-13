@@ -1,6 +1,6 @@
 %module encryption
-%include "typemaps.i"
-%include <std_string.i>
+//%include "typemaps.i"
+//%include <std_string.i>
 
 
 %extend AES {

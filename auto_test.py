@@ -63,7 +63,8 @@ if __name__ == "__main__":
 
 	print("\n--------------------------------------------------", end="\n\n")
 
-	SHA256_stream_test()
-	AES_CBC_encrypt_test()
+	#SHA256_stream_test()
+	#AES_CBC_encrypt_test()
+	print(func(b"abc"))
 
 	print("\n--------------------------------------------------", end="\n\n")
