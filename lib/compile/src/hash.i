@@ -1,10 +1,6 @@
 %module hash
 %include <std_string.i>
-%include <cstring.i>
-%include "carrays.i"
 
-
-// TODO: clean up
 
 %typemap(in, numinputs=0) (unsigned char** buffer) (unsigned char* temp) {
   $1 = &temp;
@@ -24,10 +20,9 @@
 
 
 %{
+    #undef SWIG_PYTHON_STRICT_BYTE_CHAR
 	#include "hash.hpp"
 %}
 
-%include <carrays.i>
-%array_class(uint8_t, buffer);
 
 %include "hash.hpp"

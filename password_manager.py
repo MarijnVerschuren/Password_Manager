@@ -54,9 +54,6 @@ def gui_mode(new_user: bool) -> None:
 
 
 if __name__ == "__main__":
-	s = SHA256()
-	s.add("abcdef")
-	input(s.raw_hash.hex())
 	# a = AES()
 	#a.EncryptCBC(plain, plainLen, s.add("abcdef"));
 	#s = SHA256()

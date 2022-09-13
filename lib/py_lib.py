@@ -26,6 +26,10 @@ class AES(py_lib_wrap.AES):
 	def __init__(self, key_lenght = AESKeyLength_AES_256) -> None:
 		super(AES, self).__init__(key_lenght)
 
+	def CBC_encrypt(self, msg: bytes, key: bytes, iv: bytes) -> bytes:
+		print(type(msg), type(len(msg)), type(key), type(iv))
+		return self.EncryptCBC()  # b"abc", 3, b"abc", b"abc", b"abc"
+
 
 
 # c++ functions
