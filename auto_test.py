@@ -65,7 +65,7 @@ if __name__ == "__main__":
 
 	SHA256_stream_test()
 	#AES_CBC_encrypt_test()
-	print(getpass("test: "))
+	print(getpass("getpass test: "))
 
 	print("\n--------------------------------------------------", end="\n\n")
 

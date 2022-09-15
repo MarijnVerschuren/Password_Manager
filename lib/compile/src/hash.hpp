@@ -9,6 +9,7 @@ namespace py = pybind11;
 #endif
 
 
+
 /// compute SHA256 hash
 /** Usage:
     SHA256 sha256;
