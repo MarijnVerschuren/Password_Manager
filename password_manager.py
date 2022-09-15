@@ -88,3 +88,5 @@ if __name__ == "__main__":
 # https://rweather.github.io/arduinolibs/SHA512_8cpp_source.html
 
 # crc (own implementation)
+
+# youtube.com/watch?v=_5T70cAXDJ0

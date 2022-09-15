@@ -1,5 +1,8 @@
 #pragma once
 
+#include "pybind11/pybind11.h"
+namespace py = pybind11;
+
 #include <iostream>
 #include <string>
 #include <windows.h>
@@ -11,4 +14,3 @@
 
 
 std::string getpass(std::string prompt, const char replacement = '*');
-unsigned char* func(unsigned char* in, unsigned int inLen);

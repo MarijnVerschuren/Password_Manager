@@ -1,5 +1,8 @@
 #pragma once
 
+#include "pybind11/pybind11.h"
+namespace py = pybind11;
+
 #include <string>
 #ifndef _MSC_VER  // big endian architectures need #define __BYTE_ORDER __BIG_ENDIAN
 #include <endian.h>
@@ -55,9 +58,9 @@ public:
 	void add(const void* data, uint64_t numBytes) override;
 	void add(const std::string& text) override;
 	/// return latest hash as 64 hex characters
-	std::string		get_hash() override;
+	std::string			get_hash() override;
 	/// return latest hash as bytes
-	void					get_raw_hash(unsigned char** buffer);
+	void				get_raw_hash(unsigned char** buffer);
 
 	/// restart
 	void reset() override;
@@ -71,9 +74,9 @@ private:
 	/// size of processed data in bytes
 	uint64_t m_numBytes;
 	/// valid bytes in m_buffer
-	uint64_t   m_bufferSize;
+	uint64_t m_bufferSize;
 	/// bytes not processed yet
-	uint8_t  m_buffer[BlockSize];
+	uint8_t m_buffer[BlockSize];
 
 	enum { HashValues = HashBytes / 4 };
 	/// hash, stored as integers

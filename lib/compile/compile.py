@@ -1,3 +1,4 @@
+import sys
 import os
 
 
@@ -6,19 +7,22 @@ clear_console = lambda: os.system("cls" if os.name in ["nt", "dos"] else "clear"
 
 compile_folder = os.path.dirname(os.path.abspath(__file__))
 root_folder = os.path.dirname(compile_folder)
+
+
+
 if __name__ == "__main__":
-	run(rf"echo y|rmdir {compile_folder}\int /S")
-	run(rf"mkdir {compile_folder}\int")
-	run(rf"echo y|rmdir {compile_folder}\bin /S")
-	run(rf"mkdir {compile_folder}\bin")
+	argv = sys.argv
+	if "-help" in argv:
+		print("[-force-clean]:\tdelete all previous build files before building again", sep="\n", end="\n\n")
+		exit(0);
+	if "-force-clean" in argv:
+		run(rf"echo y|rmdir {compile_folder}\build /S")
+		run(rf"mkdir {compile_folder}\build")
 
-	run(rf"swig -c++ -python -outdir {compile_folder}/int -o {compile_folder}/int/hash.cpp {compile_folder}/src/hash.i")
-	run(rf"swig -c++ -python -outdir {compile_folder}/int -o {compile_folder}/int/encryption.cpp {compile_folder}/src/encryption.i")
-	run(rf"swig -c++ -python -outdir {compile_folder}/int -o {compile_folder}/int/io.cpp {compile_folder}/src/io.i")
-	run(rf"swig -c++ -python -outdir {compile_folder}/int -o {compile_folder}/int/py_lib.cpp {compile_folder}/src/py_lib.i")  # i file that includes all swig units listed above
-	run(rf"python {compile_folder}/setup.py build_ext --include-dirs {compile_folder}/src --build-lib {compile_folder}/bin --build-temp {compile_folder}/int --swig-cpp")
+	os.chdir(rf"{compile_folder}\build")
+	run(f"cmake {compile_folder}")
+	run(f"cmake --build . -v -j {os.cpu_count()}")
 
-	run(rf"echo F|xcopy {compile_folder}\bin\*.pyd {root_folder}\_py_lib.pyd /y")
-	run(rf"echo F|xcopy {compile_folder}\int\py_lib.py {root_folder}\py_lib_wrap.py /y")
+	run(rf"echo F|xcopy {compile_folder}\build\Debug\*.pyd {root_folder}\py_lib.pyd /y")
 
 	#clear_console()

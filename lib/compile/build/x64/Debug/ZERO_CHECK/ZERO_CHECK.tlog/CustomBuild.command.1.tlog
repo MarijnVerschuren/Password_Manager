@@ -1,0 +1,10 @@
+^C:\USERS\MARIJ\ONEDRIVE\DOCUMENTEN\GITHUB\PASSWORD_MANAGER\LIB\COMPILE\BUILD\CMAKEFILES\797C0A256EEAF4C73DC1D3D868FB7141\GENERATE.STAMP.RULE
+setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -SC:/Users/marij/OneDrive/Documenten/GitHub/Password_Manager/lib/compile -BC:/Users/marij/OneDrive/Documenten/GitHub/Password_Manager/lib/compile/build --check-stamp-list CMakeFiles/generate.stamp.list --vs-solution-file C:/Users/marij/OneDrive/Documenten/GitHub/Password_Manager/lib/compile/build/py_lib.sln
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd

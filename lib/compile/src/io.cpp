@@ -33,12 +33,3 @@ std::string getpass(std::string prompt, const char replacement) {
 	SetConsoleMode(stdin_handle, con_mode);
 	return password;
 }
-
-unsigned char* func(unsigned char* in, unsigned int inLen) {
-	unsigned int max_index = inLen - 1;
-	unsigned char* out = new unsigned char[inLen];
-	for (unsigned int i = 0; i < inLen; i++) {
-		out[i] = in[max_index - i];
-	}
-	return out;
-}
