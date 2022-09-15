@@ -1,4 +1,9 @@
-# from .py_lib import
+from .py_lib import AES as _AES
+
+
+class AES(_AES):
+	def __init__(self, key_type: _AES.AES_key = _AES.AES_256) -> None:
+		super(AES, self).__init__(key_type)
 
 
 

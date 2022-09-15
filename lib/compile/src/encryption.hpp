@@ -11,7 +11,7 @@ namespace py = pybind11;
 
 
 
-enum class AESKeyLength { AES_128, AES_192, AES_256 };
+enum class AES_key { AES_128, AES_192, AES_256 };
 
 class AES {
  private:
@@ -21,76 +21,76 @@ class AES {
 
 	unsigned int blockBytesLen;
 
-	void SubBytes(unsigned char **state);
+	void sub_bytes(unsigned char **state);
 
-	void ShiftRow(unsigned char **state, int i, int n);  // shift row i on n positions
+	void shift_row(unsigned char **state, int i, int n);  // shift row i on n positions
 
-	void ShiftRows(unsigned char **state);
+	void shift_rows(unsigned char **state);
 
-	unsigned char xtime(unsigned char b);  // multiply on x
+	unsigned char x_time(unsigned char b);  // multiply on x
 
-	void MixColumns(unsigned char **state);
+	void mix_columns(unsigned char **state);
 
-	void AddRoundKey(unsigned char **state, unsigned char *key);
+	void add_round_key(unsigned char **state, unsigned char *key);
 
-	void SubWord(unsigned char *a);
+	void sub_word(unsigned char *a);
 
-	void RotWord(unsigned char *a);
+	void rot_word(unsigned char *a);
 
-	void XorWords(unsigned char *a, unsigned char *b, unsigned char *c);
+	void xor_words(unsigned char *a, unsigned char *b, unsigned char *c);
 
-	void Rcon(unsigned char *a, int n);
+	void rcon(unsigned char *a, int n);
 
-	void InvSubBytes(unsigned char **state);
+	void inv_sub_bytes(unsigned char **state);
 
-	void InvMixColumns(unsigned char **state);
+	void inv_mix_columns(unsigned char **state);
 
-	void InvShiftRows(unsigned char **state);
+	void inv_shift_rows(unsigned char **state);
 
-	void CheckLength(unsigned int len);
+	void check_length(unsigned int len);
 
-	void KeyExpansion(const unsigned char* key, unsigned char* w);
+	void key_expansion(const unsigned char* key, unsigned char* w);
 
-	void EncryptBlock(const unsigned char* in, unsigned char* out,  unsigned char* key);
+	void encrypt_block(const unsigned char* in, unsigned char* out,  unsigned char* key);
 
-	void DecryptBlock(const unsigned char* in, unsigned char* out, unsigned char* key);
+	void decrypt_block(const unsigned char* in, unsigned char* out, unsigned char* key);
 
-	void XorBlocks(const unsigned char *a, const unsigned char *b, unsigned char *c, unsigned int len);
+	void xor_blocks(const unsigned char *a, const unsigned char *b, unsigned char *c, unsigned int len);
 
-	std::vector<unsigned char> ArrayToVector(unsigned char *a, unsigned int len);
+	std::vector<unsigned char> array_to_vector(unsigned char *a, unsigned int len);
 
-	unsigned char *VectorToArray(std::vector<unsigned char> &a);
+	unsigned char *vector_to_array(std::vector<unsigned char> &a);
 
  public:
-	explicit AES(const AESKeyLength keyLength = AESKeyLength::AES_256);
+	explicit AES(const AES_key keyLength = AES_key::AES_256);
 
-	unsigned char *EncryptECB(const unsigned char* in, unsigned int inLen, const unsigned char* key);
+	unsigned char *encrypt_ECB(const unsigned char* in, unsigned int inLen, const unsigned char* key);
 
-	unsigned char *DecryptECB(const unsigned char* in, unsigned int inLen, const unsigned char* key);
+	unsigned char *decrypt_ECB(const unsigned char* in, unsigned int inLen, const unsigned char* key);
 
-	unsigned char *EncryptCBC(const unsigned char* in, unsigned int inLen, const unsigned char* key, const unsigned char *iv);
+	unsigned char *encrypt_CBC(const unsigned char* in, unsigned int inLen, const unsigned char* key, const unsigned char *iv);
 
-	unsigned char *DecryptCBC(const unsigned char* in, unsigned int inLen, const unsigned char* key, const unsigned char *iv);
+	unsigned char *decrypt_CBC(const unsigned char* in, unsigned int inLen, const unsigned char* key, const unsigned char *iv);
 
-	unsigned char *EncryptCFB(const unsigned char* in, unsigned int inLen, const unsigned char* key, const unsigned char *iv);
+	unsigned char *encrypt_CFB(const unsigned char* in, unsigned int inLen, const unsigned char* key, const unsigned char *iv);
 
-	unsigned char *DecryptCFB(const unsigned char* in, unsigned int inLen, const unsigned char* key, const unsigned char *iv);
+	unsigned char *decrypt_CFB(const unsigned char* in, unsigned int inLen, const unsigned char* key, const unsigned char *iv);
 
-	std::vector<unsigned char> EncryptECB(std::vector<unsigned char> in, std::vector<unsigned char> key);
+	std::vector<unsigned char> encrypt_ECB(std::vector<unsigned char> in, std::vector<unsigned char> key);
 
-	std::vector<unsigned char> DecryptECB(std::vector<unsigned char> in, std::vector<unsigned char> key);
+	std::vector<unsigned char> decrypt_ECB(std::vector<unsigned char> in, std::vector<unsigned char> key);
 
-	std::vector<unsigned char> EncryptCBC(std::vector<unsigned char> in, std::vector<unsigned char> key, std::vector<unsigned char> iv);
+	std::vector<unsigned char> encrypt_CBC(std::vector<unsigned char> in, std::vector<unsigned char> key, std::vector<unsigned char> iv);
 
-	std::vector<unsigned char> DecryptCBC(std::vector<unsigned char> in, std::vector<unsigned char> key, std::vector<unsigned char> iv);
+	std::vector<unsigned char> decrypt_CBC(std::vector<unsigned char> in, std::vector<unsigned char> key, std::vector<unsigned char> iv);
 
-	std::vector<unsigned char> EncryptCFB(std::vector<unsigned char> in, std::vector<unsigned char> key, std::vector<unsigned char> iv);
+	std::vector<unsigned char> encrypt_CFB(std::vector<unsigned char> in, std::vector<unsigned char> key, std::vector<unsigned char> iv);
 
-	std::vector<unsigned char> DecryptCFB(std::vector<unsigned char> in, std::vector<unsigned char> key, std::vector<unsigned char> iv);
+	std::vector<unsigned char> decrypt_CFB(std::vector<unsigned char> in, std::vector<unsigned char> key, std::vector<unsigned char> iv);
 
-	void printHexArray(unsigned char* a, unsigned int n);
+	void print_hex_array(unsigned char* a, unsigned int n);
 
-	void printHexVector(std::vector<unsigned char> a);
+	void print_hex_vector(std::vector<unsigned char> a);
 };
 
 const unsigned char sbox[16][16] = {

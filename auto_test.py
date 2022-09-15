@@ -40,7 +40,7 @@ def SHA256_stream_test(test_count: int = 0xff) -> None:
 
 def AES_CBC_encrypt_test(test_count: int = 0xff) -> None:
 	tests = [
-		[("a_",),		"ca978112ca1bbdcafac231b39a23dc4da786eff8147c4e72b9807785afee48bb"],
+		[("a",),		"ca978112ca1bbdcafac231b39a23dc4da786eff8147c4e72b9807785afee48bb"],
 		[("b",),		"fb8e20fc2e4c3f248c60c39bd652f3c1347298bb977b8b4d5903b85055620603"],
 		[("c",),		"ba7816bf8f01cfea414140de5dae2223b00361a396177a9cb410ff61f20015ad"],
 		[("d",),		"88d4266fd4e6338d13b845fcf289579d209c897823b9217da3e161936f031589"],
@@ -64,6 +64,8 @@ if __name__ == "__main__":
 	print("\n--------------------------------------------------", end="\n\n")
 
 	SHA256_stream_test()
+	a = AES()
+	print(a.encrypt_ECB("abc", os.urandom(32)))
 	#AES_CBC_encrypt_test()
 	print(getpass("getpass test: "))
 

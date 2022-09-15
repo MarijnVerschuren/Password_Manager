@@ -4,16 +4,15 @@ from .py_util import *
 # c++ functions
 from .io import getpass			# getpass
 from .hash import SHA256		# SHA256 (direct import)
-from .encryption import *
+from .encryption import AES		# AES
 
 
 __all__ = [
-	# c++ constants
+	# encryption
 	#"AESKeyLength_AES_128",
 	#"AESKeyLength_AES_192",
 	#"AESKeyLength_AES_256",
-	# c++ classes
-	#"AES",
+	"AES",
 
 	# hash
 	"SHA256", 
