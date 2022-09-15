@@ -63,14 +63,9 @@ if __name__ == "__main__":
 
 	print("\n--------------------------------------------------", end="\n\n")
 
-	s = SHA256()
-	# s.add("a")
-	print(s.hash)
-	s.add("a")
-	print(s.hash)
-	print(getpass("password: "))
-	#SHA256_stream_test()
+	SHA256_stream_test()
 	#AES_CBC_encrypt_test()
+	print(getpass("test: "))
 
 	print("\n--------------------------------------------------", end="\n\n")
 

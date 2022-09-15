@@ -23,7 +23,7 @@ PYBIND11_MODULE(py_lib, handle) {
 	sha256.def_property_readonly("raw_hash", [](SHA256* self){
 		unsigned char* data;
 		self->get_raw_hash(&data);
-		return py::bytes(data);  // cant convert here
+		return py::reinterpret_steal<py::object>(PYBIND11_BYTES_FROM_STRING_AND_SIZE((char*)data, 32));
 	});
 }
 
