@@ -20,6 +20,11 @@ PYBIND11_MODULE(py_lib, handle) {
 	sha256.def("add", py::overload_cast<const std::string&>(&SHA256::add));  // &SHA256::add<const std::string&>);
 	sha256.def("add", py::overload_cast<const void*, uint64_t>(&SHA256::add));  // &SHA256::add<const void*, uint64_t>);
 	sha256.def_property_readonly("hash", &SHA256::get_hash);
+	sha256.def_property_readonly("raw_hash", [](SHA256* self){
+		unsigned char* data;
+		self->get_raw_hash(&data);
+		return py::bytes(data);  // cant convert here
+	});
 }
 
 // TODO: return raw hash and pass raw data to add function

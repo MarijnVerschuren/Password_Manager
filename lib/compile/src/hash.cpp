@@ -332,7 +332,7 @@ void SHA256::process_buffer() {
 /// return latest hash as 64 hex characters
 std::string SHA256::get_hash() {
 	// compute hash (as raw bytes)
-	uint8_t* rawHash = nullptr;
+	uint8_t* rawHash;
 	get_raw_hash(&rawHash);
 
 	// convert to hex string
