@@ -2,7 +2,6 @@ import os
 
 
 
-# python constants
 class chs:  # (char style) class acts like a namespace
 	END =		0
 	NEGATIVE =	7
@@ -20,12 +19,9 @@ class chs:  # (char style) class acts like a namespace
 	@classmethod
 	def apply(cls, msg: str, code) -> str:
 		return f"{cls.get(code)}{msg}{cls.get(cls.END)}"
-
 # TODO: maybe move this to c++
 
 
-
-# python function
 clear_console = lambda: os.system("cls" if os.name in ["nt", "dos"] else "clear")
 
 def clear_print(*args, **kwargs) -> None:

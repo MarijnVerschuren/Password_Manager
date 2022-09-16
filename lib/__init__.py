@@ -1,24 +1,22 @@
-# python functions
+# python functions / classes / constants
 from .py_util import *
 
-# c++ functions
+# c++ functions / classes / constants
 # getpass, print_hex_array (direct import)
 from .io import getpass, print_hex_array
-# SHA256 (direct import)
-from .hash import SHA256
+# SHA256 (direct import), SHA3
+from .hash import SHA256, SHA3
 # AES
 from .encryption import AES
 
 
 __all__ = [
 	# encryption
-	#"AESKeyLength_AES_128",
-	#"AESKeyLength_AES_192",
-	#"AESKeyLength_AES_256",
 	"AES",
 
 	# hash
-	"SHA256", 
+	"SHA256",
+	"SHA3",
 
 	# io
 	"getpass",

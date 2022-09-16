@@ -2,18 +2,18 @@
 
 
 
-AES::AES(const AES_key keyLength) {
+AES::AES(const AES_key_type keyLength) {
 	this->Nb = 4;
 	switch (keyLength) {
-		case AES_key::AES_128:
+		case AES_key_type::AES_128:
 		this->Nk = 4;
 		this->Nr = 10;
 		break;
-		case AES_key::AES_192:
+		case AES_key_type::AES_192:
 		this->Nk = 6;
 		this->Nr = 12;
 		break;
-		case AES_key::AES_256:
+		case AES_key_type::AES_256:
 		this->Nk = 8;
 		this->Nr = 14;
 		break;

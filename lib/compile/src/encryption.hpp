@@ -11,7 +11,7 @@ namespace py = pybind11;
 
 
 
-enum class AES_key { AES_128, AES_192, AES_256 };
+enum class AES_key_type { AES_128, AES_192, AES_256 };
 
 class AES {
  private:
@@ -62,7 +62,7 @@ class AES {
 	unsigned char *vector_to_array(std::vector<unsigned char> &a);
 
  public:
-	explicit AES(const AES_key keyLength = AES_key::AES_256);
+	explicit AES(const AES_key_type keyLength = AES_key_type::AES_256);
 
 	unsigned char *encrypt_ECB(const unsigned char* in, unsigned int inLen, const unsigned char* key);
 

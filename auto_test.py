@@ -15,7 +15,7 @@ def print_error(results) -> None:
 
 
 # test formats
-def SHA256_stream_test(hash_add_function: callable, tests: list, prompt: str) -> None:
+def SHA_stream_test(hash_add_function: callable, tests: list, prompt: str) -> None:
 	results = []
 
 	fail = False
@@ -92,7 +92,7 @@ if __name__ == "__main__":
 		[("f",),	"bef57ec7f53a6d40beb640a780a639c83bc29ac8a9816f1fc6c5c6dcd93c4721"]		# hash of "abcdef"
 	]
 
-	# AES_TESTS
+	# ENCRYPTION_TESTS
 	aes = AES()
 	# AES_ECB_TEST
 	ECB_key = b'GE\x97\xef\x19\xac=\x9f\xd5\xe3\x0cr\xad\x12\xff\x002\xd7\x19\xe1\xb7\xc5p\xe6\xde\x93\x91\xd46_\xa91'
@@ -159,13 +159,30 @@ if __name__ == "__main__":
 
 	print("\n--------------------------------------------------", end="\n\n")
 
-	SHA256_stream_test(SHA256_stream, SHA256_stream_tests, "SHA256 (stream)")
+	SHA_stream_test(SHA256_stream, SHA256_stream_tests, "SHA256 (stream)")
 	AES_test(aes.encrypt_ECB, aes.decrypt_ECB, ECB_tests, "AES_ECB")
 	AES_test(aes.encrypt_CBC, aes.decrypt_CBC, CBC_tests, "AES_CBC")
 	AES_test(aes.encrypt_CFB, aes.decrypt_CFB, CFB_tests, "AES_CFB")
 	if enable_halting_functions:
 		print(getpass("getpass test: "))
+	s = SHA3()
+	for i in ["a", "b", "c", "d", "e"]:
+		print(s(i), "\n")
 
 	print("\n--------------------------------------------------", end="\n\n")
 
 	# https://pybind11.readthedocs.io/en/stable/advanced/functions.html
+	# TODO: load tests from json file
+
+# TODO:
+# add SHA3-512, CRC64, CRC(n) check
+# sha3-512:	https://www.google.com/search?q=c%2B%2B+sha3-512+library&oq=c%2B%2B+sha3-512+library&aqs=chrome..69i57j33i160.9059j0j7&sourceid=chrome&ie=UTF-8
+# OR
+# sha512:
+# https://rweather.github.io/arduinolibs/Hash_8h_source.html
+# https://rweather.github.io/arduinolibs/SHA512_8h_source.html
+# https://rweather.github.io/arduinolibs/SHA512_8cpp_source.html
+
+# crc (own implementation)
+
+# youtube.com/watch?v=_5T70cAXDJ0

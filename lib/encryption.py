@@ -1,8 +1,9 @@
 from .py_lib import AES as _AES
 
 
+
 class AES(_AES):
-	def __init__(self, key_type: _AES.AES_key = _AES.AES_256) -> None:
+	def __init__(self, key_type: _AES.AES_key_type = _AES.AES_256) -> None:
 		super(AES, self).__init__(key_type)
 		self.key_type = key_type
 
@@ -49,21 +50,3 @@ class AES(_AES):
 		if type(data) == str: data = data.encode()
 		if not (self.check_key_type(key) and self.check_iv_len(iv) and self.check_data_len(data)): return b"";  # fail
 		return super(AES, self).decrypt_CFB(data, key, iv)
-
-
-
-"""
-# c++ constants
-AESKeyLength_AES_128 = py_lib_wrap.AESKeyLength_AES_128
-AESKeyLength_AES_192 = py_lib_wrap.AESKeyLength_AES_192
-AESKeyLength_AES_256 = py_lib_wrap.AESKeyLength_AES_256
-
-# c++ classes
-class AES(py_lib_wrap.AES):
-	def __init__(self, key_lenght = AESKeyLength_AES_256) -> None:
-		super(AES, self).__init__(key_lenght)
-
-	def CBC_encrypt(self, msg: bytes, key: bytes, iv: bytes) -> bytes:
-		return self.EncryptCBC(msg, len(msg), key, iv)
-
-"""

@@ -75,18 +75,3 @@ if __name__ == "__main__":
 	else:						gui_mode(**args)
 # https://github.com/hoffstadt/DearPyGui
 # https://en.wikipedia.org/wiki/SOLID
-
-
-# TODO:
-# add SHA3-512, CRC64, CRC(n) check
-# eas:		https://www.google.com/search?q=c%2B%2B+aes+library&oq=c%2B%2B+aes+lib&aqs=chrome.1.69i57j0i512j0i22i30l2.5424j0j7&sourceid=chrome&ie=UTF-8
-# sha3-512:	https://www.google.com/search?q=c%2B%2B+sha3-512+library&oq=c%2B%2B+sha3-512+library&aqs=chrome..69i57j33i160.9059j0j7&sourceid=chrome&ie=UTF-8
-# OR
-# sha512:
-# https://rweather.github.io/arduinolibs/Hash_8h_source.html
-# https://rweather.github.io/arduinolibs/SHA512_8h_source.html
-# https://rweather.github.io/arduinolibs/SHA512_8cpp_source.html
-
-# crc (own implementation)
-
-# youtube.com/watch?v=_5T70cAXDJ0
