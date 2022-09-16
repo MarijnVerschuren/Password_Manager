@@ -63,27 +63,3 @@ PYBIND11_MODULE(py_lib, handle) {
     aes_key.value("AES_256", AES_key::AES_256);
     aes_key.export_values();
 }
-
-// TODO: return raw hash and pass raw data to add function
-// add operator() support
-
-// encryption
-
-
-/*  // NOT NEEDED
-aes.def("print_hex_array", [](AES* self, std::string& data){
-		self->print_hex_array((unsigned char*)data.c_str(), data.length());
-	});
-
-sha256.def("add", [](SHA256* self, py::bytes data){
-	char* buffer; ssize_t len;
-	if(PyBytes_AsStringAndSize(data.ptr(), &buffer, &len)) { return; }  // fail
-	self->add(buffer, len);
-});
-
-sha256.def("__call__", [](SHA256* self, py::bytes data){
-	char* buffer; ssize_t len;
-	if(PyBytes_AsStringAndSize(data.ptr(), &buffer, &len)) { return std::string(64, '0'); }  // fail
-	return (*self)(buffer, len);
-});
-*/
