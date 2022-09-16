@@ -1,73 +1,170 @@
-import os
+import sys, os
 
 
+# utils
+def print_error(results) -> None:
+	for args, expect, result in results:
+		modifier = chs.END
+		if result != expect: modifier = chs.NEGATIVE
+		print(
+			f"args:\t\t\t{chs.apply(f'{args}', modifier)}",
+			f"expected:\t\t{chs.apply(f'{expect}', modifier)}",
+			f"got:\t\t\t{chs.apply(f'{result}', modifier)}",
+			sep="\n", end="\n\n"
+		)
 
-def SHA256_stream_test(test_count: int = 0xff) -> None:
-	tests = [
-		[("a",),		"ca978112ca1bbdcafac231b39a23dc4da786eff8147c4e72b9807785afee48bb"],	# hash of "a"
-		[("b",),		"fb8e20fc2e4c3f248c60c39bd652f3c1347298bb977b8b4d5903b85055620603"],	# hash of "ab"
-		[("c",),		"ba7816bf8f01cfea414140de5dae2223b00361a396177a9cb410ff61f20015ad"],	# hash of "abc"
-		[("d",),		"88d4266fd4e6338d13b845fcf289579d209c897823b9217da3e161936f031589"],	# hash of "abcd"
-		[("e",),		"36bbe50ed96841d10443bcb670d6554f0a34b761be67ec9c4a8ad2c0c44ca42c"],	# hash of "abcde"
-		[("f",),		"bef57ec7f53a6d40beb640a780a639c83bc29ac8a9816f1fc6c5c6dcd93c4721"]		# hash of "abcdef"
-	]
-	test_count = min(len(tests), test_count)	# clamp to the max test count
-	tests = tests[0:test_count]					# set test count
+
+# test formats
+def SHA256_stream_test(hash_add_function: callable, tests: list, prompt: str) -> None:
 	results = []
 
-	s = SHA256()
 	fail = False
 	for args, expect in tests:
-		s.add(*args)
-		result = s.raw_hash.hex()
+		result = hash_add_function(*args)
 		if result != expect: fail = True
 		results.append([args, expect, result])
 
-	print("SHA256 (stream):\t", end="")
+	print(f"{prompt}:\t", end="")
 	if fail:
 		print(chs.apply("[FAULT]", chs.RED))
-		for args, expect, result in results:
-			print(
-				f"args:\t\t\t{chs.apply(f'{args}', chs.NEGATIVE)}",
-				f"expected:\t\t{chs.apply(f'{expect}', chs.NEGATIVE)}",
-				f"got:\t\t\t{chs.apply(f'{result}', chs.NEGATIVE)}",
-				sep="\n", end="\n\n"
-			)
+		print_error(results)
 		return
 	print(chs.apply("[OK]", chs.GREEN));
 
 
 
-def AES_CBC_encrypt_test(test_count: int = 0xff) -> None:
-	tests = [
-		[("a",),		"ca978112ca1bbdcafac231b39a23dc4da786eff8147c4e72b9807785afee48bb"],
-		[("b",),		"fb8e20fc2e4c3f248c60c39bd652f3c1347298bb977b8b4d5903b85055620603"],
-		[("c",),		"ba7816bf8f01cfea414140de5dae2223b00361a396177a9cb410ff61f20015ad"],
-		[("d",),		"88d4266fd4e6338d13b845fcf289579d209c897823b9217da3e161936f031589"],
-		[("e",),		"36bbe50ed96841d10443bcb670d6554f0a34b761be67ec9c4a8ad2c0c44ca42c"],
-		[("f",),		"bef57ec7f53a6d40beb640a780a639c83bc29ac8a9816f1fc6c5c6dcd93c4721"]
-	]
-	test_count = min(len(tests), test_count)	# clamp to the max test count
-	tests = tests[0:test_count]					# set test count
-	results = []
+def AES_test(encrypt_function: callable, decrypt_function: callable, tests: list, prompt: str) -> None:
+	results = [[], []]
 
-	a = AES()
-	print(a.CBC_encrypt(b"abc", os.urandom(32), os.urandom(16)))
+	fail = 0
+	for args, expect in tests[0]:
+		result = encrypt_function(*args)
+		if result != expect: fail |= 1
+		results[0].append([args, expect, result])
+
+	for args, expect in tests[1]:
+		result = decrypt_function(*args)
+		if result != expect: fail |= 2
+		results[1].append([args, expect, result])
+
+	print(f"{prompt}:\t\t", end="")
+	if fail:
+		if fail == 1: print(chs.apply("[ENCRYPTION FAULT]", chs.RED))
+		if fail == 2: print(chs.apply("[DECRYPTION FAULT]", chs.RED))
+		if fail == 3: print(chs.apply("[GENERAL FAULT]", chs.RED))
+
+		if fail & 1:
+			print(chs.apply("====================[ENCRYPT]=====================", chs.CYAN))
+			print_error(results[0])
+		if fail & 2:
+			print(chs.apply("====================[DECRYPT]=====================", chs.CYAN))
+			print_error(results[1])
+		return
+	print(chs.apply("[OK]", chs.GREEN));
 
 
 
 if __name__ == "__main__":
-	# compile the library
-	os.system("cmplib.bat")
+	enable_halting_functions = False
+	if "-help" in sys.argv: print(
+			"[-no-compile]\t\t\tdont compile before test",
+			"[-halting-function-test]\tinclude halting functions in test",
+			sep="\n", end="\n\n"
+		); exit(0)
+	if not "-no-compile" in sys.argv: os.system("cmplib.bat")  # compile the library
+	if "-halting-function-test" in sys.argv: enable_halting_functions = True
+
 	from lib import *  # include after compile to prevent sharing violation
+
+
+
+	# HASH_TESTS
+	sha256 = SHA256()
+	def SHA256_stream(*args):
+		sha256.add(*args)
+		return sha256.raw_hash.hex()
+	SHA256_stream_tests = [
+		[("a",),	"ca978112ca1bbdcafac231b39a23dc4da786eff8147c4e72b9807785afee48bb"],	# hash of "a"
+		[("b",),	"fb8e20fc2e4c3f248c60c39bd652f3c1347298bb977b8b4d5903b85055620603"],	# hash of "ab"
+		[("c",),	"ba7816bf8f01cfea414140de5dae2223b00361a396177a9cb410ff61f20015ad"],	# hash of "abc"
+		[("d",),	"88d4266fd4e6338d13b845fcf289579d209c897823b9217da3e161936f031589"],	# hash of "abcd"
+		[("e",),	"36bbe50ed96841d10443bcb670d6554f0a34b761be67ec9c4a8ad2c0c44ca42c"],	# hash of "abcde"
+		[("f",),	"bef57ec7f53a6d40beb640a780a639c83bc29ac8a9816f1fc6c5c6dcd93c4721"]		# hash of "abcdef"
+	]
+
+	# AES_TESTS
+	aes = AES()
+	# AES_ECB_TEST
+	ECB_key = b'GE\x97\xef\x19\xac=\x9f\xd5\xe3\x0cr\xad\x12\xff\x002\xd7\x19\xe1\xb7\xc5p\xe6\xde\x93\x91\xd46_\xa91'
+	ECB_tests = [
+		[
+			[("a", ECB_key),	b'\xa7\xe5\x99\x92\x9eg2L \x7f\xb6wn$\x95\x7f'																		],
+			[("b", ECB_key),	b'\x1fs\x8d\xaa\x166 \xc8\xd6\xf4\xa0s\x11\xe9\xa4\xaf'																],
+			[("c", ECB_key),	b'\x86nm\xb8\x9am\xae\x10\xdc\xce\xa7|\x1avXI'																		],
+			[("d", ECB_key),	b'A\xdd\x8d\x1fV\x02\xb8q\xbaJP\x94\xba\x8a1\xa4'																	],
+			[("e", ECB_key),	b'X"\xaa\x0e\x04,\x93`y\xaf[\xe2\x82\xc2\xaa}'																		],
+			[("f", ECB_key),	b'_\x04Um\xcawEm\xe7\xec;*R\x89\x9a\xb9'																			]
+		],
+		[
+			[(b'\xa7\xe5\x99\x92\x9eg2L \x7f\xb6wn$\x95\x7f',			ECB_key),	b'a\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00'],
+			[(b'\x1fs\x8d\xaa\x166 \xc8\xd6\xf4\xa0s\x11\xe9\xa4\xaf',	ECB_key),	b'b\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00'],
+			[(b'\x86nm\xb8\x9am\xae\x10\xdc\xce\xa7|\x1avXI',			ECB_key),	b'c\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00'],
+			[(b'A\xdd\x8d\x1fV\x02\xb8q\xbaJP\x94\xba\x8a1\xa4',		ECB_key),	b'd\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00'],
+			[(b'X"\xaa\x0e\x04,\x93`y\xaf[\xe2\x82\xc2\xaa}',			ECB_key),	b'e\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00'],
+			[(b'_\x04Um\xcawEm\xe7\xec;*R\x89\x9a\xb9',					ECB_key),	b'f\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00']
+		]
+	]
+
+	CBC_key = b'\x1b\xed\x96\xe3\x99\xaa\xbd@\xf2\xac1\x85\xe0\xa5\xcf\xe0\xda".r\xe8\xf2\x92\x9b\xc7\xdb\xf2Y\x0f\xc2l:'
+	CBC_iv = b'\xca\xb7\xc1\xf1PVc\x9e\xd6\xd98\xc7WC\x13D'
+	CBC_tests = [
+		[
+			[("a", CBC_key, CBC_iv),	b'\n\x00CD\xc9}Zuo/"ddX\xa1\x05'																						],
+			[("b", CBC_key, CBC_iv),	b'\x152^\xb3\xa0Z\\\xd8\xd9\xcb\xd0\xb3t\xf4-y'																			],
+			[("c", CBC_key, CBC_iv),	b'\x08\xa2ID\x81\xab\xbf9\xaevq\x99I\\\xa3\xcf'																			],
+			[("d", CBC_key, CBC_iv),	b'\xf4:(l\xb7\xde\xc8\x94\x95\xc2;`3\xa4\x9c%'																			],
+			[("e", CBC_key, CBC_iv),	b'\xa2\xd4\x03\xce\xe6\x1b\xd2\xfe\xc2\x15U\x1b?\x9e\xd0,'																],
+			[("f", CBC_key, CBC_iv),	b'\x0e\x0cl.\x07Z\xf8\x87\x87\x0c\x85\xb3\xe8O\x8b\x07'																	]
+		],
+		[
+			[(b'\n\x00CD\xc9}Zuo/"ddX\xa1\x05',								CBC_key, CBC_iv),	b'a\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00'],
+			[(b'\x152^\xb3\xa0Z\\\xd8\xd9\xcb\xd0\xb3t\xf4-y',				CBC_key, CBC_iv),	b'b\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00'],
+			[(b'\x08\xa2ID\x81\xab\xbf9\xaevq\x99I\\\xa3\xcf',				CBC_key, CBC_iv),	b'c\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00'],
+			[(b'\xf4:(l\xb7\xde\xc8\x94\x95\xc2;`3\xa4\x9c%',				CBC_key, CBC_iv),	b'd\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00'],
+			[(b'\xa2\xd4\x03\xce\xe6\x1b\xd2\xfe\xc2\x15U\x1b?\x9e\xd0,',	CBC_key, CBC_iv),	b'e\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00'],
+			[(b'\x0e\x0cl.\x07Z\xf8\x87\x87\x0c\x85\xb3\xe8O\x8b\x07',		CBC_key, CBC_iv),	b'f\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00']
+		]
+	]
+
+	CFB_key = b'Z%\xe0_x\xca\xecw.\xa8\xfe\xdd\x08JL\x84\xc1\xf2\xf3\x99\xe7\xad\x02di8\xac/\xf8\x8d\x0e\xc0'
+	CFB_iv = b'<@\xdbu5D\x8b)v\xa2\xc9\x02\xbd \xdd['
+	CFB_tests = [
+		[
+			[("a", CFB_key, CFB_iv),	b'Ac\xc3\x18D\xce\xcd\x84\x14\x83%Vt}\xc2N'																],
+			[("b", CFB_key, CFB_iv),	b'Bc\xc3\x18D\xce\xcd\x84\x14\x83%Vt}\xc2N'																],
+			[("c", CFB_key, CFB_iv),	b'Cc\xc3\x18D\xce\xcd\x84\x14\x83%Vt}\xc2N'																],
+			[("d", CFB_key, CFB_iv),	b'Dc\xc3\x18D\xce\xcd\x84\x14\x83%Vt}\xc2N'																],
+			[("e", CFB_key, CFB_iv),	b'Ec\xc3\x18D\xce\xcd\x84\x14\x83%Vt}\xc2N'																],
+			[("f", CFB_key, CFB_iv),	b'Fc\xc3\x18D\xce\xcd\x84\x14\x83%Vt}\xc2N'																]
+		],
+		[
+			[(b'Ac\xc3\x18D\xce\xcd\x84\x14\x83%Vt}\xc2N',	CFB_key, CFB_iv),	b'a\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00'],
+			[(b'Bc\xc3\x18D\xce\xcd\x84\x14\x83%Vt}\xc2N',	CFB_key, CFB_iv),	b'b\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00'],
+			[(b'Cc\xc3\x18D\xce\xcd\x84\x14\x83%Vt}\xc2N',	CFB_key, CFB_iv),	b'c\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00'],
+			[(b'Dc\xc3\x18D\xce\xcd\x84\x14\x83%Vt}\xc2N',	CFB_key, CFB_iv),	b'd\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00'],
+			[(b'Ec\xc3\x18D\xce\xcd\x84\x14\x83%Vt}\xc2N',	CFB_key, CFB_iv),	b'e\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00'],
+			[(b'Fc\xc3\x18D\xce\xcd\x84\x14\x83%Vt}\xc2N',	CFB_key, CFB_iv),	b'f\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00']
+		]
+	]
 
 	print("\n--------------------------------------------------", end="\n\n")
 
-	SHA256_stream_test()
-	a = AES()
-	print(a.encrypt_ECB("abc", os.urandom(32)))
-	#AES_CBC_encrypt_test()
-	print(getpass("getpass test: "))
+	SHA256_stream_test(SHA256_stream, SHA256_stream_tests, "SHA256 (stream)")
+	AES_test(aes.encrypt_ECB, aes.decrypt_ECB, ECB_tests, "AES_ECB")
+	AES_test(aes.encrypt_CBC, aes.decrypt_CBC, CBC_tests, "AES_CBC")
+	AES_test(aes.encrypt_CFB, aes.decrypt_CFB, CFB_tests, "AES_CFB")
+	if enable_halting_functions:
+		print(getpass("getpass test: "))
 
 	print("\n--------------------------------------------------", end="\n\n")
 

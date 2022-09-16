@@ -87,10 +87,6 @@ class AES {
 	std::vector<unsigned char> encrypt_CFB(std::vector<unsigned char> in, std::vector<unsigned char> key, std::vector<unsigned char> iv);
 
 	std::vector<unsigned char> decrypt_CFB(std::vector<unsigned char> in, std::vector<unsigned char> key, std::vector<unsigned char> iv);
-
-	void print_hex_array(unsigned char* a, unsigned int n);
-
-	void print_hex_vector(std::vector<unsigned char> a);
 };
 
 const unsigned char sbox[16][16] = {

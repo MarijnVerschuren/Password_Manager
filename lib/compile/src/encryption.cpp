@@ -387,18 +387,6 @@ void AES::xor_blocks(const unsigned char *a, const unsigned char *b, unsigned ch
 	}
 }
 
-void AES::print_hex_array(unsigned char* a, unsigned int n) {
-	for (unsigned int i = 0; i < n; i++) {
-		printf("%02x ", a[i]);
-	}
-}
-
-void AES::print_hex_vector(std::vector<unsigned char> a) {
-	for (unsigned int i = 0; i < a.size(); i++) {
-		printf("%02x ", a[i]);
-	}
-}
-
 std::vector<unsigned char> AES::array_to_vector(unsigned char *a, unsigned int len) {
 	std::vector<unsigned char> v(a, a + len * sizeof(unsigned char));
 	return v;

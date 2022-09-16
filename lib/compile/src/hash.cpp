@@ -339,9 +339,8 @@ std::string SHA256::get_hash() {
 	std::string result;
 	result.reserve(2 * HashBytes);
 	for (uint8_t i = 0; i < HashBytes; i++) {
-		static const char dec2hex[16+1] = "0123456789abcdef";
-		result += dec2hex[(rawHash[i] >> 4) & 15];
-		result += dec2hex[ rawHash[i]       & 15];
+		result += HEX_CHARS[(rawHash[i] >> 4) & 0xf];
+		result += HEX_CHARS[ rawHash[i]       & 0xf];
 	}
 
 	delete[] rawHash;

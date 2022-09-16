@@ -14,8 +14,8 @@ PYBIND11_MODULE(py_lib, handle) {
 
 	// io.hpp
 	handle.def("getpass", &getpass);
+	handle.def("print_hex_array", [](std::string& data){ print_hex_array((unsigned char*)data.c_str(), data.length()); });
 
-	// hash.hpp
 	py::class_<SHA256> sha256(handle, "SHA256");
 	sha256.def(py::init<>());
 	sha256.def("reset", &SHA256::reset);
@@ -32,13 +32,30 @@ PYBIND11_MODULE(py_lib, handle) {
 	py::class_<AES> aes(handle, "AES");
 	aes.def(py::init<const AES_key>());
 	// TODO: custom conversion from string/bytes to vector
-	aes.def("encrypt_ECB", py::overload_cast<std::vector<unsigned char>, std::vector<unsigned char>>(&AES::encrypt_ECB));
-	aes.def("decrypt_ECB", py::overload_cast<std::vector<unsigned char>, std::vector<unsigned char>>(&AES::decrypt_ECB));
-	aes.def("encrypt_CBC", py::overload_cast<std::vector<unsigned char>, std::vector<unsigned char>, std::vector<unsigned char>>(&AES::encrypt_CBC));
-	aes.def("decrypt_CBC", py::overload_cast<std::vector<unsigned char>, std::vector<unsigned char>, std::vector<unsigned char>>(&AES::decrypt_CBC));
-	aes.def("encrypt_CFB", py::overload_cast<std::vector<unsigned char>, std::vector<unsigned char>, std::vector<unsigned char>>(&AES::encrypt_CFB));
-	aes.def("decrypt_CFB", py::overload_cast<std::vector<unsigned char>, std::vector<unsigned char>, std::vector<unsigned char>>(&AES::decrypt_CFB));
-	aes.def("hex_vector", &AES::print_hex_vector);
+	aes.def("encrypt_ECB", [](AES* self, std::string& data, std::string& key){
+		unsigned char* out = self->encrypt_ECB((unsigned char*)data.c_str(), (unsigned int)data.length(), (unsigned char*)key.c_str());
+		return py::reinterpret_steal<py::object>(PYBIND11_BYTES_FROM_STRING_AND_SIZE((char*)out, (unsigned int)data.length()));
+	});
+	aes.def("decrypt_ECB", [](AES* self, std::string& data, std::string& key){
+		unsigned char* out = self->decrypt_ECB((unsigned char*)data.c_str(), (unsigned int)data.length(), (unsigned char*)key.c_str());
+		return py::reinterpret_steal<py::object>(PYBIND11_BYTES_FROM_STRING_AND_SIZE((char*)out, (unsigned int)data.length()));
+	});
+	aes.def("encrypt_CBC", [](AES* self, std::string& data, std::string& key, std::string& iv){
+		unsigned char* out = self->encrypt_CBC((unsigned char*)data.c_str(), (unsigned int)data.length(), (unsigned char*)key.c_str(), (unsigned char*)iv.c_str());
+		return py::reinterpret_steal<py::object>(PYBIND11_BYTES_FROM_STRING_AND_SIZE((char*)out, (unsigned int)data.length()));
+	});
+	aes.def("decrypt_CBC", [](AES* self, std::string& data, std::string& key, std::string& iv){
+		unsigned char* out = self->decrypt_CBC((unsigned char*)data.c_str(), (unsigned int)data.length(), (unsigned char*)key.c_str(), (unsigned char*)iv.c_str());
+		return py::reinterpret_steal<py::object>(PYBIND11_BYTES_FROM_STRING_AND_SIZE((char*)out, (unsigned int)data.length()));
+	});
+	aes.def("encrypt_CFB", [](AES* self, std::string& data, std::string& key, std::string& iv){
+		unsigned char* out = self->encrypt_CFB((unsigned char*)data.c_str(), (unsigned int)data.length(), (unsigned char*)key.c_str(), (unsigned char*)iv.c_str());
+		return py::reinterpret_steal<py::object>(PYBIND11_BYTES_FROM_STRING_AND_SIZE((char*)out, (unsigned int)data.length()));
+	});
+	aes.def("decrypt_CFB", [](AES* self, std::string& data, std::string& key, std::string& iv){
+		unsigned char* out = self->decrypt_CFB((unsigned char*)data.c_str(), (unsigned int)data.length(), (unsigned char*)key.c_str(), (unsigned char*)iv.c_str());
+		return py::reinterpret_steal<py::object>(PYBIND11_BYTES_FROM_STRING_AND_SIZE((char*)out, (unsigned int)data.length()));
+	});
 
 	py::enum_<AES_key> aes_key(aes, "AES_key");
     aes_key.value("AES_128", AES_key::AES_128);
@@ -54,6 +71,10 @@ PYBIND11_MODULE(py_lib, handle) {
 
 
 /*  // NOT NEEDED
+aes.def("print_hex_array", [](AES* self, std::string& data){
+		self->print_hex_array((unsigned char*)data.c_str(), data.length());
+	});
+
 sha256.def("add", [](SHA256* self, py::bytes data){
 	char* buffer; ssize_t len;
 	if(PyBytes_AsStringAndSize(data.ptr(), &buffer, &len)) { return; }  // fail

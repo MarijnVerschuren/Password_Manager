@@ -33,3 +33,11 @@ std::string getpass(std::string prompt, const char replacement) {
 	SetConsoleMode(stdin_handle, con_mode);
 	return password;
 }
+
+void print_hex_array(unsigned char* data, uint64_t len) {
+	std::cout << '[';
+	for (uint64_t i = 0; i < len; i++) {
+		std::cout << "0x" << HEX_CHARS[(data[i] >> 4) & 0xf] << HEX_CHARS[data[i] & 0xf];
+		if (i < (len - 1)) { std::cout << ", "; }
+	} std::cout << "]\n";
+}

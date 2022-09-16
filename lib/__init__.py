@@ -2,9 +2,12 @@
 from .py_util import *
 
 # c++ functions
-from .io import getpass			# getpass
-from .hash import SHA256		# SHA256 (direct import)
-from .encryption import AES		# AES
+# getpass, print_hex_array (direct import)
+from .io import getpass, print_hex_array
+# SHA256 (direct import)
+from .hash import SHA256
+# AES
+from .encryption import AES
 
 
 __all__ = [
@@ -19,6 +22,7 @@ __all__ = [
 
 	# io
 	"getpass",
+	"print_hex_array",
 
 	# py_util
 	"chs",
