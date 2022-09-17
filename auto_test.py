@@ -15,12 +15,13 @@ def print_error(results) -> None:
 
 
 # test formats
-def SHA_stream_test(hash_add_function: callable, tests: list, prompt: str) -> None:
+def SHA_stream_test(hash_obj: object, tests: list, prompt: str) -> None:
 	results = []
 
 	fail = False
 	for args, expect in tests:
-		result = hash_add_function(*args)
+		hash_obj.add(*args)
+		result = hash_obj.raw_hash.hex()
 		if result != expect: fail = True
 		results.append([args, expect, result])
 
@@ -80,9 +81,6 @@ if __name__ == "__main__":
 
 	# HASH_TESTS
 	sha256 = SHA256()
-	def SHA256_stream(*args):
-		sha256.add(*args)
-		return sha256.raw_hash.hex()
 	SHA256_stream_tests = [
 		[("a",),	"ca978112ca1bbdcafac231b39a23dc4da786eff8147c4e72b9807785afee48bb"],	# hash of "a"
 		[("b",),	"fb8e20fc2e4c3f248c60c39bd652f3c1347298bb977b8b4d5903b85055620603"],	# hash of "ab"
@@ -92,10 +90,37 @@ if __name__ == "__main__":
 		[("f",),	"bef57ec7f53a6d40beb640a780a639c83bc29ac8a9816f1fc6c5c6dcd93c4721"]		# hash of "abcdef"
 	]
 
+	sha3_224 = SHA3(SHA3.bits224)
+	SHA3_224_stream_tests = [
+		[("a",),	"9e86ff69557ca95f405f081269685b38e3a819b309ee942f482b6a8b"],	# hash of "a"
+		[("b",),	"09d27a15bcbab5da828d84dbd66062e5d37049f9b165a65dc581e853"],	# hash of "ab"
+		[("c",),	"e642824c3f8cf24ad09234ee7d3c766fc9a3a5168d0c94ad73b46fdf"],	# hash of "abc"
+		[("d",),	"dd886b5fd8421fb3871d24e39e53967ce4fc80dd348bedbea0109c0e"],	# hash of "abcd"
+		[("e",),	"6acfaab70afd8439cea3616b41088bd81c939b272548f6409cf30e57"],	# hash of "abcde"
+		[("f",),	"ceb3f4cd85af081120bf69ecf76bf61232bd5d810866f0eca3c8907d"]		# hash of "abcdef"
+	]
+
+	sha3_256 = SHA3(SHA3.bits256)
+	SHA3_256_stream_tests = [
+		[("a",),	"80084bf2fba02475726feb2cab2d8215eab14bc6bdd8bfb2c8151257032ecd8b"],	# hash of "a"
+		[("b",),	"5c828b33397f4762922e39a60c35699d2550466a52dd15ed44da37eb0bdc61e6"],	# hash of "ab"
+		[("c",),	"3a985da74fe225b2045c172d6bd390bd855f086e3e9d525b46bfe24511431532"],	# hash of "abc"
+		[("d",),	"6f6f129471590d2c91804c812b5750cd44cbdfb7238541c451e1ea2bc0193177"],	# hash of "abcd"
+		[("e",),	"d716ec61e18904a8f58679b71cb065d4d5db72e0e0c3f155a4feff7add0e58eb"],	# hash of "abcde"
+		[("f",),	"59890c1d183aa279505750422e6384ccb1499c793872d6f31bb3bcaa4bc9f5a5"]		# hash of "abcdef"
+	]
+
+	sha3_384 = SHA3(SHA3.bits384)
+	SHA3_384_stream_tests = [
+		[("a",),	"1815f774f320491b48569efec794d249eeb59aae46d22bf77dafe25c5edc28d7ea44f93ee1234aa88f61c91912a4ccd9"],	# hash of "a"
+		[("b",),	"dc30f83fefe3396fa0bd9709bcad28394386aa4e28ae881dc6617b361b16b969fb6a50a109068f13127b6deffbc82d4b"],	# hash of "ab"
+		[("c",),	"ec01498288516fc926459f58e2c6ad8df9b473cb0fc08c2596da7cf0e49be4b298d88cea927ac7f539f1edf228376d25"],	# hash of "abc"
+		[("d",),	"5af1d89732d4d10cc6e92a36756f68ecfbf7ae4d14ed4523f68fc304cccfa5b0bba01c80d0d9b67f9163a5c211cfd65b"],	# hash of "abcd"
+		[("e",),	"348494236b82edda7602c78ba67fc3838e427c63c23e2c9d9aa5ea6354218a3c2ca564679acabf3ac6bf5378047691c4"],	# hash of "abcde"
+		[("f",),	"d77460b0ce6109168480e279a81af32facb689ab96e22623f0122ff3a10ead263db6607f83876a843d3264dc2a863805"]		# hash of "abcdef"
+	]
+
 	sha3_512 = SHA3(SHA3.bits512)
-	def SHA3_512_stream(*args):
-		sha3_512.add(*args)
-		return sha3_512.raw_hash.hex()
 	SHA3_512_stream_tests = [
 		[("a",),	"697f2d856172cb8309d6b8b97dac4de344b549d4dee61edfb4962d8698b7fa803f4f93ff24393586e28b5b957ac3d1d369420ce53332712f997bd336d09ab02a"],	# hash of "a"
 		[("b",),	"01c87b5e8f094d8725ed47be35430de40f6ab6bd7c6641a4ecf0d046c55cb468453796bb61724306a5fb3d90fbe3726a970e5630ae6a9cf9f30d2aa062a0175e"],	# hash of "ab"
@@ -173,8 +198,11 @@ if __name__ == "__main__":
 
 	print("\n--------------------------------------------------", end="\n\n")
 
-	SHA_stream_test(SHA256_stream, SHA256_stream_tests, "SHA256 (stream)")
-	SHA_stream_test(SHA3_512_stream, SHA3_512_stream_tests, "SHA3-512 (stream)")
+	SHA_stream_test(sha256, SHA256_stream_tests, "SHA256 (stream)")
+	SHA_stream_test(sha3_224, SHA3_224_stream_tests, "SHA3-224 (stream)")
+	SHA_stream_test(sha3_256, SHA3_256_stream_tests, "SHA3-256 (stream)")
+	SHA_stream_test(sha3_384, SHA3_384_stream_tests, "SHA3-384 (stream)")
+	SHA_stream_test(sha3_512, SHA3_512_stream_tests, "SHA3-512 (stream)")
 	AES_test(aes.encrypt_ECB, aes.decrypt_ECB, ECB_tests, "AES_ECB")
 	AES_test(aes.encrypt_CBC, aes.decrypt_CBC, CBC_tests, "AES_CBC")
 	AES_test(aes.encrypt_CFB, aes.decrypt_CFB, CFB_tests, "AES_CFB")
