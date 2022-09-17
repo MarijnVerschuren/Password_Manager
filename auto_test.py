@@ -92,6 +92,20 @@ if __name__ == "__main__":
 		[("f",),	"bef57ec7f53a6d40beb640a780a639c83bc29ac8a9816f1fc6c5c6dcd93c4721"]		# hash of "abcdef"
 	]
 
+	sha3_512 = SHA3(SHA3.bits512)
+	def SHA3_512_stream(*args):
+		sha3_512.add(*args)
+		return sha3_512.raw_hash.hex()
+	SHA3_512_stream_tests = [
+		[("a",),	"697f2d856172cb8309d6b8b97dac4de344b549d4dee61edfb4962d8698b7fa803f4f93ff24393586e28b5b957ac3d1d369420ce53332712f997bd336d09ab02a"],	# hash of "a"
+		[("b",),	"01c87b5e8f094d8725ed47be35430de40f6ab6bd7c6641a4ecf0d046c55cb468453796bb61724306a5fb3d90fbe3726a970e5630ae6a9cf9f30d2aa062a0175e"],	# hash of "ab"
+		[("c",),	"b751850b1a57168a5693cd924b6b096e08f621827444f70d884f5d0240d2712e10e116e9192af3c91a7ec57647e3934057340b4cf408d5a56592f8274eec53f0"],	# hash of "abc"
+		[("d",),	"6eb7b86765bf96a8467b72401231539cbb830f6c64120954c4567272f613f1364d6a80084234fa3400d306b9f5e10c341bbdc5894d9b484a8c7deea9cbe4e265"],	# hash of "abcd"
+		[("e",),	"1d7c3aa6ee17da5f4aeb78be968aa38476dbee54842e1ae2856f4c9a5cd04d45dc75c2902182b07c130ed582d476995b502b8777ccf69f60574471600386639b"],	# hash of "abcde"
+		[("f",),	"01309a45c57cd7faef9ee6bb95fed29e5e2e0312af12a95fffeee340e5e5948b4652d26ae4b75976a53cc1612141af6e24df36517a61f46a1a05f59cf667046a"]		# hash of "abcdef"
+	]
+
+
 	# ENCRYPTION_TESTS
 	aes = AES()
 	# AES_ECB_TEST
@@ -160,14 +174,12 @@ if __name__ == "__main__":
 	print("\n--------------------------------------------------", end="\n\n")
 
 	SHA_stream_test(SHA256_stream, SHA256_stream_tests, "SHA256 (stream)")
+	SHA_stream_test(SHA3_512_stream, SHA3_512_stream_tests, "SHA3-512 (stream)")
 	AES_test(aes.encrypt_ECB, aes.decrypt_ECB, ECB_tests, "AES_ECB")
 	AES_test(aes.encrypt_CBC, aes.decrypt_CBC, CBC_tests, "AES_CBC")
 	AES_test(aes.encrypt_CFB, aes.decrypt_CFB, CFB_tests, "AES_CFB")
 	if enable_halting_functions:
 		print(getpass("getpass test: "))
-	s = SHA3()
-	for i in ["a", "b", "c", "d", "e"]:
-		print(s(i), "\n")
 
 	print("\n--------------------------------------------------", end="\n\n")
 

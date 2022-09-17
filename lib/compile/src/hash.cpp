@@ -350,9 +350,9 @@ std::string SHA256::get_hash() {
 /// return latest hash as bytes
 void SHA256::get_raw_hash(uint8_t** buffer) {
 	// save old hash if buffer is partially filled
-	uint32_t oldHash[HashValues];
+	uint32_t old_hash[HashValues];
 	for (uint8_t i = 0; i < HashValues; i++) {
-		oldHash[i] = m_hash[i];
+		old_hash[i] = m_hash[i];
 	}
 
 	// process remaining bytes
@@ -360,6 +360,7 @@ void SHA256::get_raw_hash(uint8_t** buffer) {
 
 	uint8_t* out = new uint8_t[HashBytes];
 	*buffer = out;  // return via arg
+	
 	for (uint8_t i = 0; i < HashValues; i++) {
 		*out++ = (m_hash[i] >> 24) & 0xFF;
 		*out++ = (m_hash[i] >> 16) & 0xFF;
@@ -367,7 +368,7 @@ void SHA256::get_raw_hash(uint8_t** buffer) {
 		*out++ =  m_hash[i]        & 0xFF;
 
 		// restore old hash from "process_buffer();"
-		m_hash[i] = oldHash[i];
+		m_hash[i] = old_hash[i];
 	}
 }
 
@@ -586,42 +587,32 @@ std::string SHA3::get_hash() {
 	get_raw_hash(&hash);
 
 	// ERROR
-	std::string result;
 	unsigned int iter = m_bits / 8;
+	std::string result;
 	result.reserve(iter * 2);
 	for (unsigned int i = 0; i < iter; i++) {
 		result += HEX_CHARS[(hash[i] >> 4) & 0xf];
-		result += HEX_CHARS[hash[i]        & 0xf];
+		result += HEX_CHARS[ hash[i]       & 0xf];
 	}
 
-	// delete[] hash;
+	delete[] hash;
 	return result;  // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< error
 }
 
 void SHA3::get_raw_hash(unsigned char** buffer) {
-	uint64_t oldHash[StateSize];
-	for (unsigned int i = 0; i < StateSize; i++) {
-		oldHash[i] = m_hash[i];
-	}
+	uint64_t old_hash[StateSize];
+
+	memcpy(old_hash, m_hash, StateSize * 8);
 
 	process_buffer();  // process remaining bytes
 	
 	unsigned int out_len = m_bits / 8;
 	unsigned char* out = new unsigned char[out_len];
+
+	memcpy(out, m_hash, out_len);
+	memcpy(m_hash, old_hash, StateSize * 8);
+
 	*buffer = out;  // return via arg
-
-	unsigned int iter = m_bits / 32;  // iter count compatible with any buffer
-	uint32_t* hash = ((uint32_t*)m_hash);
-	uint32_t* old_hash = ((uint32_t*)oldHash);
-
-	for (unsigned int i = 0; i < out_len; i++) {
-		*out++ = (hash[i] >> 24) & 0xFF;
-		*out++ = (hash[i] >> 16) & 0xFF;
-		*out++ = (hash[i] >>  8) & 0xFF;
-		*out++ =  hash[i]        & 0xFF;
-
-		hash[i] = old_hash[i];  // restore m_hash buffer
-	}
 }
 
 // compute SHA3 of a memory block
@@ -637,43 +628,3 @@ std::string SHA3::operator()(const std::string& text) {
 	add(text.c_str(), text.size());
 	return get_hash();
 }
-
-
-
-/*
-// save hash state
-	uint64_t oldHash[StateSize];
-	for (unsigned int i = 0; i < StateSize; i++) {
-		oldHash[i] = m_hash[i];
-	}
-
-	// process remaining bytes
-	process_buffer();
-
-	// number of significant elements in hash (uint64_t)
-	unsigned int hashLength = m_bits / 64;
-
-	std::string result;
-	result.reserve(m_bits / 4);
-	for (unsigned int i = 0; i < hashLength; i++) {
-		for (unsigned int j = 0; j < 8; j++) {  // 64 bits => 8 bytes
-			unsigned char oneByte = (unsigned char) (m_hash[i] >> (8 * j));
-			result += HEX_CHARS[oneByte >> 4];
-			result += HEX_CHARS[oneByte & 15];
-		}
-		m_hash[i] = oldHash[i];
-	}
-
-	// SHA3-224's last entry in m_hash provides only 32 bits instead of 64 bits
-	unsigned int remainder = m_bits - hashLength * 64;
-	unsigned int processed = 0;
-	while (processed < remainder) {
-		unsigned char oneByte = (unsigned char) (m_hash[hashLength] >> processed);
-		result += HEX_CHARS[oneByte >> 4];
-		result += HEX_CHARS[oneByte & 15];
-
-		processed += 8;
-	} if (remainder) {m_hash[hashLength] = oldHash[hashLength]; }
-
-	return result;
-*/
