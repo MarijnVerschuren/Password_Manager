@@ -13,7 +13,7 @@ PYBIND11_MODULE(py_lib, handle) {
 	handle.doc() = "module for python using c++";
 
 	// io.hpp
-	handle.def("getpass", &getpass);
+	handle.def("getpass", &getpass, py::call_guard<py::gil_scoped_release>());  // release the python gil before calling
 	handle.def("print_hex_array", [](std::string& data){ print_hex_array((unsigned char*)data.c_str(), data.length()); });
 
 	// hash.hpp

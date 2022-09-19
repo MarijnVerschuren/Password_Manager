@@ -23,6 +23,7 @@ __all__ = [
 	"print_hex_array",
 
 	# py_util
+	"thread",
 	"chs",
 	"clear_console",
 	"clear_print",
