@@ -49,8 +49,8 @@ def AES_test(encrypt_function: callable, decrypt_function: callable, tests: list
 		formatted_args = []
 		for arg in args: formatted_args.append(bytes.fromhex(arg))
 		formatted_tests[1].append([formatted_args, bytes.fromhex(answer)])
-	tests = formatted_tests
 
+	tests = formatted_tests
 	results = [[], []]
 
 	fail = 0
@@ -81,15 +81,21 @@ def AES_test(encrypt_function: callable, decrypt_function: callable, tests: list
 
 
 
+def getpass_test() -> None:
+	t = thread(target=getpass, args=("getpass test: ", "*", True)); t.start()
+	pyautogui.write("abcd"); pyautogui.press("enter")
+	print("getpass:\t\t", end="")
+	if t.join() == "abcd": print(chs.apply("[OK]", chs.GREEN))
+	else: print(chs.apply("[FAULT]", chs.RED))
+
+
+
 if __name__ == "__main__":
-	enable_halting_functions = False
 	if "-help" in sys.argv: print(
 			"[-no-compile]\t\t\tdont compile before test",
-			"[-halting-function-test]\tinclude halting functions in test",
 			sep="\n", end="\n\n"
 		); exit(0)
 	if not "-no-compile" in sys.argv: os.system("cmplib.bat")  # compile the library
-	if "-halting-function-test" in sys.argv: enable_halting_functions = True
 
 	from lib import *  # include after compile to prevent sharing violation
 
@@ -109,6 +115,7 @@ if __name__ == "__main__":
 		tests = json.load(i_file)
 		i_file.close()
 
+
 	print("\n--------------------------------------------------", end="\n\n")
 
 	SHA_stream_test(sha256, tests["SHA256_stream_tests"], "SHA256 (stream)")
@@ -119,26 +126,12 @@ if __name__ == "__main__":
 	AES_test(aes.encrypt_ECB, aes.decrypt_ECB, tests["AES_ECB_tests"], "AES_ECB")
 	AES_test(aes.encrypt_CBC, aes.decrypt_CBC, tests["AES_CBC_tests"], "AES_CBC")
 	AES_test(aes.encrypt_CFB, aes.decrypt_CFB, tests["AES_CFB_tests"], "AES_CFB")
-	if enable_halting_functions:
-		t = thread(target=getpass, args=("getpass test: ", ))
-		t.start()
-		pyautogui.write("abcd")
-		print(t.join())
+	getpass_test()
 
 	print("\n--------------------------------------------------", end="\n\n")
 
-	# https://pybind11.readthedocs.io/en/stable/advanced/functions.html
-	# TODO: load tests from json file
 
 # TODO:
-# add SHA3-512, CRC64, CRC(n) check
-# sha3-512:	https://www.google.com/search?q=c%2B%2B+sha3-512+library&oq=c%2B%2B+sha3-512+library&aqs=chrome..69i57j33i160.9059j0j7&sourceid=chrome&ie=UTF-8
-# OR
-# sha512:
-# https://rweather.github.io/arduinolibs/Hash_8h_source.html
-# https://rweather.github.io/arduinolibs/SHA512_8h_source.html
-# https://rweather.github.io/arduinolibs/SHA512_8cpp_source.html
+# CRC64, CRC(n) check
 
-# crc (own implementation)
-
-# youtube.com/watch?v=_5T70cAXDJ0
+# youtube.com/watch?v=_5T70cAXDJ0  # pybind11
