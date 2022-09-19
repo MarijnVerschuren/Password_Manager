@@ -5,7 +5,6 @@ import os
 root_folder = os.path.dirname(os.path.abspath(__file__))
 user_folder = os.path.join(root_folder, "user")
 data_folder = os.path.join(root_folder, "data")
-password_char = "*"
 
 
 
@@ -31,7 +30,7 @@ class Lockbox:
 
 	def unlock(self) -> None:  # TODO
 		self.name =	input("lockbox name: ")
-		self.key =	getpass("lockbox key: ", password_char)
+		self.key =	getpass("lockbox key: ")
 		self.path =	os.path.join(user_folder, self.name)
 		# check if the hash in the user file is the same
 		# then load passwords
@@ -73,5 +72,6 @@ if __name__ == "__main__":
 	if "-new" in sys.argv:		args["new_user"] = True
 	if "-nogui" in sys.argv:	console_mode(**args)
 	else:						gui_mode(**args)
+
 # https://github.com/hoffstadt/DearPyGui
 # https://en.wikipedia.org/wiki/SOLID
