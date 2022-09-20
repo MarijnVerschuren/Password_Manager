@@ -59,9 +59,9 @@ private:
 // SHA3 class derived from abstract class
 class SHA3 : public Hash {
 public:
-	enum SHA3_type { bits224 = 224, bits256 = 256, bits384 = 384, bits512 = 512 };		// algorithm variants
+	enum SHA3_type { bits224 = 224, bits256 = 256, bits384 = 384, bits512 = 512 };	// algorithm variants
 
-	explicit SHA3(SHA3_type bits = bits256);												// same as reset()
+	explicit SHA3(SHA3_type bits = bits256);										// same as reset()
 
 	std::string operator()(const void* data, size_t numBytes) override;				// compute hash of a memory block
 	std::string operator()(const std::string& text) override;						// compute hash of a string, excluding final zero
@@ -70,7 +70,7 @@ public:
 	void add(const void* data, size_t numBytes) override;
 	void add(const std::string& text) override;
 
-	std::string get_hash() override;													// return latest hash as hex characters
+	std::string get_hash() override;												// return latest hash as hex characters
 	void get_raw_hash(unsigned char** buffer) override;
 
 	void reset() override;															// restart
@@ -83,9 +83,9 @@ private:
 	/// 1600 bits, stored as 25x64 bit, BlockSize is no more than 1152 bits (Keccak224)
 	enum { StateSize = 25 /* 1600 / (8 * 8) */, MaxBlockSize = 144 /* 200 - 2 * (224 / 8) */ };
 
-	uint64_t	m_hash[StateSize];														// hash
+	uint64_t	m_hash[StateSize];													// hash
 	uint64_t	m_numBytes;															// size of processed data in bytes
-	size_t		m_blockSize;															// block size (less or equal to MaxBlockSize)
-	size_t		m_bufferSize;															// valid bytes in m_buffer
+	size_t		m_blockSize;														// block size (less or equal to MaxBlockSize)
+	size_t		m_bufferSize;														// valid bytes in m_buffer
 	uint8_t		m_buffer[MaxBlockSize];												// bytes not processed yet
 };
