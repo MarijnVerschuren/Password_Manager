@@ -6,6 +6,7 @@ import sys, os
 from lib import *
 
 root_folder = os.path.dirname(os.path.abspath(__file__))
+resource_folder = os.path.join(root_folder, "resources")
 data_folder = os.path.join(root_folder, "data")
 
 
@@ -55,6 +56,8 @@ def gui_mode(new_lockbox: bool = None) -> None:
 	lockbox = Lockbox()
 	gui.create_context()
 
+	with gui.font_registry():
+		helvetica = gui.add_font(os.path.join(resource_folder, "font.otf"), 17)
 
 	# Create new lockbox
 	def new_callback(sender, app_data):
@@ -68,12 +71,14 @@ def gui_mode(new_lockbox: bool = None) -> None:
 			if error: gui.set_value("new_lockbox_error", error)
 
 	with gui.window(label="New lockbox", tag="new_lockbox"):
-		gui.add_input_text(label="lockbox name",		tag="new_lockbox_name")
-		gui.add_input_text(label="lockbox key",			tag="new_lockbox_key",			password=True)
-		gui.add_input_text(label="repeat lockbox key",	tag="repeat_new_lockbox_key",	password=True)
-		gui.add_button(label="New", callback=new_callback)
-		gui.add_text(tag="new_lockbox_error")
-	gui.create_viewport(title="New lockbox", width=600, height=200)
+		gui.bind_font(helvetica)
+		with gui.group(horizontal=True):	gui.add_spacer(width=50);				gui.add_text		("lockbox name:")
+		with gui.group(horizontal=True):	gui.add_spacer(width=50);				gui.add_input_text	(tag="new_lockbox_name")
+		with gui.group(horizontal=True):	gui.add_spacer(width=50);				gui.add_text		("lockbox key:")
+		with gui.group(horizontal=True):	gui.add_spacer(width=50);				gui.add_input_text	(tag="new_lockbox_key",			password=True)
+		with gui.group(horizontal=True):	gui.add_spacer(width=50);				gui.add_text		("repeat lockbox key:")
+		with gui.group(horizontal=True):	gui.add_spacer(width=50, height=25);	gui.add_input_text	(tag="repeat_new_lockbox_key",	password=True)
+		with gui.group(horizontal=True):	gui.add_spacer(width=50);				gui.add_button		(label="New",			callback=new_callback);		gui.add_spacer(width=82);	gui.add_text(tag="new_lockbox_error")
 
 
 	# Unlock lockbox
@@ -87,28 +92,32 @@ def gui_mode(new_lockbox: bool = None) -> None:
 			if error: gui.set_value("unlock_lockbox_error", error)
 
 	with gui.window(label="Unlock lockbox", tag="unlock_lockbox"):
-		gui.add_input_text(label="lockbox name",	tag="unlock_lockbox_name")
-		gui.add_input_text(label="lockbox key",		tag="unlock_lockbox_key",	password=True)
-		gui.add_button(label="Unlock", callback=unlock_callback)
-		gui.add_text(tag="unlock_lockbox_error")
-	gui.create_viewport(title="Unlock lockbox", width=600, height=200)
+		gui.bind_font(helvetica)
+		gui.add_spacer(height=20)
+		with gui.group(horizontal=True):	gui.add_spacer(width=50);				gui.add_text		("lockbox name:")
+		with gui.group(horizontal=True):	gui.add_spacer(width=50);				gui.add_input_text	(tag="unlock_lockbox_name")
+		with gui.group(horizontal=True):	gui.add_spacer(width=50);				gui.add_text		("lockbox key:")
+		with gui.group(horizontal=True):	gui.add_spacer(width=50, height=25);	gui.add_input_text	(tag="unlock_lockbox_key",	password=True)
+		with gui.group(horizontal=True):	gui.add_spacer(width=50);				gui.add_button		(label="Unlock", callback=unlock_callback);		gui.add_spacer(width=2);	gui.add_text(tag="unlock_lockbox_error")
+
+
+
+	if new_lockbox is None:
+		pass  # show choice between new and unlock
+
+	if new_lockbox:
+		gui.create_viewport(title="New lockbox", width=400, height=200, resizable=False)
+		gui.configure_item("unlock_lockbox", show=False)
+		gui.set_primary_window("new_lockbox", True)
+	else:
+		gui.create_viewport(title="Unlock lockbox", width=400, height=150, resizable=False)
+		gui.configure_item("new_lockbox", show=False)
+		gui.set_primary_window("unlock_lockbox", True)
 
 
 
 	gui.setup_dearpygui()
 	gui.show_viewport()
-
-	if new_lockbox is None:
-		pass
-
-	if new_lockbox:
-		gui.configure_item("unlock_lockbox", show=False)
-		gui.set_primary_window("new_lockbox", True)
-	else:
-		gui.configure_item("new_lockbox", show=False)
-		gui.set_primary_window("unlock_lockbox", True)
-
-
 	gui.start_dearpygui()
 	gui.destroy_context()
 
@@ -116,11 +125,6 @@ def gui_mode(new_lockbox: bool = None) -> None:
 
 
 if __name__ == "__main__":
-	# a = AES()
-	#a.EncryptCBC(plain, plainLen, s.add("abcdef"));
-	#s = SHA256()
-	#print(s("abcdef"))
-
 	if "-help" in sys.argv: print(
 			"[-new]\t\tmake new lockbox",
 			"[-nogui]\trun password manager in console mode",

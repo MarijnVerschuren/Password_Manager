@@ -85,8 +85,11 @@ def getpass_test() -> None:
 	t = thread(target=getpass, args=("getpass test: ", "*", True)); t.start()
 	pyautogui.write("abcd"); pyautogui.press("enter")
 	print("getpass:\t\t", end="")
-	if t.join() == "abcd": print(chs.apply("[OK]", chs.GREEN))
-	else: print(chs.apply("[FAULT]", chs.RED))
+	got = t.join()
+	if got == "abcd": print(chs.apply("[OK]", chs.GREEN))
+	else:
+		print(chs.apply("[FAULT]", chs.RED))
+		print(chs.apply(f"got:\t\t{got}", chs.NEGATIVE))
 
 
 
