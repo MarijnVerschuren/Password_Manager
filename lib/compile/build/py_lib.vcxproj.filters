@@ -4,7 +4,13 @@
     <ClCompile Include="C:\Users\marij\OneDrive\Documenten\GitHub\Password_Manager\lib\compile\src\encryption.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="C:\Users\marij\OneDrive\Documenten\GitHub\Password_Manager\lib\compile\src\check.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="C:\Users\marij\OneDrive\Documenten\GitHub\Password_Manager\lib\compile\src\hash.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\marij\OneDrive\Documenten\GitHub\Password_Manager\lib\compile\src\math.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="C:\Users\marij\OneDrive\Documenten\GitHub\Password_Manager\lib\compile\src\io.cpp">

@@ -131,6 +131,10 @@ if __name__ == "__main__":
 	AES_test(aes.encrypt_CFB, aes.decrypt_CFB, tests["AES_CFB_tests"], "AES_CFB")
 	getpass_test()
 
+	dat = init_crc64(crc_t.crc64_ecma)
+	for i in range(256):
+		print(i, "->", dat[(i * 8) : ((i + 1) * 8)].hex())
+
 	print("\n--------------------------------------------------", end="\n\n")
 
 

@@ -15,6 +15,5 @@ namespace py = pybind11;
 constexpr const char HEX_CHARS[17] = "0123456789abcdef";  // (+0x00)
 
 std::string getpass(std::string prompt, const char replacement = '*');
-void print_hex_array(unsigned char* data, uint64_t len);
 
 // TODO: change print hex array to a set of functions that process all number types

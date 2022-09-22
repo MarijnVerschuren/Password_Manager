@@ -10,7 +10,9 @@ add_subdirectory(${DEPENDENCIES}/pybind11)
 pybind11_add_module (
 	py_lib
 	${SOURCE}/encryption.cpp
+	${SOURCE}/check.cpp
 	${SOURCE}/hash.cpp
+	${SOURCE}/math.cpp
 	${SOURCE}/io.cpp
 	${SOURCE}/bind.cpp
 )

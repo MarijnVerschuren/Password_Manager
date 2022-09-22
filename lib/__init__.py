@@ -2,12 +2,15 @@
 from .py_util import *
 
 # c++ functions / classes / constants
-# getpass, print_hex_array (direct import)
-from .io import getpass, print_hex_array
+# getpass
+from .io import getpass
 # SHA256 (direct import), SHA3
 from .hash import SHA256, SHA3
+# (crc_t, init_crc8, init_crc16, init_crc32, init_crc64 (direct import))
+from .check import crc_t, init_crc8, init_crc16, init_crc32, init_crc64
 # AES
 from .encryption import AES
+
 
 
 __all__ = [
@@ -18,9 +21,15 @@ __all__ = [
 	"SHA256",
 	"SHA3",
 
+	# check
+	"crc_t",
+	"init_crc8",
+	"init_crc16",
+	"init_crc32",
+	"init_crc64",
+
 	# io
 	"getpass",
-	"print_hex_array",
 
 	# py_util
 	"thread",
