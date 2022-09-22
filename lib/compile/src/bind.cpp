@@ -113,25 +113,25 @@ PYBIND11_MODULE(py_lib, handle) {
 	crc_t.attr("crc64_ecma") =			crc64_ecma;
 	crc_t.export_values();
 
-	handle.def("init_crc8", [](crc_type type){
+	handle.def("get_crc8_table", [](crc_type type){
 		uint8_t* out = init_crc8(type);
 		py::bytes result = py::reinterpret_steal<py::object>(PYBIND11_BYTES_FROM_STRING_AND_SIZE((char*)out, 256));
 		delete[] out;
 		return result;
 	});
-	handle.def("init_crc16", [](crc_type type){
+	handle.def("get_crc16_table", [](crc_type type){
 		uint16_t* out = init_crc16(type);
 		py::bytes result = py::reinterpret_steal<py::object>(PYBIND11_BYTES_FROM_STRING_AND_SIZE((char*)out, 512));
 		delete[] out;
 		return result;
 	});
-	handle.def("init_crc32", [](crc_type type){
+	handle.def("get_crc32_table", [](crc_type type){
 		uint32_t* out = init_crc32(type);
 		py::bytes result = py::reinterpret_steal<py::object>(PYBIND11_BYTES_FROM_STRING_AND_SIZE((char*)out, 1024));
 		delete[] out;
 		return result;
 	});
-	handle.def("init_crc64", [](crc_type type){
+	handle.def("get_crc64_table", [](crc_type type){
 		uint64_t* out = init_crc64(type);
 		py::bytes result = py::reinterpret_steal<py::object>(PYBIND11_BYTES_FROM_STRING_AND_SIZE((char*)out, 2048));
 		delete[] out;

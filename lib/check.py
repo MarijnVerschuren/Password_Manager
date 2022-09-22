@@ -1,2 +1,2 @@
-from .py_lib import init_crc8, init_crc16, init_crc32, init_crc64
+from .py_lib import get_crc8_table, get_crc16_table, get_crc32_table, get_crc64_table
 from .py_lib import crc_t
