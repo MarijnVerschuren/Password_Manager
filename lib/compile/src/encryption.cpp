@@ -2,6 +2,17 @@
 
 
 
+uint8_t* generate_iv() {
+	std::random_device rand;
+	uint8_t* out = new uint8_t[16];
+	((uint32_t*)out)[0] = rand();
+	((uint32_t*)out)[1] = rand();
+	((uint32_t*)out)[2] = rand();
+	((uint32_t*)out)[3] = rand();
+	return out;
+}
+
+
 AES::AES(const AES_key_type keyLength) {
 	this->Nb = 4;
 	switch (keyLength) {

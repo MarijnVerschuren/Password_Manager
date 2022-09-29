@@ -67,3 +67,21 @@ uint64_t* init_crc64(const uint64_t polynomial, const bool reflect_in, const boo
 	}
 	return out;
 }
+
+
+uint64_t crc_64(const void* const buffer, const uint64_t size, const uint64_t* lookup, uint64_t init, const uint64_t xor_out) {
+	for (uint64_t i = 0; i < size; i++) { init = (init << 8) ^ lookup[((init >> 8) ^ ((const uint8_t*)buffer)[i]) & 0xff]; }
+	return init ^ xor_out;
+}
+uint32_t crc_32(const void* const buffer, const uint64_t size, const uint32_t* lookup, uint32_t init, const uint32_t xor_out) {
+	for (uint64_t i = 0; i < size; i++) { init = (init << 8) ^ lookup[((init >> 8) ^ ((const uint8_t*)buffer)[i]) & 0xff]; }
+	return init ^ xor_out;
+}
+uint16_t crc_16(const void* const buffer, const uint64_t size, const uint16_t* lookup, uint16_t init, const uint16_t xor_out) {
+	for (uint64_t i = 0; i < size; i++) { init = (init << 8) ^ lookup[((init >> 8) ^ ((const uint8_t*)buffer)[i]) & 0xff]; }
+	return init ^ xor_out;
+}
+uint8_t crc_8(const void* const buffer, const uint64_t size, const uint8_t* lookup, uint8_t init, const uint8_t xor_out) {
+	for (uint64_t i = 0; i < size; i++) { init = (init << 8) ^ lookup[((init >> 8) ^ ((const uint8_t*)buffer)[i]) & 0xff]; }
+	return init ^ xor_out;
+}

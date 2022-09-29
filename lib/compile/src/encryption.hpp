@@ -8,7 +8,11 @@ namespace py = pybind11;
 #include <iostream>
 #include <vector>
 #include <string>
+#include <random>
 
+
+
+uint8_t* generate_iv();
 
 
 enum class AES_key_type { AES_128, AES_192, AES_256 };
@@ -18,8 +22,6 @@ class AES {
 	int Nb;
 	int Nk;
 	int Nr;
-
-	unsigned int blockBytesLen;
 
 	void sub_bytes(unsigned char **state);
 
@@ -62,6 +64,8 @@ class AES {
 	unsigned char *vector_to_array(std::vector<unsigned char> &a);
 
  public:
+	unsigned int blockBytesLen;  // so that other code can pad its messages
+
 	explicit AES(const AES_key_type keyLength = AES_key_type::AES_256);
 
 	unsigned char *encrypt_ECB(const unsigned char* in, unsigned int inLen, const unsigned char* key);

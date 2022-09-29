@@ -8,6 +8,7 @@ namespace py = pybind11;
 #include "hash.hpp"
 #include "check.hpp"
 #include "encryption.hpp"
+#include "file.hpp"
 
 
 
@@ -66,51 +67,51 @@ PYBIND11_MODULE(py_lib, handle) {
 	// check.hpp
 	py::class_<crc_type> (handle, "crc_type");
 	py::enum_<crc_type_enum> crc_t(handle, "crc_t");
-	crc_t.attr("crc8_ccit") =			crc8_ccit;
-	crc_t.attr("crc8_rohc") =			crc8_rohc;
-	crc_t.attr("crc8_cdma2000") =		crc8_cdma2000;
-	crc_t.attr("crc8_wcdma") =			crc8_wcdma;
-	crc_t.attr("crc8_ebu") =			crc8_ebu;
-	crc_t.attr("crc8_i_code") =			crc8_i_code;
-	crc_t.attr("crc8_darc") =			crc8_darc;
-	crc_t.attr("crc8_dvb_s2") =			crc8_dvb_s2;
-	crc_t.attr("crc8_itu") =			crc8_itu;
-	crc_t.attr("crc8_maxim") =			crc8_maxim;
+	crc_t.attr("crc8_ccit") =			crc_types::crc8_ccit;
+	crc_t.attr("crc8_rohc") =			crc_types::crc8_rohc;
+	crc_t.attr("crc8_cdma2000") =		crc_types::crc8_cdma2000;
+	crc_t.attr("crc8_wcdma") =			crc_types::crc8_wcdma;
+	crc_t.attr("crc8_ebu") =			crc_types::crc8_ebu;
+	crc_t.attr("crc8_i_code") =			crc_types::crc8_i_code;
+	crc_t.attr("crc8_darc") =			crc_types::crc8_darc;
+	crc_t.attr("crc8_dvb_s2") =			crc_types::crc8_dvb_s2;
+	crc_t.attr("crc8_itu") =			crc_types::crc8_itu;
+	crc_t.attr("crc8_maxim") =			crc_types::crc8_maxim;
 
-	crc_t.attr("crc16_ccitt") =			crc16_ccitt;
-	crc_t.attr("crc16_aug_ccitt") =		crc16_aug_ccitt;
-	crc_t.attr("crc16_genibus") =		crc16_genibus;
-	crc_t.attr("crc16_xmodem") =		crc16_xmodem;
-	crc_t.attr("crc16_mcrf4xx") =		crc16_mcrf4xx;
-	crc_t.attr("crc16_riello") =		crc16_riello;
-	crc_t.attr("crc16_tms37157") =		crc16_tms37157;
-	crc_t.attr("crc16_a") =				crc16_a;
-	crc_t.attr("crc16_kermit") =		crc16_kermit;
-	crc_t.attr("crc16_x25") =			crc16_x25;
-	crc_t.attr("crc16_buypass") =		crc16_buypass;
-	crc_t.attr("crc16_dds_110") =		crc16_dds_110;
-	crc_t.attr("crc16_arc") =			crc16_arc;
-	crc_t.attr("crc16_maxim") =			crc16_maxim;
-	crc_t.attr("crc16_usb") =			crc16_usb;
-	crc_t.attr("crc16_modbus") =		crc16_modbus;
-	crc_t.attr("crc16_dect_r") =		crc16_dect_r;
-	crc_t.attr("crc16_dect_x") =		crc16_dect_x;
-	crc_t.attr("crc16_en_13757") =		crc16_en_13757;
-	crc_t.attr("crc16_dnp") =			crc16_dnp;
-	crc_t.attr("crc16_cdma2000") =		crc16_cdma2000;
-	crc_t.attr("crc16_teledisk") =		crc16_teledisk;
+	crc_t.attr("crc16_ccitt") =			crc_types::crc16_ccitt;
+	crc_t.attr("crc16_aug_ccitt") =		crc_types::crc16_aug_ccitt;
+	crc_t.attr("crc16_genibus") =		crc_types::crc16_genibus;
+	crc_t.attr("crc16_xmodem") =		crc_types::crc16_xmodem;
+	crc_t.attr("crc16_mcrf4xx") =		crc_types::crc16_mcrf4xx;
+	crc_t.attr("crc16_riello") =		crc_types::crc16_riello;
+	crc_t.attr("crc16_tms37157") =		crc_types::crc16_tms37157;
+	crc_t.attr("crc16_a") =				crc_types::crc16_a;
+	crc_t.attr("crc16_kermit") =		crc_types::crc16_kermit;
+	crc_t.attr("crc16_x25") =			crc_types::crc16_x25;
+	crc_t.attr("crc16_buypass") =		crc_types::crc16_buypass;
+	crc_t.attr("crc16_dds_110") =		crc_types::crc16_dds_110;
+	crc_t.attr("crc16_arc") =			crc_types::crc16_arc;
+	crc_t.attr("crc16_maxim") =			crc_types::crc16_maxim;
+	crc_t.attr("crc16_usb") =			crc_types::crc16_usb;
+	crc_t.attr("crc16_modbus") =		crc_types::crc16_modbus;
+	crc_t.attr("crc16_dect_r") =		crc_types::crc16_dect_r;
+	crc_t.attr("crc16_dect_x") =		crc_types::crc16_dect_x;
+	crc_t.attr("crc16_en_13757") =		crc_types::crc16_en_13757;
+	crc_t.attr("crc16_dnp") =			crc_types::crc16_dnp;
+	crc_t.attr("crc16_cdma2000") =		crc_types::crc16_cdma2000;
+	crc_t.attr("crc16_teledisk") =		crc_types::crc16_teledisk;
 
-	crc_t.attr("crc32_bzip2") =			crc32_bzip2;
-	crc_t.attr("crc32_mpeg2") =			crc32_mpeg2;
-	crc_t.attr("crc32_posix") =			crc32_posix;
-	crc_t.attr("crc32") =				crc32;
-	crc_t.attr("crc32_jamcrc") =		crc32_jamcrc;
-	crc_t.attr("crc32_q") =				crc32_q;
-	crc_t.attr("crc32_xfr") =			crc32_xfr;
-	crc_t.attr("crc32_c") =				crc32_c;
-	crc_t.attr("crc32_d") =				crc32_d;
+	crc_t.attr("crc32_bzip2") =			crc_types::crc32_bzip2;
+	crc_t.attr("crc32_mpeg2") =			crc_types::crc32_mpeg2;
+	crc_t.attr("crc32_posix") =			crc_types::crc32_posix;
+	crc_t.attr("crc32") =				crc_types::crc32;
+	crc_t.attr("crc32_jamcrc") =		crc_types::crc32_jamcrc;
+	crc_t.attr("crc32_q") =				crc_types::crc32_q;
+	crc_t.attr("crc32_xfr") =			crc_types::crc32_xfr;
+	crc_t.attr("crc32_c") =				crc_types::crc32_c;
+	crc_t.attr("crc32_d") =				crc_types::crc32_d;
 
-	crc_t.attr("crc64_ecma") =			crc64_ecma;
+	crc_t.attr("crc64_ecma") =			crc_types::crc64_ecma;
 	crc_t.export_values();
 
 	handle.def("get_crc8_table", [](crc_type type){

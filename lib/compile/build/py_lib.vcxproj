@@ -337,6 +337,7 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
     <ClCompile Include="C:\Users\marij\OneDrive\Documenten\GitHub\Password_Manager\lib\compile\src\hash.cpp" />
     <ClCompile Include="C:\Users\marij\OneDrive\Documenten\GitHub\Password_Manager\lib\compile\src\math.cpp" />
     <ClCompile Include="C:\Users\marij\OneDrive\Documenten\GitHub\Password_Manager\lib\compile\src\io.cpp" />
+    <ClCompile Include="C:\Users\marij\OneDrive\Documenten\GitHub\Password_Manager\lib\compile\src\file.cpp" />
     <ClCompile Include="C:\Users\marij\OneDrive\Documenten\GitHub\Password_Manager\lib\compile\src\bind.cpp" />
   </ItemGroup>
   <ItemGroup>

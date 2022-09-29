@@ -218,3 +218,5 @@ if __name__ == "__main__":
 # CRC64, CRC(n) check
 
 # youtube.com/watch?v=_5T70cAXDJ0  # pybind11
+# https://github.com/ETLCPP/crc-table-generator
+# https://www.youtube.com/watch?v=cvmQNTVJrzs
