@@ -5,8 +5,10 @@
 uint64_t* CRC64_ECMA_LOOKUP_TABLE = nullptr;
 
 // folder
-uint64_t enc_file_components::folder::serialize(uint8_t** buffer) {
+uint64_t enc_file_components::folder::serialize(uint8_t** buffer const uint8_t pad_to) {
 	uint64_t size = this->title_len + 3;
+	uint8_t padding = (pad_to - (size % pad_to));
+	size += padding;
 	*buffer = new uint8_t[size];
 	uint8_t* ptr = *buffer;
 
@@ -14,6 +16,9 @@ uint64_t enc_file_components::folder::serialize(uint8_t** buffer) {
 	memcpy(ptr + 1, this->title, this->title_len);
 	ptr += this->title_len + 1;
 	*((uint16_t*)ptr) = folder_id;
+	ptr += 2;
+	memset(ptr, 0x00, padding);
+
 	return size;
 }
 void enc_file_components::folder::deserialize(uint8_t* buffer) {
@@ -32,6 +37,8 @@ enc_file_components::folder::~folder() {
 // password
 uint64_t enc_file_components::password::serialize(uint8_t** buffer) {
 	uint64_t size = this->note_len + this->title_len + this->username_len + this->password_len + 7;
+	uint8_t padding = (pad_to - (size % pad_to));
+	size += padding;
 	*buffer = new uint8_t[size];
 	uint8_t* ptr = *buffer;
 
@@ -48,6 +55,9 @@ uint64_t enc_file_components::password::serialize(uint8_t** buffer) {
 	memcpy(ptr + 2, this->note, this->note_len);
 	ptr += this->note_len + 2;
 	*((uint16_t*)ptr) = folder_id;
+	ptr += 2;
+	memset(ptr, 0x00, padding);
+
 	return size;
 }
 void enc_file_components::password::deserialize(uint8_t* buffer) {
@@ -87,6 +97,8 @@ enc_file_components::password::~password() {
 // note
 uint64_t enc_file_components::note::serialize(uint8_t** buffer) {
 	uint64_t size = this->note_len + this->title_len + 5;
+	uint8_t padding = (pad_to - (size % pad_to));
+	size += padding;
 	*buffer = new uint8_t[size];
 	uint8_t* ptr = *buffer;
 
@@ -97,6 +109,9 @@ uint64_t enc_file_components::note::serialize(uint8_t** buffer) {
 	memcpy(ptr + 2, this->note, this->note_len);
 	ptr += this->note_len + 2;
 	*((uint16_t*)ptr) = folder_id;
+	ptr += 2;
+	memset(ptr, 0x00, padding);
+
 	return size;
 }
 void enc_file_components::note::deserialize(uint8_t* buffer) {
@@ -126,6 +141,8 @@ uint64_t enc_file_components::personal_info::serialize(uint8_t** buffer) {
 		+ this->province_len + this->city_len + this->street_len
 		+ this->house_number_len + this->zip_code_len + 30;
 
+	uint8_t padding = (pad_to - (size % pad_to));
+	size += padding;
 	*buffer = new uint8_t[size];
 	uint8_t* ptr = *buffer;
 
@@ -165,6 +182,9 @@ uint64_t enc_file_components::personal_info::serialize(uint8_t** buffer) {
 	memcpy(ptr + 2, this->note, this->note_len);
 	ptr += this->note_len + 2;
 	*((uint16_t*)ptr) = folder_id;
+	ptr += 2;
+	memset(ptr, 0x00, padding);
+
 	return size;
 }
 void enc_file_components::personal_info::deserialize(uint8_t* buffer) {
@@ -255,50 +275,69 @@ enc_file_components::personal_info::~personal_info() {
 	delete[] note;
 }
 
-void enc_file_components::block::encrypt(void* data, const uint8_t* key) {
+void enc_file_components::block::encrypt(void* data, uint8_t type, const uint8_t* key) {
 	if (this->cypher_text) { delete[] this->cypher_text; }
+	this->type = type;
 	AES a();
-
 	uint8_t* raw_data = nullptr;
-	uint64_t size = data.serialize(&raw_data);
-	// TODO: PADDING <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-	// TODO: PADDING <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-	// TODO: PADDING <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-	// TODO: PADDING <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-	// TODO: PADDING <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-
+	this->block_size = ((enc_file_components::type*)data).serialize(&raw_data, a.blockBytesLen);
 	this->AES_iv = generate_iv();
-	// this->cypher_text = a.encrypt_CBC(raw_data, size, key, this->AES_iv);
+	this->cypher_text = a.encrypt_CBC(raw_data, this->block_size, key, this->AES_iv);
+	delete[] raw_data;
 }
 void* enc_file_components::block::decrypt(const uint8_t* key) {
 	switch (this->type) {
-		case enc_file_components::block_data::types::folder:
+		case enc_file_components::type::folder:
 			enc_file_components::folder			out();	break;
-		case enc_file_components::block_data::types::password:
+		case enc_file_components::type::password:
 			enc_file_components::password		out();	break;
-		case enc_file_components::block_data::types::note:
+		case enc_file_components::type::note:
 			enc_file_components::note			out();	break;
-		case enc_file_components::block_data::types::personal_info:
+		case enc_file_components::type::personal_info:
 			enc_file_components::personal_info	out();	break;
 		default:
 			return nullptr;
 	};
 	if (!this->cypher_text) { return nullptr; }
-	uint8_t* buffer = new uint8_t[this->block_size];
-	return nullptr;
+	AES a();
+	uint8_t* buffer = a.decrypt_CBC(this->cypher_text, this->block_size, key, this->AES_iv);
+	out.deserialize(buffer);
+	return &out;
 }
 
 uint64_t enc_file_components::block::serialize(uint8_t** buffer) {
-	return 0;
+	uint64_t size = this->block_size + 33;
+	*buffer = new uint8_t[size];
+	uint8_t* ptr = *buffer;
+
+	*((uint64_t*)ptr) = this->block_size;
+	ptr += 8;
+	memcpy(ptr, this->AES_iv, 16);
+	ptr += 16;
+	*ptr = this->type;
+	memcpy(ptr + 1, this->cypher_text, this->block_size);
+	ptr += this->block_size + 1;
+	*((uint64_t*)ptr) = crc_64(*buffer, size - 8, CRC64_ECMA_LOOKUP_TABLE);
+
+	return size;
 }
 
-void enc_file_components::block::deserialize(uint8_t* buffer) {
-
+bool enc_file_components::block::deserialize(uint8_t* buffer) {
+	uint8_t* ptr = buffer;
+	this->block_size = *((uint64_t*)ptr);
+	ptr += 8;
+	memcpy(this->AES_iv, ptr, 16);
+	ptr += 16;
+	this->type = *ptr;
+	memcpy(this->cypher_text, ptr + 1, this->block_size);
+	ptr += this->block_size + 1;
+	uint64_t crc = *((uint64_t*)ptr);
+	return crc != crc_64(buffer, this->block_size + 25, CRC64_ECMA_LOOKUP_TABLE);
 }
 
 
 enc_file::enc_file(const std::string path, const std::string key) {
 	if (!CRC64_ECMA_LOOKUP_TABLE) { CRC64_ECMA_LOOKUP_TABLE = init_crc64(crc_types::crc64_ecma); }
-
+	// check if file exists and if it has a header
 }
 enc_file::~enc_file() {}
