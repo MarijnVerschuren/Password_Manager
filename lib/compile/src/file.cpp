@@ -326,12 +326,15 @@ bool enc_file_components::block::deserialize(uint8_t* buffer) {
 	uint8_t* ptr = buffer;
 	this->block_size = *((uint64_t*)ptr);
 	ptr += 8;
+	if (this->AES_iv) { delete[] this->AES_iv; }
 	memcpy(this->AES_iv, ptr, 16);
 	ptr += 16;
 	this->type = *ptr;
+	if (this->cypher_text) { delete[] this-cypher_text; }
 	memcpy(this->cypher_text, ptr + 1, this->block_size);
 	ptr += this->block_size + 1;
 	uint64_t crc = *((uint64_t*)ptr);
+	
 	return crc != crc_64(buffer, this->block_size + 25, CRC64_ECMA_LOOKUP_TABLE);
 }
 
