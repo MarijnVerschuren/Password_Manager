@@ -454,7 +454,7 @@ CMAKE_VERBOSE_MAKEFILE-ADVANCED:INTERNAL=1
 //Details about finding PYTHON
 FIND_PACKAGE_MESSAGE_DETAILS_PYTHON:INTERNAL=C:/Program Files/Python38/python.exe3.8.5
 //Details about finding PythonInterp
-FIND_PACKAGE_MESSAGE_DETAILS_PythonInterp:INTERNAL=[C:/Program Files/Python38/python.exe][v3.8.5(3.6)]
+FIND_PACKAGE_MESSAGE_DETAILS_PythonInterp:INTERNAL=[C:/Program Files/Python38/python.exe][v(3.6)]
 //Test HAS_MSVC_GL_LTCG
 HAS_MSVC_GL_LTCG:INTERNAL=1
 PYBIND11_INCLUDE_DIR:INTERNAL=C:/Users/marij/OneDrive/Documenten/GitHub/Password_Manager/lib/compile/dep/pybind11/include
@@ -476,6 +476,6 @@ _Python:INTERNAL=PYTHON
 pybind11_FOUND:INTERNAL=TRUE
 //Directory where pybind11 headers are located
 pybind11_INCLUDE_DIR:INTERNAL=C:/Users/marij/OneDrive/Documenten/GitHub/Password_Manager/lib/compile/dep/pybind11/include
-//Directories where pybind11 and possibly Python headers are located
-pybind11_INCLUDE_DIRS:INTERNAL=C:/Users/marij/OneDrive/Documenten/GitHub/Password_Manager/lib/compile/dep/pybind11/include;C:/Program Files/Python38/include
+//Include directory for pybind11 (Python not requested)
+pybind11_INCLUDE_DIRS:INTERNAL=C:/Users/marij/OneDrive/Documenten/GitHub/Password_Manager/lib/compile/dep/pybind11/include
 

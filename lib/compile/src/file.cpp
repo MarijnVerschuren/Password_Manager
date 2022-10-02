@@ -5,7 +5,7 @@
 uint64_t* CRC64_ECMA_LOOKUP_TABLE = nullptr;
 
 // folder
-uint64_t enc_file_components::folder::serialize(uint8_t** buffer const uint8_t pad_to) {
+uint64_t efc::folder::serialize(uint8_t** buffer const uint8_t pad_to) {
 	uint64_t size = this->title_len + 3;
 	uint8_t padding = (pad_to - (size % pad_to));
 	size += padding;
@@ -21,7 +21,7 @@ uint64_t enc_file_components::folder::serialize(uint8_t** buffer const uint8_t p
 
 	return size;
 }
-void enc_file_components::folder::deserialize(uint8_t* buffer) {
+void efc::folder::deserialize(uint8_t* buffer) {
 	this->title_len = *buffer;
 	buffer++;
 	if (this->title) { delete[] this->title; }
@@ -30,12 +30,12 @@ void enc_file_components::folder::deserialize(uint8_t* buffer) {
 	buffer += this->title_len;
 	this->folder_id = *((uint16_t*)buffer);
 }
-enc_file_components::folder::~folder() {
+efc::folder::~folder() {
 	delete[] title;
 }
 
 // password
-uint64_t enc_file_components::password::serialize(uint8_t** buffer) {
+uint64_t efc::password::serialize(uint8_t** buffer) {
 	uint64_t size = this->note_len + this->title_len + this->username_len + this->password_len + 7;
 	uint8_t padding = (pad_to - (size % pad_to));
 	size += padding;
@@ -60,7 +60,7 @@ uint64_t enc_file_components::password::serialize(uint8_t** buffer) {
 
 	return size;
 }
-void enc_file_components::password::deserialize(uint8_t* buffer) {
+void efc::password::deserialize(uint8_t* buffer) {
 	this->title_len = *buffer;
 	buffer++;
 	if (this->title) { delete[] this->title; }
@@ -87,7 +87,7 @@ void enc_file_components::password::deserialize(uint8_t* buffer) {
 	buffer += this->note_len;
 	this->folder_id = *((uint16_t*)buffer);
 }
-enc_file_components::password::~password() {
+efc::password::~password() {
 	delete[] title;
 	delete[] username;
 	delete[] password;
@@ -95,7 +95,7 @@ enc_file_components::password::~password() {
 }
 
 // note
-uint64_t enc_file_components::note::serialize(uint8_t** buffer) {
+uint64_t efc::note::serialize(uint8_t** buffer) {
 	uint64_t size = this->note_len + this->title_len + 5;
 	uint8_t padding = (pad_to - (size % pad_to));
 	size += padding;
@@ -114,7 +114,7 @@ uint64_t enc_file_components::note::serialize(uint8_t** buffer) {
 
 	return size;
 }
-void enc_file_components::note::deserialize(uint8_t* buffer) {
+void efc::note::deserialize(uint8_t* buffer) {
 	this->title_len = *buffer;
 	buffer++;
 	if (this->title) { delete[] this->title; }
@@ -129,13 +129,13 @@ void enc_file_components::note::deserialize(uint8_t* buffer) {
 	buffer += this->note_len;
 	this->folder_id = *((uint16_t*)buffer);
 }
-enc_file_components::note::~note() {
+efc::note::~note() {
 	delete[] title;
 	delete[] note;
 }
 
 // personal_info
-uint64_t enc_file_components::personal_info::serialize(uint8_t** buffer) {
+uint64_t efc::personal_info::serialize(uint8_t** buffer) {
 	uint64_t size = this->note_len + this->title_len + this->first_name_len
 		+ this->last_name_len + this->email_len + this->country_len
 		+ this->province_len + this->city_len + this->street_len
@@ -187,7 +187,7 @@ uint64_t enc_file_components::personal_info::serialize(uint8_t** buffer) {
 
 	return size;
 }
-void enc_file_components::personal_info::deserialize(uint8_t* buffer) {
+void efc::personal_info::deserialize(uint8_t* buffer) {
 	this->title_len = *buffer;
 	buffer++;
 	if (this->title) { delete[] this->title; }
@@ -212,8 +212,6 @@ void enc_file_components::personal_info::deserialize(uint8_t* buffer) {
 	this->email = new char[this->email_len];
 	memcpy(this->email, buffer, this->email_len);
 	buffer += this->email_len;
-	if (this->phone) { delete[] this->phone; }
-	this->phone = new char[16];
 	memcpy(this->phone, buffer, 16);
 	buffer += 16;
 	this->country_len = *buffer;
@@ -260,7 +258,7 @@ void enc_file_components::personal_info::deserialize(uint8_t* buffer) {
 	buffer += this->note_len;
 	this->folder_id = *((uint16_t*)buffer);
 }
-enc_file_components::personal_info::~personal_info() {
+efc::personal_info::~personal_info() {
 	delete[] title;
 	delete[] first_name;
 	delete[] last_name;
@@ -275,26 +273,26 @@ enc_file_components::personal_info::~personal_info() {
 	delete[] note;
 }
 
-void enc_file_components::block::encrypt(void* data, uint8_t type, const uint8_t* key) {
+void efc::block::encrypt(void* data, uint8_t type, const uint8_t* key) {
 	if (this->cypher_text) { delete[] this->cypher_text; }
 	this->type = type;
 	AES a();
 	uint8_t* raw_data = nullptr;
-	this->block_size = ((enc_file_components::type*)data).serialize(&raw_data, a.blockBytesLen);
+	this->block_size = ((efc::type*)data).serialize(&raw_data, a.blockBytesLen);
 	this->AES_iv = generate_iv();
 	this->cypher_text = a.encrypt_CBC(raw_data, this->block_size, key, this->AES_iv);
 	delete[] raw_data;
 }
-void* enc_file_components::block::decrypt(const uint8_t* key) {
+void* efc::block::decrypt(const uint8_t* key) {
 	switch (this->type) {
-		case enc_file_components::type::folder:
-			enc_file_components::folder			out();	break;
-		case enc_file_components::type::password:
-			enc_file_components::password		out();	break;
-		case enc_file_components::type::note:
-			enc_file_components::note			out();	break;
-		case enc_file_components::type::personal_info:
-			enc_file_components::personal_info	out();	break;
+		case efc::type::folder:
+			efc::folder			out();	break;
+		case efc::type::password:
+			efc::password		out();	break;
+		case efc::type::note:
+			efc::note			out();	break;
+		case efc::type::personal_info:
+			efc::personal_info	out();	break;
 		default:
 			return nullptr;
 	};
@@ -305,7 +303,9 @@ void* enc_file_components::block::decrypt(const uint8_t* key) {
 	return &out;
 }
 
-uint64_t enc_file_components::block::serialize(uint8_t** buffer) {
+
+/////// REDO BLOCK functions
+uint64_t efc::block::serialize(uint8_t** buffer) {
 	uint64_t size = this->block_size + 33;
 	*buffer = new uint8_t[size];
 	uint8_t* ptr = *buffer;
@@ -322,11 +322,10 @@ uint64_t enc_file_components::block::serialize(uint8_t** buffer) {
 	return size;
 }
 
-bool enc_file_components::block::deserialize(uint8_t* buffer) {
+bool efc::block::deserialize(uint8_t* buffer) {
 	uint8_t* ptr = buffer;
 	this->block_size = *((uint64_t*)ptr);
 	ptr += 8;
-	if (this->AES_iv) { delete[] this->AES_iv; }
 	memcpy(this->AES_iv, ptr, 16);
 	ptr += 16;
 	this->type = *ptr;
@@ -339,8 +338,45 @@ bool enc_file_components::block::deserialize(uint8_t* buffer) {
 }
 
 
-enc_file::enc_file(const std::string path, const std::string key) {
+enc_file::enc_file(const std::string path, const std::string key) { this->path = path; this->key = key; }
+enc_file::~enc_file() {}
+
+
+uint8_t enc_file::new_file() {
+	// todo overwrite all
+	std::ofsteam file(this->path, std::ios::binary | std::ios::trunc | std::ios::out);
+	if (!file) { return file_handle_error; }
+	efc::header file_header;
+	memcpy(file_header.salt, generate_salt(64), 64);
+	SHA3 s(SHA3::bits512);
+	s.add(this->key); s.add(file_header.salt, 64);
+	uint8_t* current_hash; s.get_raw_hash(&current_hash);
+	memcpy(file_header.hash, current_hash, 64);
+	file.write(&file_header, 128);
+	file.close();
+	this->is_open = true;
+	return 0;  // ok
+}
+
+uint8_t enc_file::open() {
+	// init the lokup table for the crc algorithem used
 	if (!CRC64_ECMA_LOOKUP_TABLE) { CRC64_ECMA_LOOKUP_TABLE = init_crc64(crc_types::crc64_ecma); }
 	// check if file exists and if it has a header
+	efc::header file_header;
+	if (!std::filesystem::exists(this->path)) { return new_file(); }
+	std::ifsteam file(this->path, std::ios::binary | std::ios::in | std::ios::ate);
+	if (!file) { return file_handle_error; }
+	uint64_t file_size = file.tellg();
+	if (file_size < 128) { return new_file(); }  // the file exists but has no data in it
+	file.seekg(0);	// go to the start of the file
+	file.read(&file_header, 128);  // populate header struct
+	SHA3 s(SHA3::bits512);
+	s.add(this->key); s.add(file_header.salt, 64);
+	uint8_t* current_hash; s.get_raw_hash(&current_hash);
+	std::string expect(file_header.hash, 64);
+	std::string current(current_hash, 64);
+	file.close();
+	if (expect != current) { return incorrect_password; }	// error
+	this->is_open = true;
+	return 0;  // ok
 }
-enc_file::~enc_file() {}

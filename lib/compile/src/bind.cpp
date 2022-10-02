@@ -173,4 +173,18 @@ PYBIND11_MODULE(py_lib, handle) {
 		unsigned char* out = self->decrypt_CFB((unsigned char*)data.c_str(), (unsigned int)data.length(), (unsigned char*)key.c_str(), (unsigned char*)iv.c_str());
 		return py::reinterpret_steal<py::object>(PYBIND11_BYTES_FROM_STRING_AND_SIZE((char*)out, (unsigned int)data.length()));
 	});
+
+	// file.hpp
+	// TODO: add efc structs
+
+	py::class_<enc_file> encfile(handle, "enc_file");
+	encfile.def(py::init<const std::string, const std::string>());
+	encfile.def("new_file", &enc_file::new_file);
+	encfile.def("open", &enc_file::open);
+	encfile.def("add_block", &enc_file::add_block);
+
+	py::enum_<enc_file::error_types> encfile_error(encfile, "enc_file_error");
+	encfile_error.attr("file_handle_error") = enc_file::file_handle_error;
+	encfile_error.attr("file_handle_error") = enc_file::incorrect_password;
+	encfile_error.export_values();
 }
