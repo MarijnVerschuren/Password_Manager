@@ -11,6 +11,7 @@ namespace py = pybind11;
 #include <string>
 #include <filesystem>
 #include <fstream>
+#include <vector>
 
 
 
@@ -18,6 +19,7 @@ namespace efc {  // enc_file_components
 	// data in these structs are stored from big to small
 	// this is NOT how it will be stored in the file
 	class type {
+	public:
 		enum types {
 			null =			0x0,
 			folder =		0x1,
@@ -26,8 +28,8 @@ namespace efc {  // enc_file_components
 			personal_info =	0x8,
 		};
 
-		virtual uint64_t	serialize(uint8_t** const uint8_t pad_to) =	NULL;
-		virtual void		deserialize(uint8_t*) =						NULL;
+		virtual uint64_t	serialize(uint8_t**, const uint8_t) =	NULL;
+		virtual void		deserialize(uint8_t*) =					NULL;
 	};
 
 	class folder : public type {
@@ -36,8 +38,8 @@ namespace efc {  // enc_file_components
 		uint16_t folder_id;
 		uint8_t title_len;
 
-		uint64_t	serialize(uint8_t** const uint8_t pad_to);
-		void		deserialize(uint8_t*);
+		uint64_t	serialize(uint8_t**, const uint8_t) override;
+		void		deserialize(uint8_t*) override;
 		~folder();
 
 		/* // store order:
@@ -58,8 +60,8 @@ namespace efc {  // enc_file_components
 		uint8_t username_len;
 		uint8_t password_len;
 
-		uint64_t	serialize(uint8_t** const uint8_t pad_to);
-		void		deserialize(uint8_t*);
+		uint64_t	serialize(uint8_t**, const uint8_t) override;
+		void		deserialize(uint8_t*) override;
 		~password();
 
 		/* // store order:
@@ -82,8 +84,8 @@ namespace efc {  // enc_file_components
 		uint16_t note_len;
 		uint8_t title_len;
 
-		uint64_t	serialize(uint8_t** const uint8_t pad_to);
-		void		deserialize(uint8_t*);
+		uint64_t	serialize(uint8_t**, const uint8_t) override;
+		void		deserialize(uint8_t*) override;
 		~note();
 
 		/* // store order:
@@ -96,7 +98,7 @@ namespace efc {  // enc_file_components
 	};
 	class personal_info : public type {
 	public:
-		char[16] phone;  // 16 bytes
+		char phone[16];  // 16 bytes
 		char* title;
 		char* first_name;
 		char* last_name;
@@ -121,8 +123,8 @@ namespace efc {  // enc_file_components
 		uint8_t house_number_len;
 		uint8_t zip_code_len;
 
-		uint64_t	serialize(uint8_t**, const uint8_t pad_to);
-		void		deserialize(uint8_t*);
+		uint64_t	serialize(uint8_t**, const uint8_t) override;
+		void		deserialize(uint8_t*) override;
 		~personal_info();
 
 		/* // store order:
@@ -153,7 +155,16 @@ namespace efc {  // enc_file_components
 		*/
 	};
 
-	struct block {
+	struct raw_block {
+	public:
+		void* data =			nullptr;
+		uint8_t type =			0x00;
+
+		uint64_t	serialize(uint8_t**, uint8_t);
+		void		deserialize(uint8_t*);
+	};
+	
+	struct enc_block {
 	public:
 		uint8_t AES_iv[16] =	{};					// 16 bytes
 		uint64_t block_size =	0x0000000000000000;
@@ -161,11 +172,11 @@ namespace efc {  // enc_file_components
 		uint64_t crc =			0x0000000000000000;	// crc64_ECMA
 		uint8_t type =			0x00;
 
-		void		encrypt(block_data data, const uint8_t* key);
-		void*		decrypt(const uint8_t* key);
+		void		encrypt(raw_block*, const uint8_t*);
+		raw_block*	decrypt(const uint8_t*);
 
 		uint64_t	serialize(uint8_t**);
-		bool		deserialize(uint8_t*);	// return (crc) error
+		bool		deserialize(uint8_t*, uint64_t);	// return (crc) error
 
 		/* // store order:
 			block_size	= len(cypher_text) + 1 + 16 + 8
@@ -175,6 +186,8 @@ namespace efc {  // enc_file_components
 			crc			[8]
 		*/
 	};
+
+	
 
 	struct header {
 		uint8_t salt[64];
@@ -188,17 +201,30 @@ public:
 	enum error_types {
 		file_handle_error = 0x01,
 		incorrect_password = 0x02,
+		authorization_error = 0x04,
 	};
-
-	enc_file(const std::string path, const std::string key);
-	~enc_file();
-
-	uint8_t new_file();
-	uint8_t open();
+	enum soft_error_types {
+		unexpected_eof = 0x10,
+	}
+	// authorization
+	uint8_t new_file(const std::string path, const std::string key);
+	uint8_t open(const std::string path, const std::string key);
+	// adding, removing and reading data
 	void add_block();
 
 private:
+	// loading and storing
+	uint8_t load();
+	uint8_t store();
+	// decrypt / encrypt
+	uint8_t decrypt();
+	uint8_t encrypt();
+	// reset class state
+	void reset();
+
+	std::vector<efc::enc_block> enc_blocks;
+	std::vector<efc::raw_block> raw_blocks;
 	std::string path;
 	std::string key;
-	bool is_open = false;
+	bool authorized = false;
 };

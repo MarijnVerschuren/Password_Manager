@@ -178,13 +178,17 @@ PYBIND11_MODULE(py_lib, handle) {
 	// TODO: add efc structs
 
 	py::class_<enc_file> encfile(handle, "enc_file");
-	encfile.def(py::init<const std::string, const std::string>());
 	encfile.def("new_file", &enc_file::new_file);
 	encfile.def("open", &enc_file::open);
 	encfile.def("add_block", &enc_file::add_block);
 
 	py::enum_<enc_file::error_types> encfile_error(encfile, "enc_file_error");
 	encfile_error.attr("file_handle_error") = enc_file::file_handle_error;
-	encfile_error.attr("file_handle_error") = enc_file::incorrect_password;
+	encfile_error.attr("incorrect_password") = enc_file::incorrect_password;
+	encfile_error.attr("authorization_error") = enc_file::authorization_error;
 	encfile_error.export_values();
+
+	py::enum_<enc_file::soft_error_types> encfile_soft_error(encfile, "enc_file_soft_error");
+	encfile_soft_error.attr("unexpected_eof") = enc_file::unexpected_eof;
+	encfile_soft_error.export_values();
 }

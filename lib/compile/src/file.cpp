@@ -5,7 +5,7 @@
 uint64_t* CRC64_ECMA_LOOKUP_TABLE = nullptr;
 
 // folder
-uint64_t efc::folder::serialize(uint8_t** buffer const uint8_t pad_to) {
+uint64_t efc::folder::serialize(uint8_t** buffer, const uint8_t pad_to) {
 	uint64_t size = this->title_len + 3;
 	uint8_t padding = (pad_to - (size % pad_to));
 	size += padding;
@@ -35,7 +35,7 @@ efc::folder::~folder() {
 }
 
 // password
-uint64_t efc::password::serialize(uint8_t** buffer) {
+uint64_t efc::password::serialize(uint8_t** buffer, const uint8_t pad_to) {
 	uint64_t size = this->note_len + this->title_len + this->username_len + this->password_len + 7;
 	uint8_t padding = (pad_to - (size % pad_to));
 	size += padding;
@@ -95,7 +95,7 @@ efc::password::~password() {
 }
 
 // note
-uint64_t efc::note::serialize(uint8_t** buffer) {
+uint64_t efc::note::serialize(uint8_t** buffer, const uint8_t pad_to) {
 	uint64_t size = this->note_len + this->title_len + 5;
 	uint8_t padding = (pad_to - (size % pad_to));
 	size += padding;
@@ -135,7 +135,7 @@ efc::note::~note() {
 }
 
 // personal_info
-uint64_t efc::personal_info::serialize(uint8_t** buffer) {
+uint64_t efc::personal_info::serialize(uint8_t** buffer, const uint8_t pad_to) {
 	uint64_t size = this->note_len + this->title_len + this->first_name_len
 		+ this->last_name_len + this->email_len + this->country_len
 		+ this->province_len + this->city_len + this->street_len
@@ -263,7 +263,6 @@ efc::personal_info::~personal_info() {
 	delete[] first_name;
 	delete[] last_name;
 	delete[] email;
-	delete[] phone;
 	delete[] country;
 	delete[] province;
 	delete[] city;
@@ -273,40 +272,73 @@ efc::personal_info::~personal_info() {
 	delete[] note;
 }
 
-void efc::block::encrypt(void* data, uint8_t type, const uint8_t* key) {
+
+uint64_t efc::raw_block::serialize(uint8_t** buffer, uint8_t pad_to) {
+	switch (this->type) {
+	case efc::type::folder:
+		return ((efc::folder*)data)->serialize(buffer, pad_to);
+	case efc::type::password:
+		return ((efc::password*)data)->serialize(buffer, pad_to);
+	case efc::type::note:
+		return ((efc::note*)data)->serialize(buffer, pad_to);
+	case efc::type::personal_info:
+		return ((efc::personal_info*)data)->serialize(buffer, pad_to);
+	default: return 0;  // fail
+	}
+}
+
+void efc::enc_block::deserialize(uint8_t* buffer) {
+	switch (this->type) {
+		case efc::type::folder: {
+			efc::folder* folder_data = new efc::folder;
+			folder_data->deserialize(buffer);
+			out->data = folder_data;
+			return;
+		}
+		case efc::type::password: {
+			efc::password* password_data = new efc::password;
+			password_data->deserialize(buffer);
+			out->data = password_data;
+			return;
+		}
+		case efc::type::note: {
+			efc::note* note_data = new efc::note;
+			note_data->deserialize(buffer);
+			out->data = note_data;
+			return;
+		}
+		case efc::type::personal_info: {
+			efc::personal_info*	personal_info_data = new efc::personal_info;
+			personal_info_data->deserialize(buffer);
+			out->data = personal_info_data;
+			return;
+		}
+		default: { return; }  // fail (leave data as nullptr)
+	};
+}
+
+void efc::enc_block::encrypt(efc::raw_block* data, const uint8_t* key) {
 	if (this->cypher_text) { delete[] this->cypher_text; }
-	this->type = type;
-	AES a();
+	this->type = data->type;
+	AES a;
 	uint8_t* raw_data = nullptr;
-	this->block_size = ((efc::type*)data).serialize(&raw_data, a.blockBytesLen);
-	this->AES_iv = generate_iv();
-	this->cypher_text = a.encrypt_CBC(raw_data, this->block_size, key, this->AES_iv);
+	this->block_size = data->serialize(&raw_data, (uint8_t)a.blockBytesLen);
+	memcpy(this->AES_iv, generate_iv(), 16);
+	this->cypher_text = a.encrypt_CBC(raw_data, (uint32_t)this->block_size, key, this->AES_iv);
 	delete[] raw_data;
 }
-void* efc::block::decrypt(const uint8_t* key) {
-	switch (this->type) {
-		case efc::type::folder:
-			efc::folder			out();	break;
-		case efc::type::password:
-			efc::password		out();	break;
-		case efc::type::note:
-			efc::note			out();	break;
-		case efc::type::personal_info:
-			efc::personal_info	out();	break;
-		default:
-			return nullptr;
-	};
+efc::raw_block* efc::enc_block::decrypt(const uint8_t* key) {
 	if (!this->cypher_text) { return nullptr; }
-	AES a();
-	uint8_t* buffer = a.decrypt_CBC(this->cypher_text, this->block_size, key, this->AES_iv);
-	out.deserialize(buffer);
-	return &out;
+	AES a;
+	uint8_t* buffer = a.decrypt_CBC(this->cypher_text, (uint32_t)this->block_size, key, this->AES_iv);
+	raw_block* out = new raw_block;
+	out->type = this->type;
+	out->deserialize(buffer);
+	return out;
 }
 
-
-/////// REDO BLOCK functions
-uint64_t efc::block::serialize(uint8_t** buffer) {
-	uint64_t size = this->block_size + 33;
+uint64_t efc::enc_block::serialize(uint8_t** buffer) {
+	uint64_t size = this->block_size + 8;
 	*buffer = new uint8_t[size];
 	uint8_t* ptr = *buffer;
 
@@ -322,14 +354,13 @@ uint64_t efc::block::serialize(uint8_t** buffer) {
 	return size;
 }
 
-bool efc::block::deserialize(uint8_t* buffer) {
+bool efc::enc_block::deserialize(uint8_t* buffer, uint64_t block_size) {
+	this->block_size = block_size;
 	uint8_t* ptr = buffer;
-	this->block_size = *((uint64_t*)ptr);
-	ptr += 8;
 	memcpy(this->AES_iv, ptr, 16);
 	ptr += 16;
 	this->type = *ptr;
-	if (this->cypher_text) { delete[] this-cypher_text; }
+	if (this->cypher_text) { delete[] this->cypher_text; }
 	memcpy(this->cypher_text, ptr + 1, this->block_size);
 	ptr += this->block_size + 1;
 	uint64_t crc = *((uint64_t*)ptr);
@@ -338,45 +369,105 @@ bool efc::block::deserialize(uint8_t* buffer) {
 }
 
 
-enc_file::enc_file(const std::string path, const std::string key) { this->path = path; this->key = key; }
-enc_file::~enc_file() {}
 
-
-uint8_t enc_file::new_file() {
-	// todo overwrite all
-	std::ofsteam file(this->path, std::ios::binary | std::ios::trunc | std::ios::out);
-	if (!file) { return file_handle_error; }
+uint8_t enc_file::new_file(const std::string path, const std::string key) {
+	// reset internal state of the class if the path is not the same
+	if (this->path != path) { reset(); this->path = path; }
+	this->key = key;
+	// init the lokup table for the crc algorithem used
+	if (!CRC64_ECMA_LOOKUP_TABLE) { CRC64_ECMA_LOOKUP_TABLE = init_crc64(crc_types::crc64_ecma); }
+	// open the file if the path already exists 
+	if (std::filesystem::exists(this->path)) { return open(this->path, this->key); }
+	// write file
+	std::ofstream file(this->path, std::ios::binary | std::ios::trunc | std::ios::out);
+	if (!file || !file.is_open()) { return file_handle_error; }
 	efc::header file_header;
 	memcpy(file_header.salt, generate_salt(64), 64);
 	SHA3 s(SHA3::bits512);
 	s.add(this->key); s.add(file_header.salt, 64);
 	uint8_t* current_hash; s.get_raw_hash(&current_hash);
 	memcpy(file_header.hash, current_hash, 64);
-	file.write(&file_header, 128);
+	file.write((char*)&file_header, 128);
 	file.close();
-	this->is_open = true;
+	this->authorized = true;
 	return 0;  // ok
 }
 
-uint8_t enc_file::open() {
+uint8_t enc_file::open(const std::string path, const std::string key) {
+	// reset internal state of the class if the path is not the same
+	if (this->path != path) { reset(); this->path = path; }
+	this->key = key;
 	// init the lokup table for the crc algorithem used
 	if (!CRC64_ECMA_LOOKUP_TABLE) { CRC64_ECMA_LOOKUP_TABLE = init_crc64(crc_types::crc64_ecma); }
-	// check if file exists and if it has a header
+	// create the file if the path doesnt exists 
+	if (!std::filesystem::exists(this->path)) { return new_file(this->path, this->key); }
+	// check if the file has a header and read it
 	efc::header file_header;
-	if (!std::filesystem::exists(this->path)) { return new_file(); }
-	std::ifsteam file(this->path, std::ios::binary | std::ios::in | std::ios::ate);
-	if (!file) { return file_handle_error; }
+	std::ifstream file(this->path, std::ios::binary | std::ios::in | std::ios::ate);
+	if (!file || !file.is_open()) { return file_handle_error; }
 	uint64_t file_size = file.tellg();
-	if (file_size < 128) { return new_file(); }  // the file exists but has no data in it
+	if (file_size < 128) { return new_file(this->path, this->key); }  // the file exists but has no data in it
 	file.seekg(0);	// go to the start of the file
-	file.read(&file_header, 128);  // populate header struct
+	file.read((char*)&file_header, 128);  // populate header struct
 	SHA3 s(SHA3::bits512);
 	s.add(this->key); s.add(file_header.salt, 64);
 	uint8_t* current_hash; s.get_raw_hash(&current_hash);
-	std::string expect(file_header.hash, 64);
-	std::string current(current_hash, 64);
+	std::string expect((char*)file_header.hash, 64);
+	std::string current((char*)current_hash, 64);
 	file.close();
 	if (expect != current) { return incorrect_password; }	// error
-	this->is_open = true;
-	return 0;  // ok
+	this->authorized = true;
+	return load();
+}
+
+void enc_file::add_block() {
+
+}
+
+uint8_t enc_file::load() {
+	std::ifstream file(this->path, std::ios::binary | std::ios::in | std::ios::ate);
+	if (!file || !file.is_open()) { return file_handle_error; }
+	uint64_t bytes_left = file.tellg();
+	file.seekg(128);	// skip header
+	bytes_left -= 128;
+
+	uint64_t block_size;
+	uint8_t* buffer = nullptr;
+	efc::enc_block block;
+
+	while (bytes_left > 8) {
+		file.read(&block_size, 8); bytes_left -= 8;
+		if (block_size > bytes_left) { return unexpected_eof; }
+		uint8_t* buffer = new uint8_t[block_size];
+		file.read(buffer, block_size); bytes_left -= block_size;
+		block.deserialize(buffer, block_size);
+		this->enc_blocks.push_back(block);  // hope for copy <<<<<<<<<<<<<<<<<<<<<<<<<<<
+		delete[] buffer;
+	}
+	return decrypt();
+}
+
+uint8_t enc_file::store() {
+	for (uint64_t i = 0; i < this->enc_blocks.length(); i++) {
+		// todo
+	}
+	return 0;
+}
+
+uint8_t enc_file::decrypt() {
+	// todo
+	return 0;
+}
+
+uint8_t enc_file::encrypt() {
+	// todo
+	return 0;
+}
+
+void enc_file::reset() {
+	this->enc_blocks.empty();
+	this->raw_blocks.empty();
+	this->authorized = false;
+	this->path = "";
+	this->key = "";
 }
