@@ -8,7 +8,6 @@ namespace py = pybind11;
 #include "hash.hpp"
 #include "check.hpp"
 #include "encryption.hpp"
-#include "file.hpp"
 
 
 
@@ -114,29 +113,27 @@ PYBIND11_MODULE(py_lib, handle) {
 	crc_t.attr("crc64_ecma") =			crc_types::crc64_ecma;
 	crc_t.export_values();
 
-	handle.def("get_crc8_table", [](crc_type type){
-		uint8_t* out = init_crc8(type);
-		py::bytes result = py::reinterpret_steal<py::object>(PYBIND11_BYTES_FROM_STRING_AND_SIZE((char*)out, 256));
-		delete[] out;
-		return result;
+	handle.def("init_crc", &init_crc);
+
+	handle.def("get_crc8_table", [](const crc_type* type){
+		init_crc(type);
+		return py::reinterpret_steal<py::object>(PYBIND11_BYTES_FROM_STRING_AND_SIZE((char*)type->table->ptr, 256));
 	});
-	handle.def("get_crc16_table", [](crc_type type){
-		uint16_t* out = init_crc16(type);
-		py::bytes result = py::reinterpret_steal<py::object>(PYBIND11_BYTES_FROM_STRING_AND_SIZE((char*)out, 512));
-		delete[] out;
-		return result;
+	handle.def("get_crc16_table", [](const crc_type* type){
+		init_crc(type);
+		return py::reinterpret_steal<py::object>(PYBIND11_BYTES_FROM_STRING_AND_SIZE((char*)type->table->ptr, 512));
 	});
-	handle.def("get_crc32_table", [](crc_type type){
-		uint32_t* out = init_crc32(type);
-		py::bytes result = py::reinterpret_steal<py::object>(PYBIND11_BYTES_FROM_STRING_AND_SIZE((char*)out, 1024));
-		delete[] out;
-		return result;
+	handle.def("get_crc32_table", [](const crc_type* type){
+		init_crc(type);
+		return py::reinterpret_steal<py::object>(PYBIND11_BYTES_FROM_STRING_AND_SIZE((char*)type->table->ptr, 1024));
 	});
-	handle.def("get_crc64_table", [](crc_type type){
-		uint64_t* out = init_crc64(type);
-		py::bytes result = py::reinterpret_steal<py::object>(PYBIND11_BYTES_FROM_STRING_AND_SIZE((char*)out, 2048));
-		delete[] out;
-		return result;
+	handle.def("get_crc64_table", [](const crc_type* type){
+		init_crc(type);
+		return py::reinterpret_steal<py::object>(PYBIND11_BYTES_FROM_STRING_AND_SIZE((char*)type->table->ptr, 2048));
+	});
+
+	handle.def("crc", [](std::string& data, const crc_type* type) {
+		return crc((unsigned char*)data.c_str(), (uint64_t)data.length(), type);
 	});
 
 	// encryption.hpp
@@ -174,6 +171,7 @@ PYBIND11_MODULE(py_lib, handle) {
 		return py::reinterpret_steal<py::object>(PYBIND11_BYTES_FROM_STRING_AND_SIZE((char*)out, (unsigned int)data.length()));
 	});
 
+	/* DELETE
 	// file.hpp
 	// TODO: add efc structs
 
@@ -191,4 +189,5 @@ PYBIND11_MODULE(py_lib, handle) {
 	py::enum_<enc_file::soft_error_types> encfile_soft_error(encfile, "enc_file_soft_error");
 	encfile_soft_error.attr("unexpected_eof") = enc_file::unexpected_eof;
 	encfile_soft_error.export_values();
+	*/
 }

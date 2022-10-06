@@ -14,7 +14,6 @@ pybind11_add_module (
 	${SOURCE}/hash.cpp
 	${SOURCE}/math.cpp
 	${SOURCE}/io.cpp
-	${SOURCE}/file.cpp
 	${SOURCE}/bind.cpp
 )
 

@@ -16,9 +16,6 @@
     <ClCompile Include="C:\Users\marij\OneDrive\Documenten\GitHub\Password_Manager\lib\compile\src\io.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Users\marij\OneDrive\Documenten\GitHub\Password_Manager\lib\compile\src\file.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="C:\Users\marij\OneDrive\Documenten\GitHub\Password_Manager\lib\compile\src\bind.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
