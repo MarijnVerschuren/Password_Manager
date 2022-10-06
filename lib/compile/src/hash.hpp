@@ -6,11 +6,8 @@
 namespace py = pybind11;
 
 #include <string>
-#include <random>
 
 
-
-uint8_t* generate_salt(uint8_t);
 
 class Hash {
 public:

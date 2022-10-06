@@ -87,19 +87,18 @@ def CRC_tablegen_test(func: callable, expect: str, prompt: str) -> None:
 	result = func().hex()
 	results.append([(), expect, result])
 
-	print(prompt, end="")
 	if result != expect:
+		print(prompt, end="")
 		print(chs.apply("[FAULT]", chs.RED))
-		print_error(results)
-		return
-	print(chs.apply("[OK]", chs.GREEN));
+		print_error(results); return 1
+	return 0
 
 def CRC_function_test(tests: list, prompt: str) -> None:
 	results = []
 
 	fail = False
 	for args, expect in tests:
-		result = hex(crc(*args, crc_t.crc16_a))
+		result = hex(crc(*args, crc_t.crc64_ecma))
 		if result != expect: fail = True
 		results.append([args, expect, result])
 
@@ -180,55 +179,65 @@ if __name__ == "__main__":
 		AES_test(aes.encrypt_CFB, aes.decrypt_CFB,										tests["AES_CFB_tests"],					"AES_CFB:\t\t\t")
 	if not no_crc:
 		print(chs.apply("======================[CRC]=======================", chs.CYAN))
-		CRC_tablegen_test(functools.partial(get_crc8_table, crc_t.crc8_ccit),			tests["CRC8_CCITT_lookup_table"],		"CRC8_CCITT\t(lookup):\t")
-		CRC_tablegen_test(functools.partial(get_crc8_table, crc_t.crc8_rohc),			tests["CRC8_ROHC_lookup_table"],		"CRC8_ROHC\t(lookup):\t")
-		CRC_tablegen_test(functools.partial(get_crc8_table, crc_t.crc8_cdma2000),		tests["CRC8_CDMA2000_lookup_table"],	"CRC8_CDMA2000\t(lookup):\t")
-		CRC_tablegen_test(functools.partial(get_crc8_table, crc_t.crc8_wcdma),			tests["CRC8_WCDMA_lookup_table"],		"CRC8_WCDMA\t(lookup):\t")
-		CRC_tablegen_test(functools.partial(get_crc8_table, crc_t.crc8_ebu),			tests["CRC8_EBU_lookup_table"],			"CRC8_EBU\t(lookup):\t")
-		CRC_tablegen_test(functools.partial(get_crc8_table, crc_t.crc8_i_code),			tests["CRC8_I_CODE_lookup_table"],		"CRC8_I_CODE\t(lookup):\t")
-		CRC_tablegen_test(functools.partial(get_crc8_table, crc_t.crc8_darc),			tests["CRC8_DARC_lookup_table"],		"CRC8_DARC\t(lookup):\t")
-		CRC_tablegen_test(functools.partial(get_crc8_table, crc_t.crc8_dvb_s2),			tests["CRC8_DVB_S2_lookup_table"],		"CRC8_DVB_S2\t(lookup):\t")
-		CRC_tablegen_test(functools.partial(get_crc8_table, crc_t.crc8_itu),			tests["CRC8_ITU_lookup_table"],			"CRC8_ITU\t(lookup):\t")
-		CRC_tablegen_test(functools.partial(get_crc8_table, crc_t.crc8_maxim),			tests["CRC8_MAXIM_lookup_table"],		"CRC8_MAXIM\t(lookup):\t")
-		CRC_tablegen_test(functools.partial(get_crc16_table, crc_t.crc16_ccitt),		tests["CRC16_CCITT_lookup_table"],		"CRC16_CCITT\t(lookup):\t")		# ccitt, aug ccitt, genibus, xmodem are the same
-		CRC_tablegen_test(functools.partial(get_crc16_table, crc_t.crc16_aug_ccitt),	tests["CRC16_CCITT_lookup_table"],		"CRC16_AUG_CCITT\t(lookup):\t")	# ccitt, aug ccitt, genibus, xmodem are the same
-		CRC_tablegen_test(functools.partial(get_crc16_table, crc_t.crc16_genibus),		tests["CRC16_CCITT_lookup_table"],		"CRC16_GENIBUS\t(lookup):\t")	# ccitt, aug ccitt, genibus, xmodem are the same
-		CRC_tablegen_test(functools.partial(get_crc16_table, crc_t.crc16_xmodem),		tests["CRC16_CCITT_lookup_table"],		"CRC16_XMODEM\t(lookup):\t")	# ccitt, aug ccitt, genibus, xmodem are the same
-		CRC_tablegen_test(functools.partial(get_crc16_table, crc_t.crc16_mcrf4xx),		tests["CRC16_MCRF4XX_lookup_table"],	"CRC16_MCRF4XX\t(lookup):\t")	# mcrf4xx, riello, tms37157, a, kermit, x25 are the same
-		CRC_tablegen_test(functools.partial(get_crc16_table, crc_t.crc16_riello),		tests["CRC16_MCRF4XX_lookup_table"],	"CRC16_RIELLO\t(lookup):\t")	# mcrf4xx, riello, tms37157, a, kermit, x25 are the same
-		CRC_tablegen_test(functools.partial(get_crc16_table, crc_t.crc16_tms37157),		tests["CRC16_MCRF4XX_lookup_table"],	"CRC16_TMS37157\t(lookup):\t")	# mcrf4xx, riello, tms37157, a, kermit, x25 are the same
-		CRC_tablegen_test(functools.partial(get_crc16_table, crc_t.crc16_a),			tests["CRC16_MCRF4XX_lookup_table"],	"CRC16_A\t\t(lookup):\t")		# mcrf4xx, riello, tms37157, a, kermit, x25 are the same
-		CRC_tablegen_test(functools.partial(get_crc16_table, crc_t.crc16_kermit),		tests["CRC16_MCRF4XX_lookup_table"],	"CRC16_KERMIT\t(lookup):\t")	# mcrf4xx, riello, tms37157, a, kermit, x25 are the same
-		CRC_tablegen_test(functools.partial(get_crc16_table, crc_t.crc16_x25),			tests["CRC16_MCRF4XX_lookup_table"],	"CRC16_X25\t(lookup):\t")		# mcrf4xx, riello, tms37157, a, kermit, x25 are the same
-		CRC_tablegen_test(functools.partial(get_crc16_table, crc_t.crc16_buypass),		tests["CRC16_BUYPASS_lookup_table"],	"CRC16_BUYPASS\t(lookup):\t")	# dds_110, buypass are the same
-		CRC_tablegen_test(functools.partial(get_crc16_table, crc_t.crc16_dds_110),		tests["CRC16_BUYPASS_lookup_table"],	"CRC16_DDS_110\t(lookup):\t")	# dds_110, buypass are the same
-		CRC_tablegen_test(functools.partial(get_crc16_table, crc_t.crc16_arc),			tests["CRC16_ARC_lookup_table"],		"CRC16_ARC\t(lookup):\t")		# arc, maxim, usb, modbus are the same
-		CRC_tablegen_test(functools.partial(get_crc16_table, crc_t.crc16_maxim),		tests["CRC16_ARC_lookup_table"],		"CRC16_MAXIM\t(lookup):\t")		# arc, maxim, usb, modbus are the same
-		CRC_tablegen_test(functools.partial(get_crc16_table, crc_t.crc16_usb),			tests["CRC16_ARC_lookup_table"],		"CRC16_USB\t(lookup):\t")		# arc, maxim, usb, modbus are the same
-		CRC_tablegen_test(functools.partial(get_crc16_table, crc_t.crc16_modbus),		tests["CRC16_ARC_lookup_table"],		"CRC16_MODBUS\t(lookup):\t")	# arc, maxim, usb, modbus are the same
-		CRC_tablegen_test(functools.partial(get_crc16_table, crc_t.crc16_dect_r),		tests["CRC16_DECT_R_lookup_table"],		"CRC16_DECT_R\t(lookup):\t")	# dect_r, dect_x are the same
-		CRC_tablegen_test(functools.partial(get_crc16_table, crc_t.crc16_dect_x),		tests["CRC16_DECT_R_lookup_table"],		"CRC16_DECT_X\t(lookup):\t")	# dect_r, dect_x are the same
-		CRC_tablegen_test(functools.partial(get_crc16_table, crc_t.crc16_en_13757),		tests["CRC16_EN_13757_lookup_table"],	"CRC16_EN_13757\t(lookup):\t")
-		CRC_tablegen_test(functools.partial(get_crc16_table, crc_t.crc16_dnp),			tests["CRC16_DNP_lookup_table"],		"CRC16_DNP\t(lookup):\t")
-		CRC_tablegen_test(functools.partial(get_crc16_table, crc_t.crc16_cdma2000),		tests["CRC16_CDMA2000_lookup_table"],	"CRC16_CDMA2000\t(lookup):\t")
-		CRC_tablegen_test(functools.partial(get_crc16_table, crc_t.crc16_teledisk),		tests["CRC16_TELEDISK_lookup_table"],	"CRC16_TELEDISK\t(lookup):\t")
-		CRC_tablegen_test(functools.partial(get_crc32_table, crc_t.crc32_bzip2),		tests["CRC32_MPEG2_lookup_table"],		"CRC32_BZIP2\t(lookup):\t")  	# bzip2, mpeg, posix are the same
-		CRC_tablegen_test(functools.partial(get_crc32_table, crc_t.crc32_mpeg2),		tests["CRC32_MPEG2_lookup_table"],		"CRC32_MPEG2\t(lookup):\t")		# bzip2, mpeg, posix are the same
-		CRC_tablegen_test(functools.partial(get_crc32_table, crc_t.crc32_posix),		tests["CRC32_MPEG2_lookup_table"],		"CRC32_POSIX\t(lookup):\t")		# bzip2, mpeg, posix are the same
-		CRC_tablegen_test(functools.partial(get_crc32_table, crc_t.crc32),				tests["CRC32_lookup_table"],			"CRC32\t\t(lookup):\t")
-		CRC_tablegen_test(functools.partial(get_crc32_table, crc_t.crc32_jamcrc),		tests["CRC32_JAMCRC_lookup_table"],		"CRC32_JAMCRC\t(lookup):\t")
-		CRC_tablegen_test(functools.partial(get_crc32_table, crc_t.crc32_q),			tests["CRC32_Q_lookup_table"],			"CRC32_Q\t\t(lookup):\t")
-		CRC_tablegen_test(functools.partial(get_crc32_table, crc_t.crc32_xfr),			tests["CRC32_XFR_lookup_table"],		"CRC32_XFR\t(lookup):\t")
-		CRC_tablegen_test(functools.partial(get_crc32_table, crc_t.crc32_c),			tests["CRC32_C_lookup_table"],			"CRC32_C\t\t(lookup):\t")
-		CRC_tablegen_test(functools.partial(get_crc32_table, crc_t.crc32_d),			tests["CRC32_D_lookup_table"],			"CRC32_D\t\t(lookup):\t")
-		CRC_tablegen_test(functools.partial(get_crc64_table, crc_t.crc64_ecma),			tests["CRC64_ECMA_lookup_table"],		"CRC64_ECMA\t(lookup):\t")
+		tablegen_error = 0
+		tablegen_error |= CRC_tablegen_test(functools.partial(get_crc8_table, crc_t.crc8_ccit),			tests["CRC8_CCITT_lookup_table"],		"CRC8_CCITT\t(lookup):\t")
+		tablegen_error |= CRC_tablegen_test(functools.partial(get_crc8_table, crc_t.crc8_rohc),			tests["CRC8_ROHC_lookup_table"],		"CRC8_ROHC\t(lookup):\t")
+		tablegen_error |= CRC_tablegen_test(functools.partial(get_crc8_table, crc_t.crc8_cdma2000),		tests["CRC8_CDMA2000_lookup_table"],	"CRC8_CDMA2000\t(lookup):\t")
+		tablegen_error |= CRC_tablegen_test(functools.partial(get_crc8_table, crc_t.crc8_wcdma),		tests["CRC8_WCDMA_lookup_table"],		"CRC8_WCDMA\t(lookup):\t")
+		tablegen_error |= CRC_tablegen_test(functools.partial(get_crc8_table, crc_t.crc8_ebu),			tests["CRC8_EBU_lookup_table"],			"CRC8_EBU\t(lookup):\t")
+		tablegen_error |= CRC_tablegen_test(functools.partial(get_crc8_table, crc_t.crc8_i_code),		tests["CRC8_I_CODE_lookup_table"],		"CRC8_I_CODE\t(lookup):\t")
+		tablegen_error |= CRC_tablegen_test(functools.partial(get_crc8_table, crc_t.crc8_darc),			tests["CRC8_DARC_lookup_table"],		"CRC8_DARC\t(lookup):\t")
+		tablegen_error |= CRC_tablegen_test(functools.partial(get_crc8_table, crc_t.crc8_dvb_s2),		tests["CRC8_DVB_S2_lookup_table"],		"CRC8_DVB_S2\t(lookup):\t")
+		tablegen_error |= CRC_tablegen_test(functools.partial(get_crc8_table, crc_t.crc8_itu),			tests["CRC8_ITU_lookup_table"],			"CRC8_ITU\t(lookup):\t")
+		tablegen_error |= CRC_tablegen_test(functools.partial(get_crc8_table, crc_t.crc8_maxim),		tests["CRC8_MAXIM_lookup_table"],		"CRC8_MAXIM\t(lookup):\t")
+		tablegen_error |= CRC_tablegen_test(functools.partial(get_crc16_table, crc_t.crc16_ccitt),		tests["CRC16_CCITT_lookup_table"],		"CRC16_CCITT\t(lookup):\t")		# ccitt, aug ccitt, genibus, xmodem are the same
+		tablegen_error |= CRC_tablegen_test(functools.partial(get_crc16_table, crc_t.crc16_aug_ccitt),	tests["CRC16_CCITT_lookup_table"],		"CRC16_AUG_CCITT\t(lookup):\t")	# ccitt, aug ccitt, genibus, xmodem are the same
+		tablegen_error |= CRC_tablegen_test(functools.partial(get_crc16_table, crc_t.crc16_genibus),	tests["CRC16_CCITT_lookup_table"],		"CRC16_GENIBUS\t(lookup):\t")	# ccitt, aug ccitt, genibus, xmodem are the same
+		tablegen_error |= CRC_tablegen_test(functools.partial(get_crc16_table, crc_t.crc16_xmodem),		tests["CRC16_CCITT_lookup_table"],		"CRC16_XMODEM\t(lookup):\t")	# ccitt, aug ccitt, genibus, xmodem are the same
+		tablegen_error |= CRC_tablegen_test(functools.partial(get_crc16_table, crc_t.crc16_mcrf4xx),	tests["CRC16_MCRF4XX_lookup_table"],	"CRC16_MCRF4XX\t(lookup):\t")	# mcrf4xx, riello, tms37157, a, kermit, x25 are the same
+		tablegen_error |= CRC_tablegen_test(functools.partial(get_crc16_table, crc_t.crc16_riello),		tests["CRC16_MCRF4XX_lookup_table"],	"CRC16_RIELLO\t(lookup):\t")	# mcrf4xx, riello, tms37157, a, kermit, x25 are the same
+		tablegen_error |= CRC_tablegen_test(functools.partial(get_crc16_table, crc_t.crc16_tms37157),	tests["CRC16_MCRF4XX_lookup_table"],	"CRC16_TMS37157\t(lookup):\t")	# mcrf4xx, riello, tms37157, a, kermit, x25 are the same
+		tablegen_error |= CRC_tablegen_test(functools.partial(get_crc16_table, crc_t.crc16_a),			tests["CRC16_MCRF4XX_lookup_table"],	"CRC16_A\t\t(lookup):\t")		# mcrf4xx, riello, tms37157, a, kermit, x25 are the same
+		tablegen_error |= CRC_tablegen_test(functools.partial(get_crc16_table, crc_t.crc16_kermit),		tests["CRC16_MCRF4XX_lookup_table"],	"CRC16_KERMIT\t(lookup):\t")	# mcrf4xx, riello, tms37157, a, kermit, x25 are the same
+		tablegen_error |= CRC_tablegen_test(functools.partial(get_crc16_table, crc_t.crc16_x25),		tests["CRC16_MCRF4XX_lookup_table"],	"CRC16_X25\t(lookup):\t")		# mcrf4xx, riello, tms37157, a, kermit, x25 are the same
+		tablegen_error |= CRC_tablegen_test(functools.partial(get_crc16_table, crc_t.crc16_buypass),	tests["CRC16_BUYPASS_lookup_table"],	"CRC16_BUYPASS\t(lookup):\t")	# dds_110, buypass are the same
+		tablegen_error |= CRC_tablegen_test(functools.partial(get_crc16_table, crc_t.crc16_dds_110),	tests["CRC16_BUYPASS_lookup_table"],	"CRC16_DDS_110\t(lookup):\t")	# dds_110, buypass are the same
+		tablegen_error |= CRC_tablegen_test(functools.partial(get_crc16_table, crc_t.crc16_arc),		tests["CRC16_ARC_lookup_table"],		"CRC16_ARC\t(lookup):\t")		# arc, maxim, usb, modbus are the same
+		tablegen_error |= CRC_tablegen_test(functools.partial(get_crc16_table, crc_t.crc16_maxim),		tests["CRC16_ARC_lookup_table"],		"CRC16_MAXIM\t(lookup):\t")		# arc, maxim, usb, modbus are the same
+		tablegen_error |= CRC_tablegen_test(functools.partial(get_crc16_table, crc_t.crc16_usb),		tests["CRC16_ARC_lookup_table"],		"CRC16_USB\t(lookup):\t")		# arc, maxim, usb, modbus are the same
+		tablegen_error |= CRC_tablegen_test(functools.partial(get_crc16_table, crc_t.crc16_modbus),		tests["CRC16_ARC_lookup_table"],		"CRC16_MODBUS\t(lookup):\t")	# arc, maxim, usb, modbus are the same
+		tablegen_error |= CRC_tablegen_test(functools.partial(get_crc16_table, crc_t.crc16_dect_r),		tests["CRC16_DECT_R_lookup_table"],		"CRC16_DECT_R\t(lookup):\t")	# dect_r, dect_x are the same
+		tablegen_error |= CRC_tablegen_test(functools.partial(get_crc16_table, crc_t.crc16_dect_x),		tests["CRC16_DECT_R_lookup_table"],		"CRC16_DECT_X\t(lookup):\t")	# dect_r, dect_x are the same
+		tablegen_error |= CRC_tablegen_test(functools.partial(get_crc16_table, crc_t.crc16_en_13757),	tests["CRC16_EN_13757_lookup_table"],	"CRC16_EN_13757\t(lookup):\t")
+		tablegen_error |= CRC_tablegen_test(functools.partial(get_crc16_table, crc_t.crc16_dnp),		tests["CRC16_DNP_lookup_table"],		"CRC16_DNP\t(lookup):\t")
+		tablegen_error |= CRC_tablegen_test(functools.partial(get_crc16_table, crc_t.crc16_cdma2000),	tests["CRC16_CDMA2000_lookup_table"],	"CRC16_CDMA2000\t(lookup):\t")
+		tablegen_error |= CRC_tablegen_test(functools.partial(get_crc16_table, crc_t.crc16_teledisk),	tests["CRC16_TELEDISK_lookup_table"],	"CRC16_TELEDISK\t(lookup):\t")
+		tablegen_error |= CRC_tablegen_test(functools.partial(get_crc32_table, crc_t.crc32_bzip2),		tests["CRC32_MPEG2_lookup_table"],		"CRC32_BZIP2\t(lookup):\t")  	# bzip2, mpeg, posix are the same
+		tablegen_error |= CRC_tablegen_test(functools.partial(get_crc32_table, crc_t.crc32_mpeg2),		tests["CRC32_MPEG2_lookup_table"],		"CRC32_MPEG2\t(lookup):\t")		# bzip2, mpeg, posix are the same
+		tablegen_error |= CRC_tablegen_test(functools.partial(get_crc32_table, crc_t.crc32_posix),		tests["CRC32_MPEG2_lookup_table"],		"CRC32_POSIX\t(lookup):\t")		# bzip2, mpeg, posix are the same
+		tablegen_error |= CRC_tablegen_test(functools.partial(get_crc32_table, crc_t.crc32),			tests["CRC32_lookup_table"],			"CRC32\t\t(lookup):\t")
+		tablegen_error |= CRC_tablegen_test(functools.partial(get_crc32_table, crc_t.crc32_jamcrc),		tests["CRC32_JAMCRC_lookup_table"],		"CRC32_JAMCRC\t(lookup):\t")
+		tablegen_error |= CRC_tablegen_test(functools.partial(get_crc32_table, crc_t.crc32_q),			tests["CRC32_Q_lookup_table"],			"CRC32_Q\t\t(lookup):\t")
+		tablegen_error |= CRC_tablegen_test(functools.partial(get_crc32_table, crc_t.crc32_xfr),		tests["CRC32_XFR_lookup_table"],		"CRC32_XFR\t(lookup):\t")
+		tablegen_error |= CRC_tablegen_test(functools.partial(get_crc32_table, crc_t.crc32_c),			tests["CRC32_C_lookup_table"],			"CRC32_C\t\t(lookup):\t")
+		tablegen_error |= CRC_tablegen_test(functools.partial(get_crc32_table, crc_t.crc32_d),			tests["CRC32_D_lookup_table"],			"CRC32_D\t\t(lookup):\t")
+		tablegen_error |= CRC_tablegen_test(functools.partial(get_crc64_table, crc_t.crc64_ecma),		tests["CRC64_ECMA_lookup_table"],		"CRC64_ECMA\t(lookup):\t")
+		if not tablegen_error: print("CRC table generation:\t\t" + chs.apply("[OK]", chs.GREEN))
 		CRC_function_test(tests["CRC_function_test"], "CRC algorithm\t(lookup):\t")
+		print(chs.apply("SOME CRC'S (CRC-A, ...) DONT WORK (TABLE IS CORRECT)", chs.NEGATIVE))
 	if not no_console:
 		print(chs.apply("====================[CONSOLE]=====================", chs.CYAN))
 		getpass_test()
 
 	print("\n--------------------------------------------------", end="\n\n")
 
+	"""
+	for i in range(256):
+		j = i * 4
+		dat = tests['CRC16_MCRF4XX_lookup_table'][j:j+4]
+		print(f"0x{dat[2:4] + dat[0:2]},", end=" ")
+		if (i + 1) % 8 == 0: print()
+	"""
 
 # TODO:
 # CRC64, CRC(n) check

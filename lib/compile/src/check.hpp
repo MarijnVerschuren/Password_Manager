@@ -94,12 +94,13 @@ inline void		init_crc	(const crc_type* type) {
 		default: return;
 	}
 }
+inline void		deinit_crc	(const crc_type* type) { delete[] type->table->ptr; type->table->ptr = nullptr; }
 
 // caclculate crc using tables (c++ side only)
-uint8_t crc_8(const void* buffer, uint64_t size, const uint8_t* lookup, uint8_t init = 0x00, const uint8_t xor_out = 0x00);
-uint16_t crc_16(const void* buffer, uint64_t size, const uint16_t* lookup, uint16_t init = 0x0000, const uint16_t xor_out = 0x0000);
-uint32_t crc_32(const void* buffer, uint64_t size, const uint32_t* lookup, uint32_t init = 0x00000000, const uint32_t xor_out = 0x00000000);
-uint64_t crc_64(const void* buffer, uint64_t size, const uint64_t* lookup, uint64_t init = 0x0000000000000000, const uint64_t xor_out = 0x0000000000000000);
+uint8_t crc_8(const void* buffer, uint64_t size, const uint8_t* lookup, const uint8_t init = 0x00, const uint8_t xor_out = 0x00);
+uint16_t crc_16(const void* buffer, uint64_t size, const uint16_t* lookup, const uint16_t init = 0x0000, const uint16_t xor_out = 0x0000);
+uint32_t crc_32(const void* buffer, uint64_t size, const uint32_t* lookup, const uint32_t init = 0x00000000, const uint32_t xor_out = 0x00000000);
+uint64_t crc_64(const void* buffer, uint64_t size, const uint64_t* lookup, const uint64_t init = 0x0000000000000000, const uint64_t xor_out = 0x0000000000000000);
 // caclculate crc using tables (python side (managed by c++))
 inline uint64_t crc(const void* buffer, const uint64_t size, const crc_type* type) {
 	init_crc(type);

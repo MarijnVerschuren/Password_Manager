@@ -87,7 +87,7 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
       <AdditionalIncludeDirectories>C:\Users\marij\OneDrive\Documenten\GitHub\Password_Manager\lib\compile\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <AdditionalOptions>%(AdditionalOptions) /external:I "C:/Users/marij/OneDrive/Documenten/GitHub/Password_Manager/lib/compile/dep/pybind11/include" /external:I "C:/Program Files/Python38/include" /bigobj</AdditionalOptions>
+      <AdditionalOptions>%(AdditionalOptions) /external:I "C:/Users/marij/OneDrive/Documenten/GitHub/Password_Manager/lib/compile/dep/pybind11/include" /external:I "C:/Users/marij/AppData/Local/Programs/Python/Python38/include" /bigobj</AdditionalOptions>
       <AssemblerListingLocation>$(IntDir)</AssemblerListingLocation>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
@@ -106,10 +106,10 @@
     </ClCompile>
     <ResourceCompile>
       <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;_DEBUG;_WINDOWS;CMAKE_INTDIR=\"Debug\";py_lib_EXPORTS</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>C:\Users\marij\OneDrive\Documenten\GitHub\Password_Manager\lib\compile\src;C:\Users\marij\OneDrive\Documenten\GitHub\Password_Manager\lib\compile\dep\pybind11\include;C:\Program Files\Python38\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\marij\OneDrive\Documenten\GitHub\Password_Manager\lib\compile\src;C:\Users\marij\OneDrive\Documenten\GitHub\Password_Manager\lib\compile\dep\pybind11\include;C:\Users\marij\AppData\Local\Programs\Python\Python38\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ResourceCompile>
     <Midl>
-      <AdditionalIncludeDirectories>C:\Users\marij\OneDrive\Documenten\GitHub\Password_Manager\lib\compile\src;C:\Users\marij\OneDrive\Documenten\GitHub\Password_Manager\lib\compile\dep\pybind11\include;C:\Program Files\Python38\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\marij\OneDrive\Documenten\GitHub\Password_Manager\lib\compile\src;C:\Users\marij\OneDrive\Documenten\GitHub\Password_Manager\lib\compile\dep\pybind11\include;C:\Users\marij\AppData\Local\Programs\Python\Python38\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
       <HeaderFileName>%(Filename).h</HeaderFileName>
       <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
@@ -117,7 +117,7 @@
       <ProxyFileName>%(Filename)_p.c</ProxyFileName>
     </Midl>
     <Link>
-      <AdditionalDependencies>C:\Program Files\Python38\libs\python38.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;comdlg32.lib;advapi32.lib</AdditionalDependencies>
+      <AdditionalDependencies>C:\Users\marij\AppData\Local\Programs\Python\Python38\libs\python38.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;comdlg32.lib;advapi32.lib</AdditionalDependencies>
       <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalOptions>%(AdditionalOptions) /machine:x64</AdditionalOptions>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -133,7 +133,7 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
       <AdditionalIncludeDirectories>C:\Users\marij\OneDrive\Documenten\GitHub\Password_Manager\lib\compile\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <AdditionalOptions>%(AdditionalOptions) /external:I "C:/Users/marij/OneDrive/Documenten/GitHub/Password_Manager/lib/compile/dep/pybind11/include" /external:I "C:/Program Files/Python38/include" /bigobj</AdditionalOptions>
+      <AdditionalOptions>%(AdditionalOptions) /external:I "C:/Users/marij/OneDrive/Documenten/GitHub/Password_Manager/lib/compile/dep/pybind11/include" /external:I "C:/Users/marij/AppData/Local/Programs/Python/Python38/include" /bigobj</AdditionalOptions>
       <AssemblerListingLocation>$(IntDir)</AssemblerListingLocation>
       <ExceptionHandling>Sync</ExceptionHandling>
       <ExternalWarningLevel>TurnOffAllWarnings</ExternalWarningLevel>
@@ -154,10 +154,10 @@
     </ClCompile>
     <ResourceCompile>
       <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;_WINDOWS;NDEBUG;CMAKE_INTDIR=\"Release\";py_lib_EXPORTS</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>C:\Users\marij\OneDrive\Documenten\GitHub\Password_Manager\lib\compile\src;C:\Users\marij\OneDrive\Documenten\GitHub\Password_Manager\lib\compile\dep\pybind11\include;C:\Program Files\Python38\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\marij\OneDrive\Documenten\GitHub\Password_Manager\lib\compile\src;C:\Users\marij\OneDrive\Documenten\GitHub\Password_Manager\lib\compile\dep\pybind11\include;C:\Users\marij\AppData\Local\Programs\Python\Python38\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ResourceCompile>
     <Midl>
-      <AdditionalIncludeDirectories>C:\Users\marij\OneDrive\Documenten\GitHub\Password_Manager\lib\compile\src;C:\Users\marij\OneDrive\Documenten\GitHub\Password_Manager\lib\compile\dep\pybind11\include;C:\Program Files\Python38\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\marij\OneDrive\Documenten\GitHub\Password_Manager\lib\compile\src;C:\Users\marij\OneDrive\Documenten\GitHub\Password_Manager\lib\compile\dep\pybind11\include;C:\Users\marij\AppData\Local\Programs\Python\Python38\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
       <HeaderFileName>%(Filename).h</HeaderFileName>
       <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
@@ -165,7 +165,7 @@
       <ProxyFileName>%(Filename)_p.c</ProxyFileName>
     </Midl>
     <Link>
-      <AdditionalDependencies>C:\Program Files\Python38\libs\python38.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;comdlg32.lib;advapi32.lib</AdditionalDependencies>
+      <AdditionalDependencies>C:\Users\marij\AppData\Local\Programs\Python\Python38\libs\python38.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;comdlg32.lib;advapi32.lib</AdditionalDependencies>
       <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalOptions>%(AdditionalOptions) /machine:x64</AdditionalOptions>
       <GenerateDebugInformation>false</GenerateDebugInformation>
@@ -182,7 +182,7 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">
     <ClCompile>
       <AdditionalIncludeDirectories>C:\Users\marij\OneDrive\Documenten\GitHub\Password_Manager\lib\compile\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <AdditionalOptions>%(AdditionalOptions) /external:I "C:/Users/marij/OneDrive/Documenten/GitHub/Password_Manager/lib/compile/dep/pybind11/include" /external:I "C:/Program Files/Python38/include" /bigobj</AdditionalOptions>
+      <AdditionalOptions>%(AdditionalOptions) /external:I "C:/Users/marij/OneDrive/Documenten/GitHub/Password_Manager/lib/compile/dep/pybind11/include" /external:I "C:/Users/marij/AppData/Local/Programs/Python/Python38/include" /bigobj</AdditionalOptions>
       <AssemblerListingLocation>$(IntDir)</AssemblerListingLocation>
       <ExceptionHandling>Sync</ExceptionHandling>
       <ExternalWarningLevel>TurnOffAllWarnings</ExternalWarningLevel>
@@ -203,10 +203,10 @@
     </ClCompile>
     <ResourceCompile>
       <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;_WINDOWS;NDEBUG;CMAKE_INTDIR=\"MinSizeRel\";py_lib_EXPORTS</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>C:\Users\marij\OneDrive\Documenten\GitHub\Password_Manager\lib\compile\src;C:\Users\marij\OneDrive\Documenten\GitHub\Password_Manager\lib\compile\dep\pybind11\include;C:\Program Files\Python38\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\marij\OneDrive\Documenten\GitHub\Password_Manager\lib\compile\src;C:\Users\marij\OneDrive\Documenten\GitHub\Password_Manager\lib\compile\dep\pybind11\include;C:\Users\marij\AppData\Local\Programs\Python\Python38\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ResourceCompile>
     <Midl>
-      <AdditionalIncludeDirectories>C:\Users\marij\OneDrive\Documenten\GitHub\Password_Manager\lib\compile\src;C:\Users\marij\OneDrive\Documenten\GitHub\Password_Manager\lib\compile\dep\pybind11\include;C:\Program Files\Python38\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\marij\OneDrive\Documenten\GitHub\Password_Manager\lib\compile\src;C:\Users\marij\OneDrive\Documenten\GitHub\Password_Manager\lib\compile\dep\pybind11\include;C:\Users\marij\AppData\Local\Programs\Python\Python38\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
       <HeaderFileName>%(Filename).h</HeaderFileName>
       <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
@@ -214,7 +214,7 @@
       <ProxyFileName>%(Filename)_p.c</ProxyFileName>
     </Midl>
     <Link>
-      <AdditionalDependencies>C:\Program Files\Python38\libs\python38.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;comdlg32.lib;advapi32.lib</AdditionalDependencies>
+      <AdditionalDependencies>C:\Users\marij\AppData\Local\Programs\Python\Python38\libs\python38.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;comdlg32.lib;advapi32.lib</AdditionalDependencies>
       <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalOptions>%(AdditionalOptions) /machine:x64</AdditionalOptions>
       <GenerateDebugInformation>false</GenerateDebugInformation>
@@ -231,7 +231,7 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">
     <ClCompile>
       <AdditionalIncludeDirectories>C:\Users\marij\OneDrive\Documenten\GitHub\Password_Manager\lib\compile\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <AdditionalOptions>%(AdditionalOptions) /external:I "C:/Users/marij/OneDrive/Documenten/GitHub/Password_Manager/lib/compile/dep/pybind11/include" /external:I "C:/Program Files/Python38/include" /bigobj</AdditionalOptions>
+      <AdditionalOptions>%(AdditionalOptions) /external:I "C:/Users/marij/OneDrive/Documenten/GitHub/Password_Manager/lib/compile/dep/pybind11/include" /external:I "C:/Users/marij/AppData/Local/Programs/Python/Python38/include" /bigobj</AdditionalOptions>
       <AssemblerListingLocation>$(IntDir)</AssemblerListingLocation>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <ExceptionHandling>Sync</ExceptionHandling>
@@ -250,10 +250,10 @@
     </ClCompile>
     <ResourceCompile>
       <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;_WINDOWS;NDEBUG;CMAKE_INTDIR=\"RelWithDebInfo\";py_lib_EXPORTS</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>C:\Users\marij\OneDrive\Documenten\GitHub\Password_Manager\lib\compile\src;C:\Users\marij\OneDrive\Documenten\GitHub\Password_Manager\lib\compile\dep\pybind11\include;C:\Program Files\Python38\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\marij\OneDrive\Documenten\GitHub\Password_Manager\lib\compile\src;C:\Users\marij\OneDrive\Documenten\GitHub\Password_Manager\lib\compile\dep\pybind11\include;C:\Users\marij\AppData\Local\Programs\Python\Python38\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ResourceCompile>
     <Midl>
-      <AdditionalIncludeDirectories>C:\Users\marij\OneDrive\Documenten\GitHub\Password_Manager\lib\compile\src;C:\Users\marij\OneDrive\Documenten\GitHub\Password_Manager\lib\compile\dep\pybind11\include;C:\Program Files\Python38\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\marij\OneDrive\Documenten\GitHub\Password_Manager\lib\compile\src;C:\Users\marij\OneDrive\Documenten\GitHub\Password_Manager\lib\compile\dep\pybind11\include;C:\Users\marij\AppData\Local\Programs\Python\Python38\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
       <HeaderFileName>%(Filename).h</HeaderFileName>
       <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
@@ -261,7 +261,7 @@
       <ProxyFileName>%(Filename)_p.c</ProxyFileName>
     </Midl>
     <Link>
-      <AdditionalDependencies>C:\Program Files\Python38\libs\python38.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;comdlg32.lib;advapi32.lib</AdditionalDependencies>
+      <AdditionalDependencies>C:\Users\marij\AppData\Local\Programs\Python\Python38\libs\python38.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;comdlg32.lib;advapi32.lib</AdditionalDependencies>
       <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalOptions>%(AdditionalOptions) /machine:x64</AdditionalOptions>
       <GenerateDebugInformation>true</GenerateDebugInformation>

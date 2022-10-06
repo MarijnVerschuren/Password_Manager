@@ -2,14 +2,6 @@
 
 
 
-uint8_t* generate_salt(uint8_t len) {
-	std::random_device rand;
-	uint8_t* out = new uint8_t[len];
-	for (uint8_t i = 0; i < len; i++) { ((uint32_t*)out)[i] = rand(); }
-	return out;
-}
-
-
 SHA256::SHA256() {
 	reset();
 }

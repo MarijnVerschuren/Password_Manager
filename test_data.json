@@ -514,7 +514,7 @@
     "CRC_function_test": [
         [
             ["abcdef"],
-            "5F0AB046"
+            "0x242e9b2e16689f71"
         ]
     ]
 }

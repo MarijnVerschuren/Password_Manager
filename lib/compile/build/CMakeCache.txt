@@ -15,7 +15,7 @@
 ########################
 
 //Path to a program.
-CMAKE_AR:FILEPATH=C:/Program Files/Microsoft Visual Studio/2022/Professional/VC/Tools/MSVC/14.31.31103/bin/Hostx64/x64/lib.exe
+CMAKE_AR:FILEPATH=C:/Program Files/Microsoft Visual Studio/2022/Professional/VC/Tools/MSVC/14.33.31629/bin/Hostx64/x64/lib.exe
 
 //Semicolon separated list of supported configuration types, only
 // supports Debug, Release, MinSizeRel, and RelWithDebInfo, anything
@@ -128,7 +128,7 @@ CMAKE_INSTALL_SHAREDSTATEDIR:PATH=com
 CMAKE_INSTALL_SYSCONFDIR:PATH=etc
 
 //Path to a program.
-CMAKE_LINKER:FILEPATH=C:/Program Files/Microsoft Visual Studio/2022/Professional/VC/Tools/MSVC/14.31.31103/bin/Hostx64/x64/link.exe
+CMAKE_LINKER:FILEPATH=C:/Program Files/Microsoft Visual Studio/2022/Professional/VC/Tools/MSVC/14.33.31629/bin/Hostx64/x64/link.exe
 
 //Flags used by the linker during the creation of modules during
 // all build types.
@@ -268,7 +268,7 @@ PYBIND11_PYTHON_VERSION:STRING=
 PYBIND11_TEST:BOOL=OFF
 
 //Path to a program.
-PYTHON_EXECUTABLE:FILEPATH=C:/Program Files/Python38/python.exe
+PYTHON_EXECUTABLE:FILEPATH=C:/Users/marij/AppData/Local/Programs/Python/Python38/python.exe
 
 //Value Computed by CMake
 py_lib_BINARY_DIR:STATIC=C:/Users/marij/OneDrive/Documenten/GitHub/Password_Manager/lib/compile/build
@@ -452,17 +452,17 @@ CMAKE_STATIC_LINKER_FLAGS_RELWITHDEBINFO-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: CMAKE_VERBOSE_MAKEFILE
 CMAKE_VERBOSE_MAKEFILE-ADVANCED:INTERNAL=1
 //Details about finding PYTHON
-FIND_PACKAGE_MESSAGE_DETAILS_PYTHON:INTERNAL=C:/Program Files/Python38/python.exe3.8.5
+FIND_PACKAGE_MESSAGE_DETAILS_PYTHON:INTERNAL=C:/Users/marij/AppData/Local/Programs/Python/Python38/python.exe3.8.5
 //Details about finding PythonInterp
-FIND_PACKAGE_MESSAGE_DETAILS_PythonInterp:INTERNAL=[C:/Program Files/Python38/python.exe][v3.8.5(3.6)]
+FIND_PACKAGE_MESSAGE_DETAILS_PythonInterp:INTERNAL=[C:/Users/marij/AppData/Local/Programs/Python/Python38/python.exe][v3.8.5(3.6)]
 //Test HAS_MSVC_GL_LTCG
 HAS_MSVC_GL_LTCG:INTERNAL=1
 PYBIND11_INCLUDE_DIR:INTERNAL=C:/Users/marij/OneDrive/Documenten/GitHub/Password_Manager/lib/compile/dep/pybind11/include
 //ADVANCED property for variable: PYTHON_EXECUTABLE
 PYTHON_EXECUTABLE-ADVANCED:INTERNAL=1
-PYTHON_INCLUDE_DIRS:INTERNAL=C:/Program Files/Python38/include
+PYTHON_INCLUDE_DIRS:INTERNAL=C:/Users/marij/AppData/Local/Programs/Python/Python38/include
 PYTHON_IS_DEBUG:INTERNAL=0
-PYTHON_LIBRARIES:INTERNAL=C:/Program Files/Python38/libs/python38.lib
+PYTHON_LIBRARIES:INTERNAL=C:/Users/marij/AppData/Local/Programs/Python/Python38/libs/python38.lib
 PYTHON_MODULE_EXTENSION:INTERNAL=.cp38-win_amd64.pyd
 PYTHON_MODULE_PREFIX:INTERNAL=
 PYTHON_VERSION:INTERNAL=3.8.5
@@ -477,5 +477,5 @@ pybind11_FOUND:INTERNAL=TRUE
 //Directory where pybind11 headers are located
 pybind11_INCLUDE_DIR:INTERNAL=C:/Users/marij/OneDrive/Documenten/GitHub/Password_Manager/lib/compile/dep/pybind11/include
 //Directories where pybind11 and possibly Python headers are located
-pybind11_INCLUDE_DIRS:INTERNAL=C:/Users/marij/OneDrive/Documenten/GitHub/Password_Manager/lib/compile/dep/pybind11/include;C:/Program Files/Python38/include
+pybind11_INCLUDE_DIRS:INTERNAL=C:/Users/marij/OneDrive/Documenten/GitHub/Password_Manager/lib/compile/dep/pybind11/include;C:/Users/marij/AppData/Local/Programs/Python/Python38/include
 

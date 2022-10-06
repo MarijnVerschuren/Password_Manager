@@ -13,9 +13,11 @@ data_folder = os.path.join(root_folder, "data")
 
 class Lockbox:
 	def __init__(self) -> None:
+		self.sha3_512 = SHA3(SHA3.bits512)
 		self.name = None
 		self.path = None
 		self.key = None
+
 
 	def new(self, name, key_0, key_1) -> str or None:
 		self.name = name
@@ -24,9 +26,17 @@ class Lockbox:
 		self.key = key_0;
 		self.path =	os.path.join(data_folder, self.name)
 		if os.path.exists(self.path):
-			return "lockbox already exists"
-		with open(self.path, "wb") as ofile:
-			pass # TODO: build header etc...
+			if os.path.getsize(self.path) >= 128:
+				return "lockbox already exists"
+			# if the file size is smaller than 128B the file is not taken as it has no header
+		salt = os.urandom(64)
+		self.sha3_512.add(self.key.encode("ascii") + salt)
+		with open(self.path, "wb") as ofile:		# overwrite
+			ofile.write(salt)						# 64B
+			ofile.write(self.sha3_512.raw_hash)		# 64B
+			ofile.close()
+		self.sha3_512.reset()
+
 
 	def unlock(self, name, key) -> str or None:
 		self.name =	name;
@@ -34,11 +44,20 @@ class Lockbox:
 		self.path =	os.path.join(data_folder, self.name)
 		if not os.path.exists(self.path):
 			return "lockbox name does not exist"
-
 		with open(self.path, "rb") as ifile:
-			pass # TODO: read file etc...
+			salt = ifile.read(64)
+			_hash = ifile.read(64)
+			ifile.close()
+		self.sha3_512.add(key.encode("ascii") + salt)
+		if self.sha3_512.raw_hash != _hash: return "password incorrect"
+		self.sha3_512.reset()
+		return read_blocks()
 
 
+	def read_blocks(self) -> str or None:
+		pass
+
+# TODO: continue after success
 
 # --------------------------------------------------------------------------------------------- #
 #			UI																					|
