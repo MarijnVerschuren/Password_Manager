@@ -23,6 +23,8 @@ struct crc_type {
 	lookup* table;
 	bool reflect_in;
 	bool reflect_out;
+	uint64_t init;
+	uint64_t xor_out;
 	crc_bits bits;
 };
 
@@ -94,18 +96,18 @@ inline void		init_crc	(const crc_type* type) {
 }
 
 // caclculate crc using tables (c++ side only)
-uint8_t crc_8(const void* const buffer, const uint64_t size, const uint8_t* lookup, uint8_t init = 0x00, const uint8_t xor_out = 0x00);
-uint16_t crc_16(const void* const buffer, const uint64_t size, const uint16_t* lookup, uint16_t init = 0x0000, const uint16_t xor_out = 0x0000);
-uint32_t crc_32(const void* const buffer, const uint64_t size, const uint32_t* lookup, uint32_t init = 0x00000000, const uint32_t xor_out = 0x00000000);
-uint64_t crc_64(const void* const buffer, const uint64_t size, const uint64_t* lookup, uint64_t init = 0x0000000000000000, const uint64_t xor_out = 0x0000000000000000);
+uint8_t crc_8(const void* buffer, uint64_t size, const uint8_t* lookup, uint8_t init = 0x00, const uint8_t xor_out = 0x00);
+uint16_t crc_16(const void* buffer, uint64_t size, const uint16_t* lookup, uint16_t init = 0x0000, const uint16_t xor_out = 0x0000);
+uint32_t crc_32(const void* buffer, uint64_t size, const uint32_t* lookup, uint32_t init = 0x00000000, const uint32_t xor_out = 0x00000000);
+uint64_t crc_64(const void* buffer, uint64_t size, const uint64_t* lookup, uint64_t init = 0x0000000000000000, const uint64_t xor_out = 0x0000000000000000);
 // caclculate crc using tables (python side (managed by c++))
-inline uint64_t crc(const void* const buffer, const uint64_t size, const crc_type* type) {
+inline uint64_t crc(const void* buffer, const uint64_t size, const crc_type* type) {
 	init_crc(type);
 	switch (type->bits) {
-	case crc_bits::bit_8:	return crc_8(buffer, size,	(uint8_t*)type->table->ptr) &	0xff;
-	case crc_bits::bit_16:	return crc_16(buffer, size,	(uint16_t*)type->table->ptr) &	0xffff;
-	case crc_bits::bit_32:	return crc_32(buffer, size,	(uint32_t*)type->table->ptr) &	0xffffffff;
-	case crc_bits::bit_64:	return crc_64(buffer, size,	(uint64_t*)type->table->ptr);
+	case crc_bits::bit_8:	return crc_8(buffer, size,	(uint8_t*)type->table->ptr, (uint8_t)type->init, (uint8_t)type->xor_out) &		0xff;
+	case crc_bits::bit_16:	return crc_16(buffer, size,	(uint16_t*)type->table->ptr, (uint16_t)type->init, (uint16_t)type->xor_out) &	0xffff;
+	case crc_bits::bit_32:	return crc_32(buffer, size,	(uint32_t*)type->table->ptr, (uint32_t)type->init, (uint32_t)type->xor_out) &	0xffffffff;
+	case crc_bits::bit_64:	return crc_64(buffer, size,	(uint64_t*)type->table->ptr, type->init, type->xor_out);
 	default:				return 0;
 	}
 }

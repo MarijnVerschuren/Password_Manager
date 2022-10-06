@@ -94,6 +94,21 @@ def CRC_tablegen_test(func: callable, expect: str, prompt: str) -> None:
 		return
 	print(chs.apply("[OK]", chs.GREEN));
 
+def CRC_function_test(tests: list, prompt: str) -> None:
+	results = []
+
+	fail = False
+	for args, expect in tests:
+		result = hex(crc(*args, crc_t.crc16_a))
+		if result != expect: fail = True
+		results.append([args, expect, result])
+
+	print(prompt, end="")
+	if fail:
+		print(chs.apply("[FAULT]", chs.RED))
+		print_error(results)
+		return
+	print(chs.apply("[OK]", chs.GREEN));
 
 def getpass_test() -> None:
 	t = thread(target=getpass, args=("getpass test: ", "*", True)); t.start()
@@ -207,6 +222,7 @@ if __name__ == "__main__":
 		CRC_tablegen_test(functools.partial(get_crc32_table, crc_t.crc32_c),			tests["CRC32_C_lookup_table"],			"CRC32_C\t\t(lookup):\t")
 		CRC_tablegen_test(functools.partial(get_crc32_table, crc_t.crc32_d),			tests["CRC32_D_lookup_table"],			"CRC32_D\t\t(lookup):\t")
 		CRC_tablegen_test(functools.partial(get_crc64_table, crc_t.crc64_ecma),			tests["CRC64_ECMA_lookup_table"],		"CRC64_ECMA\t(lookup):\t")
+		CRC_function_test(tests["CRC_function_test"], "CRC algorithm\t(lookup):\t")
 	if not no_console:
 		print(chs.apply("====================[CONSOLE]=====================", chs.CYAN))
 		getpass_test()
