@@ -25,7 +25,8 @@ class Lockbox:
 		self.path =	os.path.join(data_folder, self.name)
 		if os.path.exists(self.path):
 			return "lockbox already exists"
-		open(self.path, "x").close()
+		with open(self.path, "wb") as ofile:
+			pass # TODO: build header etc...
 
 	def unlock(self, name, key) -> str or None:
 		self.name =	name;
@@ -34,8 +35,14 @@ class Lockbox:
 		if not os.path.exists(self.path):
 			return "lockbox name does not exist"
 
+		with open(self.path, "rb") as ifile:
+			pass # TODO: read file etc...
 
 
+
+# --------------------------------------------------------------------------------------------- #
+#			UI																					|
+# --------------------------------------------------------------------------------------------- #
 def console_mode(new_lockbox: bool) -> None:
 	lockbox = Lockbox()
 	error = True
