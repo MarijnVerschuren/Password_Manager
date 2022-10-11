@@ -1,0 +1,25 @@
+.icon-chevronright::before, .icon-chevronright::after {
+	content: "";
+}
+
+.main [data-module-template="heroes"] .unit-image-wrapper .unit-image.unit-image-sketch {
+	width: 539px;
+	height: 480px;
+	background-size: 539px 480px;
+	background-repeat: no-repeat;
+	background-image: url(../images/Sketch.png);
+}
+.main [data-module-template="heroes"] .unit-image-wrapper .unit-image.unit-image-source {
+	width: 3000px;
+	height: 750px;
+	background-size: 3000px 750px;
+	background-repeat: no-repeat;
+	background-image: url(../images/Source.png);
+}
+.main [data-module-template="heroes"] .unit-image-wrapper .unit-image.unit-image-security {
+	width: 750px;
+	height: 563px;
+	background-size: 750px 563px;
+	background-repeat: no-repeat;
+	background-image: url(../images/Security.png);
+}

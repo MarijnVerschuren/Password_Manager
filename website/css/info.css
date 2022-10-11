@@ -1,0 +1,3 @@
+.more:after, .more:before {
+    content: "";
+}
