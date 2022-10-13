@@ -10,7 +10,7 @@ std::string getpass(std::string prompt, const char replacement) {
 
 	std::cout << prompt;  // printing the prompt
 
-	HANDLE stdin_handle = GetStdHandle(STD_INPUT_HANDLE);  // asking for the cmd handle from the windows kernel
+	HANDLE stdin_handle = GetStdHandle(STD_INPUT_HANDLE);  // asking for the cmd handle
 
 	// get console settings and disableing echo (hide chars) and line_input (no newline)
 	GetConsoleMode(stdin_handle, &con_mode);

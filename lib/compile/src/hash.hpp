@@ -39,7 +39,7 @@ public:
 	void add(const std::string& text) override;
 
 	std::string	get_hash() override;												// return latest hash as 64 hex characters
-	void get_raw_hash(unsigned char** buffer) override;										// return latest hash as an array
+	void get_raw_hash(unsigned char** buffer) override;								// return latest hash as an array
 
 	void reset() override;															// restart
 
