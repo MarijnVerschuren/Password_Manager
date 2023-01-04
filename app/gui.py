@@ -19,7 +19,7 @@ resource_folder = os.path.join(root_folder, "resources")
 		functionality
 """
 def gui_mode(new_lockbox: bool = None) -> None:
-	lockbox = Lockbox()
+	lockbox = None
 	gui.create_context()
 
 	with gui.font_registry():
@@ -27,14 +27,14 @@ def gui_mode(new_lockbox: bool = None) -> None:
 
 	# Create new lockbox
 	def new_callback(sender, app_data):
-		error = True
-		while error is not None:
-			error = lockbox.new(
+		while True:
+			lockbox = new_lockbox(
 				gui.get_value("new_lockbox_name"),
 				gui.get_value("new_lockbox_key"),
 				gui.get_value("repeat_new_lockbox_key")
 			)
-			if error: gui.set_value("new_lockbox_error", error)
+			if logger.error: gui.set_value("new_lockbox_error", logger.error)
+			else: break
 
 	with gui.window(label="New lockbox", tag="new_lockbox"):
 		gui.bind_font(helvetica)
@@ -49,13 +49,13 @@ def gui_mode(new_lockbox: bool = None) -> None:
 
 	# Unlock lockbox
 	def unlock_callback(sender, app_data):
-		error = True
-		while error is not None:
-			error = lockbox.unlock(
+		while True:
+			lockbox = unlock_lockbox(
 				gui.get_value("unlock_lockbox_name"),
 				gui.get_value("unlock_lockbox_key")
 			)
-			if error: gui.set_value("unlock_lockbox_error", error)
+			if logger.error: gui.set_value("unlock_lockbox_error", logger.error)
+			else: break
 
 	with gui.window(label="Unlock lockbox", tag="unlock_lockbox"):
 		gui.bind_font(helvetica)
@@ -98,7 +98,14 @@ if __name__ == "__main__":
 			sep="\n", end="\n\n"
 		); exit(0)
 
-	clear_console()
+	CON.clear()
 	kwargs = {"new_lockbox": False}
 	if "-new" in sys.argv:		kwargs["new_lockbox"] = True
 	gui_mode(**kwargs)
+
+
+
+"""
+		TODO
+"""
+# redo gui funcions

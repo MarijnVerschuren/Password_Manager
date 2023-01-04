@@ -9,12 +9,12 @@ import json
 # utils
 def print_error(results) -> None:
 	for args, expect, result in results:
-		modifier = chs.END
-		if result != expect: modifier = chs.NEGATIVE
+		modifier = CON.END
+		if result != expect: modifier = CON.NEGATIVE
 		print(
-			f"args:\t\t{chs.apply(f'{args}', modifier)}",
-			f"expected:\t{chs.apply(f'{expect}', modifier)}",
-			f"got:\t\t{chs.apply(f'{result}', modifier)}",
+			f"args:\t\t{CON.color(f'{args}', modifier)}",
+			f"expected:\t{CON.color(f'{expect}', modifier)}",
+			f"got:\t\t{CON.color(f'{result}', modifier)}",
 			sep="\n", end="\n\n"
 		)
 
@@ -32,10 +32,10 @@ def SHA_stream_test(hash_obj: object, tests: list, prompt: str) -> None:
 
 	print(prompt, end="")
 	if fail:
-		print(chs.apply("[FAULT]", chs.RED))
+		CON.color_print("[FAULT]", CON.RED)
 		print_error(results)
 		return
-	print(chs.apply("[OK]", chs.GREEN));
+	CON.color_print("[OK]", CON.GREEN)
 
 
 
@@ -67,18 +67,18 @@ def AES_test(encrypt_function: callable, decrypt_function: callable, tests: list
 
 	print(prompt, end="")
 	if fail:
-		if fail == 1: print(chs.apply("[ENCRYPTION FAULT]", chs.RED))
-		if fail == 2: print(chs.apply("[DECRYPTION FAULT]", chs.RED))
-		if fail == 3: print(chs.apply("[GENERAL FAULT]", chs.RED))
+		if fail == 1: CON.color_print("[ENCRYPTION FAULT]", CON.RED)
+		if fail == 2: CON.color_print("[DECRYPTION FAULT]", CON.RED)
+		if fail == 3: CON.color_print("[GENERAL FAULT]", CON.RED)
 
 		if fail & 1:
-			if fail & 2: print(chs.apply("                    [ENCRYPT]                     ", chs.PURPLE))
+			if fail & 2: CON.color_print("                    [ENCRYPT]                     ", CON.PURPLE)
 			print_error(results[0])
 		if fail & 2:
-			if fail & 1: print(chs.apply("                    [DECRYPT]                     ", chs.PURPLE))
+			if fail & 1: CON.color_print("                    [DECRYPT]                     ", CON.PURPLE)
 			print_error(results[1])
 		return
-	print(chs.apply("[OK]", chs.GREEN));
+	CON.color_print("[OK]", CON.GREEN)
 
 
 def CRC_tablegen_test(func: callable, expect: str, prompt: str) -> None:
@@ -89,7 +89,7 @@ def CRC_tablegen_test(func: callable, expect: str, prompt: str) -> None:
 
 	if result != expect:
 		print(prompt, end="")
-		print(chs.apply("[FAULT]", chs.RED))
+		CON.color_print("[FAULT]", CON.RED)
 		print_error(results); return 1
 	return 0
 
@@ -104,20 +104,20 @@ def CRC_function_test(tests: list, prompt: str) -> None:
 
 	print(prompt, end="")
 	if fail:
-		print(chs.apply("[FAULT]", chs.RED))
+		CON.color_print("[FAULT]", CON.RED)
 		print_error(results)
 		return
-	print(chs.apply("[OK]", chs.GREEN));
+	CON.color_print("[OK]", CON.GREEN)
 
 def getpass_test() -> None:
 	t = thread(target=getpass, args=("getpass test: ", "*", True)); t.start()
 	pyautogui.write("abcd"); pyautogui.press("enter")
 	print("getpass:\t\t\t", end="")
 	got = t.join()
-	if got == "abcd": print(chs.apply("[OK]", chs.GREEN))
+	if got == "abcd": CON.color_print("[OK]", CON.GREEN)
 	else:
-		print(chs.apply("[FAULT]", chs.RED))
-		print(chs.apply(f"got:\t\t\t{got}", chs.NEGATIVE))
+		CON.color_print("[FAULT]", CON.RED)
+		CON.color_print(f"got:\t\t\t{got}", CON.NEGATIVE)
 
 
 
@@ -170,19 +170,19 @@ if __name__ == "__main__":
 	print("\n--------------------------------------------------", end="\n\n")
 
 	if not no_hash:
-		print(chs.apply("======================[HASH]======================", chs.CYAN))
+		CON.color_print("======================[HASH]======================", CON.CYAN)
 		SHA_stream_test(sha256,															tests["SHA256_stream_tests"],			"SHA256\t\t(stream):\t")
 		SHA_stream_test(sha3_224,														tests["SHA3_224_stream_tests"],			"SHA3-224\t(stream):\t")
 		SHA_stream_test(sha3_256,														tests["SHA3_256_stream_tests"],			"SHA3-256\t(stream):\t")
 		SHA_stream_test(sha3_384,														tests["SHA3_384_stream_tests"],			"SHA3-384\t(stream):\t")
 		SHA_stream_test(sha3_512,														tests["SHA3_512_stream_tests"],			"SHA3-512\t(stream):\t")
 	if not no_encryption:
-		print(chs.apply("===================[ENCRYPTION]===================", chs.CYAN))
+		CON.color_print("===================[ENCRYPTION]===================", CON.CYAN)
 		AES_test(aes.encrypt_ECB, aes.decrypt_ECB,										tests["AES_ECB_tests"],					"AES_ECB:\t\t\t")
 		AES_test(aes.encrypt_CBC, aes.decrypt_CBC,										tests["AES_CBC_tests"],					"AES_CBC:\t\t\t")
 		AES_test(aes.encrypt_CFB, aes.decrypt_CFB,										tests["AES_CFB_tests"],					"AES_CFB:\t\t\t")
 	if not no_crc:
-		print(chs.apply("======================[CRC]=======================", chs.CYAN))
+		CON.color_print("======================[CRC]=======================", CON.CYAN)
 		tablegen_error = 0
 		tablegen_error |= CRC_tablegen_test(functools.partial(get_crc8_table, crc_t.crc8_ccit),			tests["CRC8_CCITT_lookup_table"],		"CRC8_CCITT\t(lookup):\t")
 		tablegen_error |= CRC_tablegen_test(functools.partial(get_crc8_table, crc_t.crc8_rohc),			tests["CRC8_ROHC_lookup_table"],		"CRC8_ROHC\t(lookup):\t")
@@ -226,11 +226,11 @@ if __name__ == "__main__":
 		tablegen_error |= CRC_tablegen_test(functools.partial(get_crc32_table, crc_t.crc32_c),			tests["CRC32_C_lookup_table"],			"CRC32_C\t\t(lookup):\t")
 		tablegen_error |= CRC_tablegen_test(functools.partial(get_crc32_table, crc_t.crc32_d),			tests["CRC32_D_lookup_table"],			"CRC32_D\t\t(lookup):\t")
 		tablegen_error |= CRC_tablegen_test(functools.partial(get_crc64_table, crc_t.crc64_ecma),		tests["CRC64_ECMA_lookup_table"],		"CRC64_ECMA\t(lookup):\t")
-		if not tablegen_error: print("CRC table generation:\t\t" + chs.apply("[OK]", chs.GREEN))
+		if not tablegen_error: print("CRC table generation:\t\t" + CON.color("[OK]", CON.GREEN))
 		CRC_function_test(tests["CRC_function_test"], "CRC algorithm\t(lookup):\t")
-		print(chs.apply("SOME CRC'S (CRC-A, ...) DONT WORK (TABLE IS CORRECT)", chs.NEGATIVE))
+		CON.color_print("SOME CRC'S (CRC-A, ...) DONT WORK (TABLE IS CORRECT)", CON.NEGATIVE)
 	if not no_console:
-		print(chs.apply("====================[CONSOLE]=====================", chs.CYAN))
+		CON.color_print("====================[CONSOLE]=====================", CON.CYAN)
 		getpass_test()
 
 	print("\n--------------------------------------------------", end="\n\n")

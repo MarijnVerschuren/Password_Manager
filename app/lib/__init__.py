@@ -38,9 +38,7 @@ __all__ = [
 
 	# py_util
 	"thread",
-	"chs",
-	"clear_console",
-	"clear_print"
+	"CON",
 ]
 
 __doc__ = py_lib.__doc__
