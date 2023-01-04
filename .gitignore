@@ -1,6 +1,6 @@
-Password_Manager/lib/__pycache__
-Password_Manager/lib/compile/int
-Password_Manager/lib/compile/bin
-Password_Manager/lib/_py_lib.pyd
-Password_Manager/lib/py_lib_wrap.py
-Password_Manager/lib/compile/build/*
+Password_Manager/app/lib/__pycache__
+Password_Manager/app/lib/compile/int
+Password_Manager/app/lib/compile/bin
+Password_Manager/app/lib/_py_lib.pyd
+Password_Manager/app/lib/py_lib_wrap.py
+Password_Manager/app/lib/compile/build/*
