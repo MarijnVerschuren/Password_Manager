@@ -1,3 +1,0 @@
-check.hpp:
-	define crc functions for all types (for use in python) also add deinit for lookup tables
-	make crc correction function

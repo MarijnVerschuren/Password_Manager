@@ -1,0 +1,31 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="17.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="C:\Users\marij\OneDrive\Documenten\GitHub\Password_Manager\app\lib\compile\src\encryption.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\marij\OneDrive\Documenten\GitHub\Password_Manager\app\lib\compile\src\check.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\marij\OneDrive\Documenten\GitHub\Password_Manager\app\lib\compile\src\hash.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\marij\OneDrive\Documenten\GitHub\Password_Manager\app\lib\compile\src\math.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\marij\OneDrive\Documenten\GitHub\Password_Manager\app\lib\compile\src\io.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\marij\OneDrive\Documenten\GitHub\Password_Manager\app\lib\compile\src\bind.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="C:\Users\marij\OneDrive\Documenten\GitHub\Password_Manager\app\lib\compile\CMakeLists.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{FBAC50EF-9DA3-3996-B660-10AB57C49872}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

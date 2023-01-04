@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="17.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <CustomBuild Include="C:\Users\marij\OneDrive\Documenten\GitHub\Password_Manager\app\lib\compile\build\CMakeFiles\6367fcd53d26d8115d0a4785b9d5a91c\generate.stamp.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="CMake Rules">
+      <UniqueIdentifier>{735CFD8B-7020-3A8A-8DB5-7D2DD21C935C}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

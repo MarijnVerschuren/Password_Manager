@@ -1,0 +1,4 @@
+C:/Users/marij/OneDrive/Documenten/GitHub/Password_Manager/app/lib/compile/build/CMakeFiles/py_lib.dir
+C:/Users/marij/OneDrive/Documenten/GitHub/Password_Manager/app/lib/compile/build/CMakeFiles/ALL_BUILD.dir
+C:/Users/marij/OneDrive/Documenten/GitHub/Password_Manager/app/lib/compile/build/CMakeFiles/ZERO_CHECK.dir
+C:/Users/marij/OneDrive/Documenten/GitHub/Password_Manager/app/lib/compile/build/dep/pybind11/CMakeFiles/ALL_BUILD.dir
